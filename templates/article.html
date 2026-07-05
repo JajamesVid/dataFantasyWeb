@@ -1,0 +1,53 @@
+{% extends "base.html" %}
+
+{% block title %}{{ article.title }} · DataFantasy{% endblock %}
+
+{% block content %}
+<div class="article-page">
+
+  {% if article.cover %}
+  <div class="article-hero" style="background-image: url('{{ url_for('static', filename='img/articles/' ~ article.cover) }}')">
+    <div class="article-hero-overlay"></div>
+  </div>
+  {% endif %}
+
+  <div class="container article-container">
+    <a href="/" class="back-link">← Volver al tablón</a>
+
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="tag tag--{{ article.tag | lower }}">{{ article.tag }}</span>
+        <time class="card-date">{{ article.date }}</time>
+        <span class="card-date">· {{ article.author }}</span>
+      </div>
+      <h1 class="article-title">{{ article.title }}</h1>
+      <p class="article-lead">{{ article.summary }}</p>
+    </header>
+
+    <div class="article-divider"></div>
+
+    <div class="article-body">
+      {% for block in article.body %}
+        {% if block.type == "text" %}
+          <p>{{ block.content }}</p>
+        {% elif block.type == "image" %}
+          <figure class="article-figure">
+            <img
+              src="{{ url_for('static', filename='img/articles/' ~ block.src) }}"
+              alt="{{ block.caption or '' }}"
+              class="article-img"
+            />
+            {% if block.caption %}
+            <figcaption>{{ block.caption }}</figcaption>
+            {% endif %}
+          </figure>
+        {% endif %}
+      {% endfor %}
+    </div>
+
+    <div class="article-divider"></div>
+
+    <a href="/" class="back-link back-link--bottom">← Volver al tablón</a>
+  </div>
+</div>
+{% endblock %}

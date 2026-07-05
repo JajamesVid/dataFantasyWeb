@@ -1,0 +1,24 @@
+{% extends "base.html" %}
+
+{% block title %}Equipos · DataFantasy{% endblock %}
+
+{% block content %}
+<section class="inner-page">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Equipos de La Liga</h2>
+      <span class="section-count">{{ teams|length }} equipos</span>
+    </div>
+
+    <div class="teams-grid">
+      {% for team in teams %}
+      <a href="{{ url_for('equipo', slug=team.slug) }}" class="team-card">
+        <span class="team-badge">{{ team.short }}</span>
+        <span class="team-name">{{ team.name }}</span>
+        <span class="team-arrow">→</span>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

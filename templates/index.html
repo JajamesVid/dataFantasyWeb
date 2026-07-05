@@ -1,0 +1,44 @@
+{% extends "base.html" %}
+
+{% block title %}DataFantasy · Análisis Fantasy La Liga{% endblock %}
+
+{% block content %}
+<section class="hero">
+  <div class="container">
+    <p class="hero-eyebrow">Temporada 2025/26</p>
+    <h1 class="hero-title">Gana tu liga fantasy<br /><span class="accent">Sin cuñados, con datos reales</span></h1>
+    <p class="hero-subtitle">Análisis estadístico semanal de La Liga Santander para ayudarte a tomar las mejores decisiones en tu equipo.</p>
+  </div>
+</section>
+
+<section class="board-section">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Tablón de Anuncios</h2>
+      <span class="section-count">{{ articles|length }} artículos</span>
+    </div>
+
+    <div class="articles-grid">
+      {% for article in articles %}
+      <a href="{{ url_for('article', article_id=article.id) }}" class="card">
+        {% if article.cover %}
+        <div class="card-cover" style="background-image: url('{{ url_for('static', filename='img/articles/' ~ article.cover) }}')"></div>
+        {% endif %}
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag tag--{{ article.tag | lower }}">{{ article.tag }}</span>
+            <time class="card-date">{{ article.date }}</time>
+          </div>
+          <h3 class="card-title">{{ article.title }}</h3>
+          <p class="card-summary">{{ article.summary }}</p>
+          <div class="card-footer">
+            <span class="card-author">{{ article.author }}</span>
+            <span class="card-link">Leer más →</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+  </div>
+</section>
+{% endblock %}

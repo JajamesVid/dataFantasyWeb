@@ -1,0 +1,130 @@
+{% extends "base.html" %}
+
+{% block title %}{{ team.name }} · DataFantasy{% endblock %}
+
+{% block content %}
+<section class="inner-page">
+  <div class="container">
+    <a href="/equipos" class="back-link">← Todos los equipos</a>
+
+    <div class="team-header">
+      <span class="team-badge team-badge--lg">{{ team.short }}</span>
+      <h1 class="section-title">{{ team.name }}</h1>
+    </div>
+
+    {% if lineup %}
+    <div class="team-layout">
+
+      <!-- Left: pitch -->
+      <div class="pitch-column">
+        <p class="pitch-title">Once más probable</p>
+        <div class="pitch-wrap">
+          <svg class="pitch-svg" viewBox="0 0 100 150" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+            <rect x="2" y="2" width="96" height="146" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <line x1="2" y1="75" x2="98" y2="75" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <circle cx="50" cy="75" r="13" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <circle cx="50" cy="75" r="0.6" fill="white" fill-opacity="0.5"/>
+            <rect x="22" y="2" width="56" height="25" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <rect x="36" y="2" width="28" height="9" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <circle cx="50" cy="18" r="0.6" fill="white" fill-opacity="0.5"/>
+            <rect x="22" y="123" width="56" height="25" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <rect x="36" y="139" width="28" height="9" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <circle cx="50" cy="132" r="0.6" fill="white" fill-opacity="0.5"/>
+            <path d="M2 5 A3 3 0 0 1 5 2"      fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <path d="M95 2 A3 3 0 0 1 98 5"     fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <path d="M98 145 A3 3 0 0 1 95 148" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+            <path d="M5 148 A3 3 0 0 1 2 145"   fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
+          </svg>
+
+          {% for player in lineup %}
+          <div class="player-marker" style="left:{{ player.x }}%; top:{{ player.y }}%">
+            <svg class="player-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+              <circle cx="12" cy="8" r="4" fill="white" fill-opacity="0.9"/>
+              <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.9"/>
+            </svg>
+            <span class="player-name">{{ player.name }}</span>
+            <span class="player-prob">{% if player.probability is not none %}{{ player.probability }}%{% else %}—{% endif %}</span>
+          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Right: articles -->
+      <div class="articles-column">
+        {% if articles %}
+        <div class="section-header">
+          <h2 class="section-title" style="font-size:1.1rem; font-weight:600;">Artículos relacionados</h2>
+          <span class="section-count">{{ articles|length }}</span>
+        </div>
+        <div class="articles-grid articles-grid--single">
+          {% for article in articles %}
+          <a href="{{ url_for('article', article_id=article.id) }}" class="card">
+            {% if article.cover %}
+            <div class="card-cover" style="background-image: url('{{ url_for('static', filename='img/articles/' ~ article.cover) }}')"></div>
+            {% endif %}
+            <div class="card-content">
+              <div class="card-top">
+                <span class="tag tag--{{ article.tag | lower }}">{{ article.tag }}</span>
+                <time class="card-date">{{ article.date }}</time>
+              </div>
+              <h3 class="card-title">{{ article.title }}</h3>
+              <p class="card-summary">{{ article.summary }}</p>
+              <div class="card-footer">
+                <span class="card-author">{{ article.author }}</span>
+                <span class="card-link">Leer más →</span>
+              </div>
+            </div>
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+        <div class="empty-state">
+          <p class="empty-icon">📋</p>
+          <p class="empty-text">Todavía no hay artículos publicados para este equipo.</p>
+          <p class="empty-sub">Vuelve pronto — publicamos análisis cada semana.</p>
+        </div>
+        {% endif %}
+      </div>
+
+    </div>
+
+    {% else %}
+    <!-- No lineup: articles full width -->
+    {% if articles %}
+    <div class="section-header" style="margin-top:2rem;">
+      <h2 class="section-title" style="font-size:1.1rem;font-weight:600;">Artículos relacionados</h2>
+      <span class="section-count">{{ articles|length }}</span>
+    </div>
+    <div class="articles-grid">
+      {% for article in articles %}
+      <a href="{{ url_for('article', article_id=article.id) }}" class="card">
+        {% if article.cover %}
+        <div class="card-cover" style="background-image: url('{{ url_for('static', filename='img/articles/' ~ article.cover) }}')"></div>
+        {% endif %}
+        <div class="card-content">
+          <div class="card-top">
+            <span class="tag tag--{{ article.tag | lower }}">{{ article.tag }}</span>
+            <time class="card-date">{{ article.date }}</time>
+          </div>
+          <h3 class="card-title">{{ article.title }}</h3>
+          <p class="card-summary">{{ article.summary }}</p>
+          <div class="card-footer">
+            <span class="card-author">{{ article.author }}</span>
+            <span class="card-link">Leer más →</span>
+          </div>
+        </div>
+      </a>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state" style="margin-top:2rem;">
+      <p class="empty-icon">📋</p>
+      <p class="empty-text">Todavía no hay artículos publicados para este equipo.</p>
+      <p class="empty-sub">Vuelve pronto — publicamos análisis cada semana.</p>
+    </div>
+    {% endif %}
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}

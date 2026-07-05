@@ -1,0 +1,2268 @@
+{
+  "teams": [
+    {
+      "name": "Real Madrid",
+      "sofascore_id": 2829,
+      "players": [
+        {
+          "name": "kylian-mbappe",
+          "sofascore_id": 826643
+        },
+        {
+          "name": "vinicius-junior",
+          "sofascore_id": 868812
+        },
+        {
+          "name": "rodrygo",
+          "sofascore_id": 910536
+        },
+        {
+          "name": "franco-mastantuono",
+          "sofascore_id": 1403559
+        },
+        {
+          "name": "gonzalo-garcia",
+          "sofascore_id": 1402716
+        },
+        {
+          "name": "jude-bellingham",
+          "sofascore_id": 991011
+        },
+        {
+          "name": "federico-valverde",
+          "sofascore_id": 831808
+        },
+        {
+          "name": "arda-gler",
+          "sofascore_id": 1091116
+        },
+        {
+          "name": "brahim-diaz",
+          "sofascore_id": 835485
+        },
+        {
+          "name": "eduardo-camavinga",
+          "sofascore_id": 973887
+        },
+        {
+          "name": "aurelien-tchouameni",
+          "sofascore_id": 859025
+        },
+        {
+          "name": "dani-ceballos",
+          "sofascore_id": 547838
+        },
+        {
+          "name": "thiago-pitarch",
+          "sofascore_id": 2237795
+        },
+        {
+          "name": "manuel-ngel",
+          "sofascore_id": 1142683
+        },
+        {
+          "name": "cesar-palacios",
+          "sofascore_id": 1402688
+        },
+        {
+          "name": "jorge-cestero",
+          "sofascore_id": 1590121
+        },
+        {
+          "name": "trent-alexander-arnold",
+          "sofascore_id": 795064
+        },
+        {
+          "name": "antonio-rudiger",
+          "sofascore_id": 142622
+        },
+        {
+          "name": "dean-huijsen",
+          "sofascore_id": 1176744
+        },
+        {
+          "name": "der-milito",
+          "sofascore_id": 822519
+        },
+        {
+          "name": "daniel-carvajal",
+          "sofascore_id": 138572
+        },
+        {
+          "name": "raul-asencio-1",
+          "sofascore_id": 1156645
+        },
+        {
+          "name": "david-alaba",
+          "sofascore_id": 66492
+        },
+        {
+          "name": "lvaro-fernandez-1",
+          "sofascore_id": 1085081
+        },
+        {
+          "name": "ferland-mendy",
+          "sofascore_id": 792073
+        },
+        {
+          "name": "fran-garcia",
+          "sofascore_id": 851271
+        },
+        {
+          "name": "manuel-serrano",
+          "sofascore_id": 1145644
+        },
+        {
+          "name": "thibaut-courtois",
+          "sofascore_id": 70988
+        },
+        {
+          "name": "andriy-lunin",
+          "sofascore_id": 857574
+        },
+        {
+          "name": "fran-gonzalez-2",
+          "sofascore_id": 1493226
+        },
+        {
+          "name": "alvaro-gonzalez-1",
+          "sofascore_id": 1542706
+        }
+      ]
+    },
+    {
+      "name": "Real Oviedo",
+      "sofascore_id": 2851,
+      "players": [
+        {
+          "name": "federico-vinas",
+          "sofascore_id": 976104
+        },
+        {
+          "name": "thiago-borbas",
+          "sofascore_id": 1018547
+        },
+        {
+          "name": "alex-fores",
+          "sofascore_id": 1086128
+        },
+        {
+          "name": "haissem-hassan",
+          "sofascore_id": 942836
+        },
+        {
+          "name": "santi-cazorla",
+          "sofascore_id": 17651
+        },
+        {
+          "name": "kwasi-sibo",
+          "sofascore_id": 905639
+        },
+        {
+          "name": "ilyas-chaira",
+          "sofascore_id": 1008037
+        },
+        {
+          "name": "leander-dendoncker",
+          "sofascore_id": 190405
+        },
+        {
+          "name": "thiago-fernandez",
+          "sofascore_id": 1201412
+        },
+        {
+          "name": "luka-ilic",
+          "sofascore_id": 885664
+        },
+        {
+          "name": "nicolas-fonseca",
+          "sofascore_id": 944629
+        },
+        {
+          "name": "santiago-colombatto",
+          "sofascore_id": 822379
+        },
+        {
+          "name": "alberto-reina",
+          "sofascore_id": 882475
+        },
+        {
+          "name": "ovie-ejaria",
+          "sofascore_id": 845025
+        },
+        {
+          "name": "brandon-domingues",
+          "sofascore_id": 1035697
+        },
+        {
+          "name": "pablo-agudin",
+          "sofascore_id": 1587199
+        },
+        {
+          "name": "eric-bertrand-bailly",
+          "sofascore_id": 606346
+        },
+        {
+          "name": "rahim-alhassane",
+          "sofascore_id": 1120504
+        },
+        {
+          "name": "david-carmo",
+          "sofascore_id": 892235
+        },
+        {
+          "name": "javi-lopez-1",
+          "sofascore_id": 945404
+        },
+        {
+          "name": "nacho-vidal",
+          "sofascore_id": 844752
+        },
+        {
+          "name": "david-costas",
+          "sofascore_id": 345333
+        },
+        {
+          "name": "dani-calvo",
+          "sofascore_id": 560756
+        },
+        {
+          "name": "lucas-ahijado",
+          "sofascore_id": 597876
+        },
+        {
+          "name": "horatiu-moldovan",
+          "sofascore_id": 857065
+        },
+        {
+          "name": "aaron-escandell",
+          "sofascore_id": 368922
+        }
+      ]
+    },
+    {
+      "name": "Deportivo Alavés",
+      "sofascore_id": 2885,
+      "players": [
+        {
+          "name": "mariano-diaz",
+          "sofascore_id": 175753
+        },
+        {
+          "name": "ibrahim-diabate",
+          "sofascore_id": 1084043
+        },
+        {
+          "name": "antonio-martinez",
+          "sofascore_id": 831253
+        },
+        {
+          "name": "lucas-boye",
+          "sofascore_id": 814385
+        },
+        {
+          "name": "aitor-manas",
+          "sofascore_id": 1639543
+        },
+        {
+          "name": "abde-rebbach",
+          "sofascore_id": 1082968
+        },
+        {
+          "name": "antonio-blanco",
+          "sofascore_id": 855832
+        },
+        {
+          "name": "carles-alena",
+          "sofascore_id": 794937
+        },
+        {
+          "name": "denis-suarez",
+          "sofascore_id": 138383
+        },
+        {
+          "name": "calebe",
+          "sofascore_id": 1046796
+        },
+        {
+          "name": "carlos-benavidez",
+          "sofascore_id": 873717
+        },
+        {
+          "name": "pablo-ibanez",
+          "sofascore_id": 1084381
+        },
+        {
+          "name": "jon-guridi",
+          "sofascore_id": 788141
+        },
+        {
+          "name": "ander-guevara",
+          "sofascore_id": 891931
+        },
+        {
+          "name": "angel-perez-1",
+          "sofascore_id": 1513222
+        },
+        {
+          "name": "youssef-enriquez",
+          "sofascore_id": 1403364
+        },
+        {
+          "name": "facundo-garces",
+          "sofascore_id": 879875
+        },
+        {
+          "name": "nahuel-tenaglia",
+          "sofascore_id": 896073
+        },
+        {
+          "name": "jonny-castro",
+          "sofascore_id": 235648
+        },
+        {
+          "name": "jon-pacheco",
+          "sofascore_id": 934383
+        },
+        {
+          "name": "ville-koski",
+          "sofascore_id": 999178
+        },
+        {
+          "name": "victor-parada",
+          "sofascore_id": 985726
+        },
+        {
+          "name": "antonio-sivera",
+          "sofascore_id": 369004
+        },
+        {
+          "name": "raul-fernandez",
+          "sofascore_id": 31828
+        }
+      ]
+    },
+    {
+      "name": "Celta Vigo",
+      "sofascore_id": 2821,
+      "players": [
+        {
+          "name": "borja-iglesias",
+          "sofascore_id": 785989
+        },
+        {
+          "name": "iago-aspas",
+          "sofascore_id": 19356
+        },
+        {
+          "name": "ferran-jutgla",
+          "sofascore_id": 949962
+        },
+        {
+          "name": "jones-el-abdellaoui",
+          "sofascore_id": 1173575
+        },
+        {
+          "name": "pablo-duran",
+          "sofascore_id": 1398524
+        },
+        {
+          "name": "ilaix-moriba",
+          "sofascore_id": 962890
+        },
+        {
+          "name": "williot-swedberg",
+          "sofascore_id": 1126779
+        },
+        {
+          "name": "scar-mingueza",
+          "sofascore_id": 859773
+        },
+        {
+          "name": "matias-vecino",
+          "sofascore_id": 158615
+        },
+        {
+          "name": "fer-lopez",
+          "sofascore_id": 1526628
+        },
+        {
+          "name": "franco-cervi",
+          "sofascore_id": 557008
+        },
+        {
+          "name": "hugo-lvarez-",
+          "sofascore_id": 1154935
+        },
+        {
+          "name": "hugo-sotelo",
+          "sofascore_id": 1120669
+        },
+        {
+          "name": "sergio-carreira",
+          "sofascore_id": 1002764
+        },
+        {
+          "name": "javi-rueda",
+          "sofascore_id": 1008259
+        },
+        {
+          "name": "miguel-roman",
+          "sofascore_id": 1398526
+        },
+        {
+          "name": "marcos-alonso",
+          "sofascore_id": 69408
+        },
+        {
+          "name": "joseph-aidoo",
+          "sofascore_id": 796320
+        },
+        {
+          "name": "carl-starfelt",
+          "sofascore_id": 360718
+        },
+        {
+          "name": "javi-rodriguez",
+          "sofascore_id": 1526627
+        },
+        {
+          "name": "mihailo-risti",
+          "sofascore_id": 363774
+        },
+        {
+          "name": "lvaro-nunez",
+          "sofascore_id": 1012410
+        },
+        {
+          "name": "yoel-lago",
+          "sofascore_id": 1145100
+        },
+        {
+          "name": "carlos-dominguez",
+          "sofascore_id": 1069703
+        },
+        {
+          "name": "manu-fernandez-1",
+          "sofascore_id": 1630975
+        },
+        {
+          "name": "andrei-radu",
+          "sofascore_id": 815202
+        },
+        {
+          "name": "ivan-villar",
+          "sofascore_id": 848980
+        },
+        {
+          "name": "marc-vidal",
+          "sofascore_id": 905443
+        }
+      ]
+    },
+    {
+      "name": "Real Betis",
+      "sofascore_id": 2816,
+      "players": [
+        {
+          "name": "cedric-bakambu",
+          "sofascore_id": 115665
+        },
+        {
+          "name": "cucho-hernandez",
+          "sofascore_id": 887055
+        },
+        {
+          "name": "ezequiel-avila",
+          "sofascore_id": 789381
+        },
+        {
+          "name": "antony",
+          "sofascore_id": 958380
+        },
+        {
+          "name": "abde-ezzalzouli",
+          "sofascore_id": 1011375
+        },
+        {
+          "name": "sofyan-amrabat",
+          "sofascore_id": 359272
+        },
+        {
+          "name": "isco-alarcon",
+          "sofascore_id": 103417
+        },
+        {
+          "name": "giovani-lo-celso",
+          "sofascore_id": 798835
+        },
+        {
+          "name": "lvaro-fidalgo",
+          "sofascore_id": 838629
+        },
+        {
+          "name": "nelson-deossa",
+          "sofascore_id": 1129401
+        },
+        {
+          "name": "rodrigo-riquelme",
+          "sofascore_id": 989113
+        },
+        {
+          "name": "pablo-fornals",
+          "sofascore_id": 816763
+        },
+        {
+          "name": "pablo-garcia-1",
+          "sofascore_id": 1893910
+        },
+        {
+          "name": "marc-roca",
+          "sofascore_id": 847128
+        },
+        {
+          "name": "sergi-altimira",
+          "sofascore_id": 1137814
+        },
+        {
+          "name": "hector-bellerin",
+          "sofascore_id": 188365
+        },
+        {
+          "name": "natan",
+          "sofascore_id": 1015287
+        },
+        {
+          "name": "junior-firpo",
+          "sofascore_id": 914835
+        },
+        {
+          "name": "ricardo-rodriguez",
+          "sofascore_id": 67769
+        },
+        {
+          "name": "marc-bartra",
+          "sofascore_id": 99519
+        },
+        {
+          "name": "diego-javier-llorente",
+          "sofascore_id": 305278
+        },
+        {
+          "name": "aitor-ruibal",
+          "sofascore_id": 893062
+        },
+        {
+          "name": "ngel-ortiz",
+          "sofascore_id": 1152139
+        },
+        {
+          "name": "pablo-busto",
+          "sofascore_id": 1464647
+        },
+        {
+          "name": "adriansan-miguel",
+          "sofascore_id": 50539
+        },
+        {
+          "name": "pau-lopez",
+          "sofascore_id": 548848
+        },
+        {
+          "name": "alvaro-valles",
+          "sofascore_id": 964983
+        }
+      ]
+    },
+    {
+      "name": "Espanyol",
+      "sofascore_id": 2814,
+      "players": [
+        {
+          "name": "roberto-fernandez-1",
+          "sofascore_id": 1392592
+        },
+        {
+          "name": "cyril-ngonge",
+          "sofascore_id": 877037
+        },
+        {
+          "name": "kike-garcia",
+          "sofascore_id": 84972
+        },
+        {
+          "name": "lluc-castell",
+          "sofascore_id": 1466117
+        },
+        {
+          "name": "charles-pickel",
+          "sofascore_id": 758664
+        },
+        {
+          "name": "javi-puado",
+          "sofascore_id": 891511
+        },
+        {
+          "name": "edu-exposito",
+          "sofascore_id": 877262
+        },
+        {
+          "name": "pere-milla",
+          "sofascore_id": 175185
+        },
+        {
+          "name": "tyrhys-dolan",
+          "sofascore_id": 1063015
+        },
+        {
+          "name": "pol-lozano",
+          "sofascore_id": 826010
+        },
+        {
+          "name": "terrats",
+          "sofascore_id": 1088565
+        },
+        {
+          "name": "urko-gonzalez-de-zarate",
+          "sofascore_id": 1064009
+        },
+        {
+          "name": "jofre-carreras",
+          "sofascore_id": 1019236
+        },
+        {
+          "name": "antoniu-roca",
+          "sofascore_id": 1099344
+        },
+        {
+          "name": "miguel-londono",
+          "sofascore_id": 2031771
+        },
+        {
+          "name": "omar-el-hilali",
+          "sofascore_id": 1064026
+        },
+        {
+          "name": "carlos-romero",
+          "sofascore_id": 1396048
+        },
+        {
+          "name": "leandro-cabrera",
+          "sofascore_id": 81992
+        },
+        {
+          "name": "clemens-riedel",
+          "sofascore_id": 1129360
+        },
+        {
+          "name": "fernando-calero",
+          "sofascore_id": 857205
+        },
+        {
+          "name": "jose-salinas",
+          "sofascore_id": 1068891
+        },
+        {
+          "name": "miguel-ngel-rubio",
+          "sofascore_id": 934351
+        },
+        {
+          "name": "adama-timera",
+          "sofascore_id": 1870032
+        },
+        {
+          "name": "marko-dmitrovic",
+          "sofascore_id": 94527
+        },
+        {
+          "name": "ngel-fortuno",
+          "sofascore_id": 1082734
+        },
+        {
+          "name": "pol-tristan",
+          "sofascore_id": 962624
+        }
+      ]
+    },
+    {
+      "name": "Getafe",
+      "sofascore_id": 2859,
+      "players": [
+        {
+          "name": "martin-satriano",
+          "sofascore_id": 973536
+        },
+        {
+          "name": "borja-mayoral",
+          "sofascore_id": 604954
+        },
+        {
+          "name": "luis-vazquez",
+          "sofascore_id": 974713
+        },
+        {
+          "name": "veljko-birmancevic",
+          "sofascore_id": 831510
+        },
+        {
+          "name": "adrian-liso",
+          "sofascore_id": 1515554
+        },
+        {
+          "name": "juanmi-jimenez",
+          "sofascore_id": 96369
+        },
+        {
+          "name": "lex-sancris",
+          "sofascore_id": 1398518
+        },
+        {
+          "name": "mario-martin",
+          "sofascore_id": 1154549
+        },
+        {
+          "name": "luis-milla",
+          "sofascore_id": 811629
+        },
+        {
+          "name": "mauro-arambarri",
+          "sofascore_id": 385888
+        },
+        {
+          "name": "abu-kamara",
+          "sofascore_id": 1087476
+        },
+        {
+          "name": "javi-munoz",
+          "sofascore_id": 353154
+        },
+        {
+          "name": "adrian-riquelme",
+          "sofascore_id": 2439155
+        },
+        {
+          "name": "abdel-abqar",
+          "sofascore_id": 1101232
+        },
+        {
+          "name": "dakonam-djene",
+          "sofascore_id": 307702
+        },
+        {
+          "name": "sebastian-boselli",
+          "sofascore_id": 1392092
+        },
+        {
+          "name": "zaid-romero",
+          "sofascore_id": 1108450
+        },
+        {
+          "name": "ismael-bekhoucha",
+          "sofascore_id": 1895964
+        },
+        {
+          "name": "diego-rico",
+          "sofascore_id": 350560
+        },
+        {
+          "name": "allan-nyom",
+          "sofascore_id": 128637
+        },
+        {
+          "name": "domingos-duarte",
+          "sofascore_id": 576276
+        },
+        {
+          "name": "juan-iglesias",
+          "sofascore_id": 949707
+        },
+        {
+          "name": "davinchi",
+          "sofascore_id": 1918369
+        },
+        {
+          "name": "kiko-femenia",
+          "sofascore_id": 53739
+        },
+        {
+          "name": "david-soria",
+          "sofascore_id": 604258
+        },
+        {
+          "name": "jiri-letacek",
+          "sofascore_id": 826047
+        }
+      ]
+    },
+    {
+      "name": "Valencia",
+      "sofascore_id": 2828,
+      "players": [
+        {
+          "name": "lucas-beltran",
+          "sofascore_id": 962029
+        },
+        {
+          "name": "arnaut-danjuma",
+          "sofascore_id": 827064
+        },
+        {
+          "name": "umar-sadiq",
+          "sofascore_id": 754710
+        },
+        {
+          "name": "hugo-duro",
+          "sofascore_id": 909119
+        },
+        {
+          "name": "largie-ramazani",
+          "sofascore_id": 909966
+        },
+        {
+          "name": "daniel-raba",
+          "sofascore_id": 873947
+        },
+        {
+          "name": "guido-rodriguez",
+          "sofascore_id": 609752
+        },
+        {
+          "name": "javi-guerra-1",
+          "sofascore_id": 1122610
+        },
+        {
+          "name": "pepelu",
+          "sofascore_id": 826948
+        },
+        {
+          "name": "diego-lopez-1",
+          "sofascore_id": 998950
+        },
+        {
+          "name": "andre-almeida-1",
+          "sofascore_id": 845693
+        },
+        {
+          "name": "luis-rioja",
+          "sofascore_id": 900433
+        },
+        {
+          "name": "filip-ugrinic",
+          "sofascore_id": 857482
+        },
+        {
+          "name": "baptiste-santamaria",
+          "sofascore_id": 344751
+        },
+        {
+          "name": "lucas-nunez",
+          "sofascore_id": 1939361
+        },
+        {
+          "name": "mouctar-diakhaby",
+          "sofascore_id": 797306
+        },
+        {
+          "name": "jose-gaya",
+          "sofascore_id": 227922
+        },
+        {
+          "name": "-renzo-saravia",
+          "sofascore_id": 315916
+        },
+        {
+          "name": "cesar-tarrega",
+          "sofascore_id": 996928
+        },
+        {
+          "name": "thierry-correia",
+          "sofascore_id": 851282
+        },
+        {
+          "name": "unai-nunez",
+          "sofascore_id": 892521
+        },
+        {
+          "name": "eray-cmert",
+          "sofascore_id": 814023
+        },
+        {
+          "name": "dimitri-foulquier",
+          "sofascore_id": 151138
+        },
+        {
+          "name": "jesus-vazquez-1",
+          "sofascore_id": 996929
+        },
+        {
+          "name": "jose-manuel-copete",
+          "sofascore_id": 913695
+        },
+        {
+          "name": "marcos-navarro-1",
+          "sofascore_id": 1490806
+        },
+        {
+          "name": "rubi-munoz",
+          "sofascore_id": 2606306
+        },
+        {
+          "name": "julen-agirrezabala",
+          "sofascore_id": 1014412
+        },
+        {
+          "name": "stole-dimitrievski",
+          "sofascore_id": 97951
+        },
+        {
+          "name": "cristian-rivero",
+          "sofascore_id": 914744
+        }
+      ]
+    },
+    {
+      "name": "Atlético Madrid",
+      "sofascore_id": 2836,
+      "players": [
+        {
+          "name": "julian-lvarez",
+          "sofascore_id": 944656
+        },
+        {
+          "name": "antoine-griezmann",
+          "sofascore_id": 85859
+        },
+        {
+          "name": "ademola-lookman",
+          "sofascore_id": 824200
+        },
+        {
+          "name": "alexander-sorloth",
+          "sofascore_id": 309078
+        },
+        {
+          "name": "thiago-almada",
+          "sofascore_id": 944660
+        },
+        {
+          "name": "giuliano-simeone",
+          "sofascore_id": 1099352
+        },
+        {
+          "name": "nicolas-gonzalez",
+          "sofascore_id": 901325
+        },
+        {
+          "name": "lex-baena",
+          "sofascore_id": 910031
+        },
+        {
+          "name": "johnny-cardoso",
+          "sofascore_id": 990169
+        },
+        {
+          "name": "pablo-barrios",
+          "sofascore_id": 1142588
+        },
+        {
+          "name": "koke-resurreccion",
+          "sofascore_id": 84539
+        },
+        {
+          "name": "obed-vargas",
+          "sofascore_id": 1119345
+        },
+        {
+          "name": "rodrigo-mendoza",
+          "sofascore_id": 1391752
+        },
+        {
+          "name": "rayane-belaid",
+          "sofascore_id": 1179148
+        },
+        {
+          "name": "iker-luque",
+          "sofascore_id": 1544428
+        },
+        {
+          "name": "javi-morcillo",
+          "sofascore_id": 1832076
+        },
+        {
+          "name": "nahuel-molina",
+          "sofascore_id": 831799
+        },
+        {
+          "name": "marcos-llorente",
+          "sofascore_id": 353138
+        },
+        {
+          "name": "clement-lenglet",
+          "sofascore_id": 580550
+        },
+        {
+          "name": "robin-le-normand",
+          "sofascore_id": 787751
+        },
+        {
+          "name": "jose-maria-gimenez",
+          "sofascore_id": 325355
+        },
+        {
+          "name": "david-hancko",
+          "sofascore_id": 807771
+        },
+        {
+          "name": "marc-pubill",
+          "sofascore_id": 1094106
+        },
+        {
+          "name": "matteo-ruggeri",
+          "sofascore_id": 965011
+        },
+        {
+          "name": "javier-bonar",
+          "sofascore_id": 1142591
+        },
+        {
+          "name": "juan-musso",
+          "sofascore_id": 263651
+        },
+        {
+          "name": "jan-oblak",
+          "sofascore_id": 69768
+        },
+        {
+          "name": "salvi-esquivel",
+          "sofascore_id": 1179149
+        }
+      ]
+    },
+    {
+      "name": "Girona FC",
+      "sofascore_id": 24264,
+      "players": [
+        {
+          "name": "vladyslav-vanat",
+          "sofascore_id": 976374
+        },
+        {
+          "name": "cristhian-stuani",
+          "sofascore_id": 32048
+        },
+        {
+          "name": "abel-ruiz",
+          "sofascore_id": 826013
+        },
+        {
+          "name": "cristian-portu",
+          "sofascore_id": 218616
+        },
+        {
+          "name": "claudio-echeverri",
+          "sofascore_id": 1482424
+        },
+        {
+          "name": "azzedine-ounahi",
+          "sofascore_id": 991421
+        },
+        {
+          "name": "axel-witsel",
+          "sofascore_id": 35612
+        },
+        {
+          "name": "donny-van-de-beek",
+          "sofascore_id": 361790
+        },
+        {
+          "name": "thomas-lemar",
+          "sofascore_id": 191182
+        },
+        {
+          "name": "viktor-tsygankov",
+          "sofascore_id": 319735
+        },
+        {
+          "name": "bryan-gil",
+          "sofascore_id": 910026
+        },
+        {
+          "name": "lass-kourouma",
+          "sofascore_id": 1860172
+        },
+        {
+          "name": "ivan-martin",
+          "sofascore_id": 973699
+        },
+        {
+          "name": "fran-beltran",
+          "sofascore_id": 835484
+        },
+        {
+          "name": "joel-roca",
+          "sofascore_id": 1391616
+        },
+        {
+          "name": "ricard-artero",
+          "sofascore_id": 1134432
+        },
+        {
+          "name": "vitor-reis",
+          "sofascore_id": 1485300
+        },
+        {
+          "name": "daley-blind",
+          "sofascore_id": 44864
+        },
+        {
+          "name": "arnau-martinez",
+          "sofascore_id": 1084081
+        },
+        {
+          "name": "alex-moreno",
+          "sofascore_id": 294593
+        },
+        {
+          "name": "alejandro-frances",
+          "sofascore_id": 1002347
+        },
+        {
+          "name": "david-lopez",
+          "sofascore_id": 135116
+        },
+        {
+          "name": "hugo-rincon",
+          "sofascore_id": 1632454
+        },
+        {
+          "name": "marc-andre-ter-stegen",
+          "sofascore_id": 88625
+        },
+        {
+          "name": "paulo-gazzaniga",
+          "sofascore_id": 164343
+        },
+        {
+          "name": "vladyslav-krapyvtsov",
+          "sofascore_id": 1521733
+        },
+        {
+          "name": "ruben-blanco",
+          "sofascore_id": 180515
+        },
+        {
+          "name": "juan-carlos-martin",
+          "sofascore_id": 83708
+        }
+      ]
+    },
+    {
+      "name": "Rayo Vallecano",
+      "sofascore_id": 2818,
+      "players": [
+        {
+          "name": "alemo",
+          "sofascore_id": 981604
+        },
+        {
+          "name": "jorge-de-frutos",
+          "sofascore_id": 900003
+        },
+        {
+          "name": "carlos-martin",
+          "sofascore_id": 1131581
+        },
+        {
+          "name": "sergio-camello",
+          "sofascore_id": 910024
+        },
+        {
+          "name": "randy-nteka",
+          "sofascore_id": 932764
+        },
+        {
+          "name": "ilias-akhomach",
+          "sofascore_id": 1089108
+        },
+        {
+          "name": "pathe-ciss",
+          "sofascore_id": 913679
+        },
+        {
+          "name": "isi-palazon",
+          "sofascore_id": 899982
+        },
+        {
+          "name": "alvaro-garcia",
+          "sofascore_id": 345111
+        },
+        {
+          "name": "pedro-diaz",
+          "sofascore_id": 900669
+        },
+        {
+          "name": "unai-lopez",
+          "sofascore_id": 588566
+        },
+        {
+          "name": "oscar-trejo",
+          "sofascore_id": 21949
+        },
+        {
+          "name": "scar-valentin",
+          "sofascore_id": 900008
+        },
+        {
+          "name": "fran-perez",
+          "sofascore_id": 966637
+        },
+        {
+          "name": "gerard-gumbau",
+          "sofascore_id": 326471
+        },
+        {
+          "name": "andrei-florin",
+          "sofascore_id": 965031
+        },
+        {
+          "name": "nobel-mendy",
+          "sofascore_id": 1458073
+        },
+        {
+          "name": "abdul-mumin",
+          "sofascore_id": 846147
+        },
+        {
+          "name": "florian-lejeune",
+          "sofascore_id": 88528
+        },
+        {
+          "name": "luiz-felipe",
+          "sofascore_id": 850035
+        },
+        {
+          "name": "alfonso-espino",
+          "sofascore_id": 542634
+        },
+        {
+          "name": "ivan-balliu",
+          "sofascore_id": 152446
+        },
+        {
+          "name": "pep-chavarria",
+          "sofascore_id": 1010421
+        },
+        {
+          "name": "jozhua-vertrouwd",
+          "sofascore_id": 1120947
+        },
+        {
+          "name": "augusto-batalla",
+          "sofascore_id": 358910
+        },
+        {
+          "name": "dani-cardenas",
+          "sofascore_id": 965832
+        },
+        {
+          "name": "adrian-molina",
+          "sofascore_id": 1893144
+        }
+      ]
+    },
+    {
+      "name": "Real Sociedad",
+      "sofascore_id": 2824,
+      "players": [
+        {
+          "name": "mikel-oyarzabal",
+          "sofascore_id": 823622
+        },
+        {
+          "name": "orri-steinn-skarsson",
+          "sofascore_id": 1026015
+        },
+        {
+          "name": "jon-karrikaburu",
+          "sofascore_id": 1099175
+        },
+        {
+          "name": "takefusa-kubo",
+          "sofascore_id": 880218
+        },
+        {
+          "name": "wesley-gassova",
+          "sofascore_id": 1211632
+        },
+        {
+          "name": "luka-sucic",
+          "sofascore_id": 949156
+        },
+        {
+          "name": "arsen-zakharyan",
+          "sofascore_id": 1066045
+        },
+        {
+          "name": "goncalo-guedes",
+          "sofascore_id": 280979
+        },
+        {
+          "name": "yangel-herrera",
+          "sofascore_id": 839585
+        },
+        {
+          "name": "carlos-soler",
+          "sofascore_id": 832427
+        },
+        {
+          "name": "ander-barrenetxea",
+          "sofascore_id": 966862
+        },
+        {
+          "name": "brais-mendez",
+          "sofascore_id": 845385
+        },
+        {
+          "name": "benat-turrientes",
+          "sofascore_id": 980410
+        },
+        {
+          "name": "jon-gorrotxategi",
+          "sofascore_id": 1216309
+        },
+        {
+          "name": "pablo-marin",
+          "sofascore_id": 1139409
+        },
+        {
+          "name": "jon-aramburu",
+          "sofascore_id": 1116388
+        },
+        {
+          "name": "sergio-gomez",
+          "sofascore_id": 855835
+        },
+        {
+          "name": "duje-caleta-car",
+          "sofascore_id": 257091
+        },
+        {
+          "name": "alvaro-odriozola",
+          "sofascore_id": 353250
+        },
+        {
+          "name": "jon-martin",
+          "sofascore_id": 1466116
+        },
+        {
+          "name": "igor-zubeldia",
+          "sofascore_id": 838159
+        },
+        {
+          "name": "aihen-munoz",
+          "sofascore_id": 966441
+        },
+        {
+          "name": "aritz-elustondo",
+          "sofascore_id": 785468
+        },
+        {
+          "name": "alex-remiro",
+          "sofascore_id": 791773
+        },
+        {
+          "name": "unai-marrero",
+          "sofascore_id": 1094782
+        }
+      ]
+    },
+    {
+      "name": "Osasuna",
+      "sofascore_id": 2820,
+      "players": [
+        {
+          "name": "victor-munoz",
+          "sofascore_id": 1145642
+        },
+        {
+          "name": "ante-budimir",
+          "sofascore_id": 37318
+        },
+        {
+          "name": "raul-garcia-1",
+          "sofascore_id": 997280
+        },
+        {
+          "name": "kike-barja",
+          "sofascore_id": 591132
+        },
+        {
+          "name": "iker-benito",
+          "sofascore_id": 1086346
+        },
+        {
+          "name": "raul-moro",
+          "sofascore_id": 980383
+        },
+        {
+          "name": "aimar-oroz",
+          "sofascore_id": 985329
+        },
+        {
+          "name": "ruben-garcia",
+          "sofascore_id": 260031
+        },
+        {
+          "name": "jon-moncayola",
+          "sofascore_id": 976141
+        },
+        {
+          "name": "lucas-torro",
+          "sofascore_id": 187313
+        },
+        {
+          "name": "moi-gomez",
+          "sofascore_id": 149370
+        },
+        {
+          "name": "iker-munoz",
+          "sofascore_id": 1119586
+        },
+        {
+          "name": "boyomo",
+          "sofascore_id": 1067582
+        },
+        {
+          "name": "javi-galan",
+          "sofascore_id": 825133
+        },
+        {
+          "name": "alejandro-catena",
+          "sofascore_id": 900792
+        },
+        {
+          "name": "valentin-rosier",
+          "sofascore_id": 842419
+        },
+        {
+          "name": "abel-bretones",
+          "sofascore_id": 1010165
+        },
+        {
+          "name": "jorge-herrando",
+          "sofascore_id": 944225
+        },
+        {
+          "name": "juan-cruz-1",
+          "sofascore_id": 814360
+        },
+        {
+          "name": "asier-osambela",
+          "sofascore_id": 1399702
+        },
+        {
+          "name": "sergio-herrera",
+          "sofascore_id": 294377
+        },
+        {
+          "name": "aitor-fernandez",
+          "sofascore_id": 99516
+        }
+      ]
+    },
+    {
+      "name": "Elche",
+      "sofascore_id": 2846,
+      "players": [
+        {
+          "name": "alvaro-rodriguez",
+          "sofascore_id": 1154587
+        },
+        {
+          "name": "andre-silva",
+          "sofascore_id": 190159
+        },
+        {
+          "name": "rafa-mir",
+          "sofascore_id": 825754
+        },
+        {
+          "name": "adam-boayar",
+          "sofascore_id": 1518971
+        },
+        {
+          "name": "tete-morente",
+          "sofascore_id": 605374
+        },
+        {
+          "name": "alex-sanchez-2",
+          "sofascore_id": 2216007
+        },
+        {
+          "name": "lucas-cepeda",
+          "sofascore_id": 1126447
+        },
+        {
+          "name": "federico-redondo",
+          "sofascore_id": 1117026
+        },
+        {
+          "name": "grady-diangana",
+          "sofascore_id": 848512
+        },
+        {
+          "name": "aleix-febas",
+          "sofascore_id": 286167
+        },
+        {
+          "name": "gonzalo-villar",
+          "sofascore_id": 914765
+        },
+        {
+          "name": "german-valera",
+          "sofascore_id": 962710
+        },
+        {
+          "name": "martim-neto",
+          "sofascore_id": 1100646
+        },
+        {
+          "name": "marc-aguado",
+          "sofascore_id": 1014595
+        },
+        {
+          "name": "yago-santiago",
+          "sofascore_id": 1092515
+        },
+        {
+          "name": "josan",
+          "sofascore_id": 808955
+        },
+        {
+          "name": "hector-fort",
+          "sofascore_id": 1402908
+        },
+        {
+          "name": "david-affengruber",
+          "sofascore_id": 988672
+        },
+        {
+          "name": "buba-sangare",
+          "sofascore_id": 1542721
+        },
+        {
+          "name": "adria-pedrosa",
+          "sofascore_id": 928672
+        },
+        {
+          "name": "victor-chust",
+          "sofascore_id": 855831
+        },
+        {
+          "name": "pedro-bigas",
+          "sofascore_id": 141832
+        },
+        {
+          "name": "leo-petrot",
+          "sofascore_id": 827504
+        },
+        {
+          "name": "john-nwankwo",
+          "sofascore_id": 1094758
+        },
+        {
+          "name": "inaki-pena",
+          "sofascore_id": 794949
+        },
+        {
+          "name": "matias-dituro",
+          "sofascore_id": 556884
+        }
+      ]
+    },
+    {
+      "name": "Levante UD",
+      "sofascore_id": 2849,
+      "players": [
+        {
+          "name": "etta-eyong",
+          "sofascore_id": 1393673
+        },
+        {
+          "name": "carlos-espi",
+          "sofascore_id": 1649918
+        },
+        {
+          "name": "jose-luis-morales",
+          "sofascore_id": 344129
+        },
+        {
+          "name": "ivan-romero",
+          "sofascore_id": 1014042
+        },
+        {
+          "name": "tai-abed",
+          "sofascore_id": 1160250
+        },
+        {
+          "name": "paco-cortes",
+          "sofascore_id": 1869106
+        },
+        {
+          "name": "kervin-arriaga",
+          "sofascore_id": 1083832
+        },
+        {
+          "name": "carlos-alvarez",
+          "sofascore_id": 1010656
+        },
+        {
+          "name": "oriol-rey",
+          "sofascore_id": 859769
+        },
+        {
+          "name": "iker-losada",
+          "sofascore_id": 992331
+        },
+        {
+          "name": "ugo-raghouber",
+          "sofascore_id": 1170694
+        },
+        {
+          "name": "kareem-tunde",
+          "sofascore_id": 1649919
+        },
+        {
+          "name": "pablo-martinez",
+          "sofascore_id": 927066
+        },
+        {
+          "name": "jon-ander-olasagasti",
+          "sofascore_id": 1010383
+        },
+        {
+          "name": "unai-vencedor",
+          "sofascore_id": 966802
+        },
+        {
+          "name": "victor-garcia-1",
+          "sofascore_id": 952222
+        },
+        {
+          "name": "roger-brugue",
+          "sofascore_id": 909554
+        },
+        {
+          "name": "matias-moreno",
+          "sofascore_id": 1496360
+        },
+        {
+          "name": "alan-matturro",
+          "sofascore_id": 1177401
+        },
+        {
+          "name": "manu-sanchez",
+          "sofascore_id": 984789
+        },
+        {
+          "name": "adrian-de-la-fuente",
+          "sofascore_id": 997244
+        },
+        {
+          "name": "jeremy-toljan",
+          "sofascore_id": 149606
+        },
+        {
+          "name": "unai-elgezabal",
+          "sofascore_id": 813574
+        },
+        {
+          "name": "diego-pampin",
+          "sofascore_id": 855837
+        },
+        {
+          "name": "mat-ryan",
+          "sofascore_id": 134029
+        },
+        {
+          "name": "pablo-campos",
+          "sofascore_id": 1085579
+        },
+        {
+          "name": "alejandro-primo",
+          "sofascore_id": 1215079
+        }
+      ]
+    },
+    {
+      "name": "Villarreal",
+      "sofascore_id": 2819,
+      "players": [
+        {
+          "name": "georges-mikautadze",
+          "sofascore_id": 1009372
+        },
+        {
+          "name": "nicolas-pepe",
+          "sofascore_id": 593526
+        },
+        {
+          "name": "gerard-moreno",
+          "sofascore_id": 146866
+        },
+        {
+          "name": "ayoze-perez",
+          "sofascore_id": 345195
+        },
+        {
+          "name": "tani-oluwaseyi",
+          "sofascore_id": 1172477
+        },
+        {
+          "name": "alfonso-gonzalez",
+          "sofascore_id": 1468090
+        },
+        {
+          "name": "hugo-lopez",
+          "sofascore_id": 1966890
+        },
+        {
+          "name": "thomas-teye",
+          "sofascore_id": 316148
+        },
+        {
+          "name": "pape-gueye",
+          "sofascore_id": 879694
+        },
+        {
+          "name": "tajon-buchanan",
+          "sofascore_id": 973290
+        },
+        {
+          "name": "alberto-moleiro",
+          "sofascore_id": 1012444
+        },
+        {
+          "name": "dani-parejo",
+          "sofascore_id": 39182
+        },
+        {
+          "name": "alassane-diatta",
+          "sofascore_id": 1893907
+        },
+        {
+          "name": "santi-comesana",
+          "sofascore_id": 843678
+        },
+        {
+          "name": "renato-veiga",
+          "sofascore_id": 1087359
+        },
+        {
+          "name": "juan-foyth",
+          "sofascore_id": 873189
+        },
+        {
+          "name": "santiago-mourino",
+          "sofascore_id": 1468046
+        },
+        {
+          "name": "willy-kambwala",
+          "sofascore_id": 1136721
+        },
+        {
+          "name": "rafa-marin",
+          "sofascore_id": 984623
+        },
+        {
+          "name": "sergi-cardona",
+          "sofascore_id": 986245
+        },
+        {
+          "name": "alex-freeman",
+          "sofascore_id": 1184541
+        },
+        {
+          "name": "logan-costa",
+          "sofascore_id": 911853
+        },
+        {
+          "name": "alfonso-pedraza",
+          "sofascore_id": 797290
+        },
+        {
+          "name": "pau-navarro",
+          "sofascore_id": 1525863
+        },
+        {
+          "name": "arnau-tenas",
+          "sofascore_id": 908714
+        },
+        {
+          "name": "luiz-junior",
+          "sofascore_id": 1066603
+        },
+        {
+          "name": "diego-conde",
+          "sofascore_id": 951008
+        }
+      ]
+    },
+    {
+      "name": "FC Barcelona",
+      "sofascore_id": 2817,
+      "players": [
+        {
+          "name": "robert-lewandowski",
+          "sofascore_id": 41789
+        },
+        {
+          "name": "marcus-rashford",
+          "sofascore_id": 814590
+        },
+        {
+          "name": "ferran-torres",
+          "sofascore_id": 855833
+        },
+        {
+          "name": "roony-bardghji",
+          "sofascore_id": 1162107
+        },
+        {
+          "name": "lamine-yamal",
+          "sofascore_id": 1402912
+        },
+        {
+          "name": "raphinha",
+          "sofascore_id": 831005
+        },
+        {
+          "name": "pedri-gonzalez",
+          "sofascore_id": 992587
+        },
+        {
+          "name": "pablo-gavi",
+          "sofascore_id": 1103693
+        },
+        {
+          "name": "frenkie-de-jong",
+          "sofascore_id": 795222
+        },
+        {
+          "name": "fermin-lopez",
+          "sofascore_id": 1153270
+        },
+        {
+          "name": "dani-olmo",
+          "sofascore_id": 789071
+        },
+        {
+          "name": "marc-bernal",
+          "sofascore_id": 1526618
+        },
+        {
+          "name": "marc-casado",
+          "sofascore_id": 1000483
+        },
+        {
+          "name": "pau-cubarsi",
+          "sofascore_id": 1402913
+        },
+        {
+          "name": "jules-kounde",
+          "sofascore_id": 827212
+        },
+        {
+          "name": "alejandro-balde",
+          "sofascore_id": 997035
+        },
+        {
+          "name": "ronald-araujo",
+          "sofascore_id": 925097
+        },
+        {
+          "name": "joao-cancelo",
+          "sofascore_id": 138892
+        },
+        {
+          "name": "andreas-christensen",
+          "sofascore_id": 186795
+        },
+        {
+          "name": "eric-garcia",
+          "sofascore_id": 876214
+        },
+        {
+          "name": "gerard-martin",
+          "sofascore_id": 1094827
+        },
+        {
+          "name": "xavi-espart",
+          "sofascore_id": 1546073
+        },
+        {
+          "name": "joan-garcia",
+          "sofascore_id": 930267
+        },
+        {
+          "name": "wojciech-szczesny",
+          "sofascore_id": 50490
+        }
+      ]
+    },
+    {
+      "name": "Mallorca",
+      "sofascore_id": 2826,
+      "players": [
+        {
+          "name": "vedat-muriqi",
+          "sofascore_id": 310874
+        },
+        {
+          "name": "zito-luvumbo-1",
+          "sofascore_id": 1000150
+        },
+        {
+          "name": "takuma-asano",
+          "sofascore_id": 309546
+        },
+        {
+          "name": "mateo-joseph",
+          "sofascore_id": 1170693
+        },
+        {
+          "name": "abdon-prats",
+          "sofascore_id": 146852
+        },
+        {
+          "name": "pablo-torre",
+          "sofascore_id": 1082981
+        },
+        {
+          "name": "jan-virgili",
+          "sofascore_id": 1939173
+        },
+        {
+          "name": "samu-almeida",
+          "sofascore_id": 988351
+        },
+        {
+          "name": "sergi-darder",
+          "sofascore_id": 110783
+        },
+        {
+          "name": "omar-mascarell",
+          "sofascore_id": 255999
+        },
+        {
+          "name": "manuel-morlanes",
+          "sofascore_id": 826004
+        },
+        {
+          "name": "jastin-kalumba",
+          "sofascore_id": 1484974
+        },
+        {
+          "name": "antonio-sanchez",
+          "sofascore_id": 949722
+        },
+        {
+          "name": "javi-llabres",
+          "sofascore_id": 1162309
+        },
+        {
+          "name": "jan-salas",
+          "sofascore_id": 1905699
+        },
+        {
+          "name": "johan-mojica",
+          "sofascore_id": 344847
+        },
+        {
+          "name": "pablo-maffeo",
+          "sofascore_id": 788216
+        },
+        {
+          "name": "marash-kumbulla",
+          "sofascore_id": 893642
+        },
+        {
+          "name": "martin-valjent",
+          "sofascore_id": 300522
+        },
+        {
+          "name": "antonio-raillo",
+          "sofascore_id": 807116
+        },
+        {
+          "name": "mateu-morey",
+          "sofascore_id": 879543
+        },
+        {
+          "name": "antonio-lato",
+          "sofascore_id": 828239
+        },
+        {
+          "name": "david-lopez-1",
+          "sofascore_id": 1513896
+        },
+        {
+          "name": "javier-olaizola",
+          "sofascore_id": 2282845
+        },
+        {
+          "name": "luis-orejuela",
+          "sofascore_id": 2269442
+        },
+        {
+          "name": "lucas-bergstrom",
+          "sofascore_id": 996903
+        },
+        {
+          "name": "leo-roman",
+          "sofascore_id": 1131909
+        },
+        {
+          "name": "ivan-cuellar",
+          "sofascore_id": 19013
+        }
+      ]
+    },
+    {
+      "name": "Sevilla",
+      "sofascore_id": 2833,
+      "players": [
+        {
+          "name": "alexis-sanchez",
+          "sofascore_id": 34120
+        },
+        {
+          "name": "akor-adams",
+          "sofascore_id": 946381
+        },
+        {
+          "name": "chidera-ejuke",
+          "sofascore_id": 875890
+        },
+        {
+          "name": "neal-maupay",
+          "sofascore_id": 268903
+        },
+        {
+          "name": "isaac-romero",
+          "sofascore_id": 1018190
+        },
+        {
+          "name": "ruben-vargas",
+          "sofascore_id": 872919
+        },
+        {
+          "name": "djibril-sow",
+          "sofascore_id": 799054
+        },
+        {
+          "name": "lucien-agoume",
+          "sofascore_id": 960006
+        },
+        {
+          "name": "nemanja-gudelj",
+          "sofascore_id": 68332
+        },
+        {
+          "name": "adnan-januzaj",
+          "sofascore_id": 328145
+        },
+        {
+          "name": "batista-mendy",
+          "sofascore_id": 859021
+        },
+        {
+          "name": "juanlu-sanchez",
+          "sofascore_id": 1010655
+        },
+        {
+          "name": "peque",
+          "sofascore_id": 997033
+        },
+        {
+          "name": "joan-jordan",
+          "sofascore_id": 591750
+        },
+        {
+          "name": "joaquin-oso",
+          "sofascore_id": 1534422
+        },
+        {
+          "name": "manu-bueno",
+          "sofascore_id": 1142094
+        },
+        {
+          "name": "cesar-azpilicueta",
+          "sofascore_id": 21555
+        },
+        {
+          "name": "gabriel-suazo",
+          "sofascore_id": 818986
+        },
+        {
+          "name": "tanguy-kouassi",
+          "sofascore_id": 1003007
+        },
+        {
+          "name": "marcao",
+          "sofascore_id": 840951
+        },
+        {
+          "name": "jose-ngel-carmona",
+          "sofascore_id": 1015240
+        },
+        {
+          "name": "kike-salas",
+          "sofascore_id": 1097719
+        },
+        {
+          "name": "federico-gattoni",
+          "sofascore_id": 941464
+        },
+        {
+          "name": "fabio-cardoso",
+          "sofascore_id": 252815
+        },
+        {
+          "name": "andres-castrin",
+          "sofascore_id": 1428699
+        },
+        {
+          "name": "iker-munoz-1",
+          "sofascore_id": 1402720
+        },
+        {
+          "name": "odysseas-vlachodimos",
+          "sofascore_id": 138149
+        },
+        {
+          "name": "rjan-nyland",
+          "sofascore_id": 22209
+        }
+      ]
+    },
+    {
+      "name": "Athletic Club",
+      "sofascore_id": 2825,
+      "players": [
+        {
+          "name": "maroan-sannadi",
+          "sofascore_id": 1520799
+        },
+        {
+          "name": "gorka-guruzeta",
+          "sofascore_id": 605672
+        },
+        {
+          "name": "urko-izeta",
+          "sofascore_id": 1430667
+        },
+        {
+          "name": "nico-williams",
+          "sofascore_id": 1085400
+        },
+        {
+          "name": "inaki-williams",
+          "sofascore_id": 783374
+        },
+        {
+          "name": "oihan-sancet",
+          "sofascore_id": 966801
+        },
+        {
+          "name": "alex-berenguer",
+          "sofascore_id": 592012
+        },
+        {
+          "name": "mikel-jauregizar",
+          "sofascore_id": 1495844
+        },
+        {
+          "name": "inigo-ruiz-de-galarreta",
+          "sofascore_id": 96365
+        },
+        {
+          "name": "robert-navarro",
+          "sofascore_id": 944165
+        },
+        {
+          "name": "unai-gomez",
+          "sofascore_id": 1391375
+        },
+        {
+          "name": "alejandro-rego",
+          "sofascore_id": 2110897
+        },
+        {
+          "name": "benat-prados",
+          "sofascore_id": 1012409
+        },
+        {
+          "name": "selton-sanchez",
+          "sofascore_id": 1953923
+        },
+        {
+          "name": "mikel-vesga",
+          "sofascore_id": 359742
+        },
+        {
+          "name": "nico-serrano",
+          "sofascore_id": 1019318
+        },
+        {
+          "name": "aymeric-laporte",
+          "sofascore_id": 149734
+        },
+        {
+          "name": "dani-vivian",
+          "sofascore_id": 910978
+        },
+        {
+          "name": "adama-boiro",
+          "sofascore_id": 1398511
+        },
+        {
+          "name": "yuri-berchiche",
+          "sofascore_id": 84531
+        },
+        {
+          "name": "aitor-paredes",
+          "sofascore_id": 959872
+        },
+        {
+          "name": "yeray-alvarez",
+          "sofascore_id": 807648
+        },
+        {
+          "name": "jesus-areso",
+          "sofascore_id": 910267
+        },
+        {
+          "name": "andoni-gorosabel",
+          "sofascore_id": 866810
+        },
+        {
+          "name": "inigo-lekue",
+          "sofascore_id": 801837
+        },
+        {
+          "name": "unai-egiluz",
+          "sofascore_id": 1391374
+        },
+        {
+          "name": "unai-simon",
+          "sofascore_id": 797291
+        },
+        {
+          "name": "alex-padilla",
+          "sofascore_id": 1155116
+        }
+      ]
+    }
+  ]
+}
