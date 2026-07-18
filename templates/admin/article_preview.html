@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block title %}Vista previa · {{ article.title or "Artículo" }} · DataFantasy{% endblock %}
+
+{% block content %}
+<div class="preview-banner">
+  <span>👁 Vista previa — así se verá el artículo publicado</span>
+  {% if back_url %}
+  <a href="{{ back_url }}" class="btn btn--ghost">← Volver a editar</a>
+  {% else %}
+  <span class="preview-note">Aún no se ha guardado — cierra esta pestaña para seguir editando</span>
+  {% endif %}
+</div>
+
+<div class="article-page">
+
+  {% if article.cover %}
+  <div class="article-hero" style="background-image: url('{{ url_for('static', filename='img/articles/' ~ article.cover) }}')">
+    <div class="article-hero-overlay"></div>
+  </div>
+  {% endif %}
+
+  <div class="container article-container">
+    <header class="article-header">
+      <div class="article-meta">
+        <span class="tag tag--{{ article.tag | lower }}">{{ article.tag }}</span>
+        <time class="card-date">{{ article.date }}</time>
+        <span class="card-date">· {{ article.author }}</span>
+      </div>
+      <h1 class="article-title">{{ article.title or "(Sin título)" }}</h1>
+      <p class="article-lead">{{ article.summary }}</p>
+    </header>
+
+    <div class="article-divider"></div>
+
+    <div class="article-body">
+      {% for block in article.body %}
+        {% if block.type == "text" %}
+          <p>{{ block.content }}</p>
+        {% elif block.type == "image" %}
+          <figure class="article-figure">
+            <img
+              src="{{ url_for('static', filename='img/articles/' ~ block.src) }}"
+              alt="{{ block.caption or '' }}"
+              class="article-img"
+            />
+            {% if block.caption %}
+            <figcaption>{{ block.caption }}</figcaption>
+            {% endif %}
+          </figure>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+{% endblock %}

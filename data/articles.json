@@ -6,14 +6,29 @@
     "date": "2026-06-25",
     "tag": "Análisis",
     "author": "DataFantasy",
-    "teams": ["real-madrid"],
+    "teams": [
+      "real-madrid"
+    ],
     "cover": null,
     "body": [
-      {"type": "text", "content": "Jude Bellingham y Federico Valverde son probablemente los dos centrocampistas más completos de La Liga este año. El problema para los managers fantasy es que ocupan la misma posición y el presupuesto raramente da para tener a los dos. Toca elegir."},
-      {"type": "text", "content": "Bellingham tiene el techo más alto: cuando está encendido, acumula goles, asistencias y acciones clave en cantidades que ningún centrocampista de la liga puede igualar. El inconveniente es su irregularidad — hay jornadas en las que desaparece del partido y sus números fantasy se resienten."},
-      {"type": "text", "content": "Valverde, en cambio, es la definición de fiabilidad. Semana tras semana aparece en el once, corre más que nadie y rara vez decepciona. Su techo de puntos es más bajo que el del inglés, pero su suelo también es mucho más alto. Para ligas en las que el cómputo es semanal, eso tiene un valor enorme."},
-      {"type": "text", "content": "Nuestra recomendación: si tu liga valora las semanas ganadas, elige Valverde. Si es por puntos totales acumulados y tienes estómago para los altibajos, Bellingham tiene más potencial de acabar la temporada como el centrocampista más puntuado."}
-    ]
+      {
+        "type": "text",
+        "content": "Jude Bellingham y Federico Valverde son probablemente los dos centrocampistas más completos de La Liga este año. El problema para los managers fantasy es que ocupan la misma posición y el presupuesto raramente da para tener a los dos. Toca elegir."
+      },
+      {
+        "type": "text",
+        "content": "Bellingham tiene el techo más alto: cuando está encendido, acumula goles, asistencias y acciones clave en cantidades que ningún centrocampista de la liga puede igualar. El inconveniente es su irregularidad — hay jornadas en las que desaparece del partido y sus números fantasy se resienten."
+      },
+      {
+        "type": "text",
+        "content": "Valverde, en cambio, es la definición de fiabilidad. Semana tras semana aparece en el once, corre más que nadie y rara vez decepciona. Su techo de puntos es más bajo que el del inglés, pero su suelo también es mucho más alto. Para ligas en las que el cómputo es semanal, eso tiene un valor enorme."
+      },
+      {
+        "type": "text",
+        "content": "Nuestra recomendación: si tu liga valora las semanas ganadas, elige Valverde. Si es por puntos totales acumulados y tienes estómago para los altibajos, Bellingham tiene más potencial de acabar la temporada como el centrocampista más puntuado."
+      }
+    ],
+    "status": "published"
   },
   {
     "id": 1,
@@ -22,16 +37,40 @@
     "date": "2026-06-20",
     "tag": "Jornada",
     "author": "DataFantasy",
-    "teams": ["real-madrid", "barcelona", "atletico-madrid"],
+    "teams": [
+      "real-madrid",
+      "barcelona",
+      "atletico-madrid"
+    ],
     "cover": "jornada38.jpg",
     "body": [
-      {"type": "text", "content": "La última jornada de Liga siempre trae consigo una mezcla de equipos sin nada en juego y otros que se lo juegan todo. Eso crea oportunidades de oro en el fantasy: los equipos que ya están clasificados para Europa suelen rotar, pero los que necesitan puntos sacan a sus mejores hombres."},
-      {"type": "text", "content": "En ataque, el nombre que más destaca esta semana es un delantero que lleva tres jornadas consecutivas marcando y que tiene enfrente a uno de los peores equipos defensivamente de la segunda vuelta. Su precio en el mercado fantasy sigue siendo razonable dado su rendimiento reciente."},
-      {"type": "image", "src": "jornada38-ataque.jpg", "caption": "Los delanteros más en forma de cara a la última jornada."},
-      {"type": "text", "content": "En el centro del campo, fíjate en los mediapuntas de equipos con la permanencia ya asegurada que juegan en casa. Suelen tener más libertad táctica y acumulan puntos por asistencias y acciones clave. Hemos identificado dos perfiles concretos que históricamente rinden por encima de la media en la última jornada."},
-      {"type": "text", "content": "En defensa, la clave esta semana es apostar por equipos que no se juegan nada y que suelen cerrar bien atrás para no arriesgar lesiones. Un clean sheet puede marcar la diferencia entre ganar tu semana fantasy o quedarte a un paso."},
-      {"type": "text", "content": "Recuerda también revisar los posibles descensos: los equipos que bajan en la última jornada suelen tener una actuación anímica muy baja, lo que beneficia a sus rivales directos. Tenlo en cuenta al configurar tu once."}
-    ]
+      {
+        "type": "text",
+        "content": "La última jornada de Liga siempre trae consigo una mezcla de equipos sin nada en juego y otros que se lo juegan todo. Eso crea oportunidades de oro en el fantasy: los equipos que ya están clasificados para Europa suelen rotar, pero los que necesitan puntos sacan a sus mejores hombres."
+      },
+      {
+        "type": "text",
+        "content": "En ataque, el nombre que más destaca esta semana es un delantero que lleva tres jornadas consecutivas marcando y que tiene enfrente a uno de los peores equipos defensivamente de la segunda vuelta. Su precio en el mercado fantasy sigue siendo razonable dado su rendimiento reciente."
+      },
+      {
+        "type": "image",
+        "src": "jornada38-ataque.jpg",
+        "caption": "Los delanteros más en forma de cara a la última jornada."
+      },
+      {
+        "type": "text",
+        "content": "En el centro del campo, fíjate en los mediapuntas de equipos con la permanencia ya asegurada que juegan en casa. Suelen tener más libertad táctica y acumulan puntos por asistencias y acciones clave. Hemos identificado dos perfiles concretos que históricamente rinden por encima de la media en la última jornada."
+      },
+      {
+        "type": "text",
+        "content": "En defensa, la clave esta semana es apostar por equipos que no se juegan nada y que suelen cerrar bien atrás para no arriesgar lesiones. Un clean sheet puede marcar la diferencia entre ganar tu semana fantasy o quedarte a un paso."
+      },
+      {
+        "type": "text",
+        "content": "Recuerda también revisar los posibles descensos: los equipos que bajan en la última jornada suelen tener una actuación anímica muy baja, lo que beneficia a sus rivales directos. Tenlo en cuenta al configurar tu once."
+      }
+    ],
+    "status": "published"
   },
   {
     "id": 2,
@@ -43,13 +82,33 @@
     "teams": [],
     "cover": null,
     "body": [
-      {"type": "text", "content": "En el fantasy, el precio de un jugador lo fija su popularidad tanto como su rendimiento real. Eso crea ineficiencias: delanteros con grandes números que pasan desapercibidos porque juegan en equipos mediáticos o porque sus goles llegan en jornadas de poco impacto mediático."},
-      {"type": "text", "content": "El primer nombre de nuestra lista es un delantero que lleva 12 goles en Liga pero que apenas aparece en el 8% de los equipos fantasy. Su equipo no pelea ni por arriba ni por abajo, lo que hace que pase desapercibido en los titulares, pero sus números individuales son de primer nivel."},
-      {"type": "image", "src": "infravalorados-stats.jpg", "caption": "Comparativa de puntos fantasy vs. porcentaje de equipos en los que aparece cada jugador."},
-      {"type": "text", "content": "El segundo caso es aún más llamativo: un extremo reconvertido en falso nueve que acumula goles y asistencias con una regularidad sorprendente. Su precio no ha subido proporcionalmente porque muchos managers fantasy no lo tienen en su radar al no jugar de «9 puro»."},
-      {"type": "text", "content": "Los tres restantes comparten una característica: todos juegan en equipos que tienen un calendario favorable en las últimas jornadas. Más partidos ante rivales flojos significa más ocasiones, más goles y más puntos fantasy."},
-      {"type": "text", "content": "La conclusión es clara: en el fantasy no gana quien tiene los nombres más conocidos, sino quien encuentra valor donde los demás no miran. Estos cinco delanteros son exactamente eso."}
-    ]
+      {
+        "type": "text",
+        "content": "En el fantasy, el precio de un jugador lo fija su popularidad tanto como su rendimiento real. Eso crea ineficiencias: delanteros con grandes números que pasan desapercibidos porque juegan en equipos mediáticos o porque sus goles llegan en jornadas de poco impacto mediático."
+      },
+      {
+        "type": "text",
+        "content": "El primer nombre de nuestra lista es un delantero que lleva 12 goles en Liga pero que apenas aparece en el 8% de los equipos fantasy. Su equipo no pelea ni por arriba ni por abajo, lo que hace que pase desapercibido en los titulares, pero sus números individuales son de primer nivel."
+      },
+      {
+        "type": "image",
+        "src": "infravalorados-stats.jpg",
+        "caption": "Comparativa de puntos fantasy vs. porcentaje de equipos en los que aparece cada jugador."
+      },
+      {
+        "type": "text",
+        "content": "El segundo caso es aún más llamativo: un extremo reconvertido en falso nueve que acumula goles y asistencias con una regularidad sorprendente. Su precio no ha subido proporcionalmente porque muchos managers fantasy no lo tienen en su radar al no jugar de «9 puro»."
+      },
+      {
+        "type": "text",
+        "content": "Los tres restantes comparten una característica: todos juegan en equipos que tienen un calendario favorable en las últimas jornadas. Más partidos ante rivales flojos significa más ocasiones, más goles y más puntos fantasy."
+      },
+      {
+        "type": "text",
+        "content": "La conclusión es clara: en el fantasy no gana quien tiene los nombres más conocidos, sino quien encuentra valor donde los demás no miran. Estos cinco delanteros son exactamente eso."
+      }
+    ],
+    "status": "published"
   },
   {
     "id": 3,
@@ -61,12 +120,32 @@
     "teams": [],
     "cover": "mercado-portada.jpg",
     "body": [
-      {"type": "text", "content": "El fantasy football ha evolucionado más allá de simplemente acertar once titulares cada semana. Ahora existe una capa financiera que puede ser tan importante como la deportiva: el mercado de jugadores, donde el precio fluctúa en función del rendimiento, las noticias y la demanda de otros managers."},
-      {"type": "text", "content": "En plataformas como La Liga Fantasy oficial, el precio de un jugador sube cuando muchos usuarios lo compran y baja cuando lo venden masivamente. Eso crea dinámicas muy similares a las de la bolsa: si eres de los primeros en detectar que un jugador va a explotar, puedes comprarlo barato y venderlo caro semanas después."},
-      {"type": "image", "src": "mercado-grafico.jpg", "caption": "Evolución del precio de un jugador a lo largo de la temporada vs. sus puntos acumulados."},
-      {"type": "text", "content": "La clave está en anticiparse al mercado. Cuando un jugador marca dos goles en una jornada, al día siguiente ya es demasiado tarde para comprarlo barato: su precio ya habrá subido. El dinero de verdad está en comprar antes de que ocurra algo, basándose en datos: calendario favorable, recuperación de lesión, cambio táctico del entrenador."},
-      {"type": "text", "content": "Sorare lleva este concepto un paso más allá con cartas NFT de jugadores reales. Aquí el componente especulativo es aún mayor, ya que el precio de una carta depende tanto del rendimiento del jugador como de la oferta y demanda del coleccionismo."},
-      {"type": "text", "content": "En DataFantasy vamos a empezar a publicar análisis semanales de movimientos de mercado, detectando jugadores cuyo precio no refleja todavía su rendimiento real. Si combinas el análisis deportivo con la inteligencia de mercado, tienes una ventaja enorme sobre el resto de managers de tu liga."}
-    ]
+      {
+        "type": "text",
+        "content": "El fantasy football ha evolucionado más allá de simplemente acertar once titulares cada semana. Ahora existe una capa financiera que puede ser tan importante como la deportiva: el mercado de jugadores, donde el precio fluctúa en función del rendimiento, las noticias y la demanda de otros managers."
+      },
+      {
+        "type": "text",
+        "content": "En plataformas como La Liga Fantasy oficial, el precio de un jugador sube cuando muchos usuarios lo compran y baja cuando lo venden masivamente. Eso crea dinámicas muy similares a las de la bolsa: si eres de los primeros en detectar que un jugador va a explotar, puedes comprarlo barato y venderlo caro semanas después."
+      },
+      {
+        "type": "image",
+        "src": "mercado-grafico.jpg",
+        "caption": "Evolución del precio de un jugador a lo largo de la temporada vs. sus puntos acumulados."
+      },
+      {
+        "type": "text",
+        "content": "La clave está en anticiparse al mercado. Cuando un jugador marca dos goles en una jornada, al día siguiente ya es demasiado tarde para comprarlo barato: su precio ya habrá subido. El dinero de verdad está en comprar antes de que ocurra algo, basándose en datos: calendario favorable, recuperación de lesión, cambio táctico del entrenador."
+      },
+      {
+        "type": "text",
+        "content": "Sorare lleva este concepto un paso más allá con cartas NFT de jugadores reales. Aquí el componente especulativo es aún mayor, ya que el precio de una carta depende tanto del rendimiento del jugador como de la oferta y demanda del coleccionismo."
+      },
+      {
+        "type": "text",
+        "content": "En DataFantasy vamos a empezar a publicar análisis semanales de movimientos de mercado, detectando jugadores cuyo precio no refleja todavía su rendimiento real. Si combinas el análisis deportivo con la inteligencia de mercado, tienes una ventaja enorme sobre el resto de managers de tu liga."
+      }
+    ],
+    "status": "published"
   }
 ]

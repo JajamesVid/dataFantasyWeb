@@ -19,11 +19,21 @@
       <nav class="nav">
         <a href="/">Inicio</a>
         <a href="/equipos">Equipos</a>
+        <a href="{{ url_for('admin_articles') }}" class="nav-admin">Admin</a>
       </nav>
     </div>
   </header>
 
   <main>
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+      <div class="container">
+        {% for message in messages %}
+        <div class="flash-message">{{ message }}</div>
+        {% endfor %}
+      </div>
+      {% endif %}
+    {% endwith %}
     {% block content %}{% endblock %}
   </main>
 

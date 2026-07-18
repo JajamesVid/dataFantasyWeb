@@ -1,0 +1,168 @@
+{% extends "base.html" %}
+
+{% block title %}{{ "Editar" if article.id else "Nuevo" }} artículo · Admin · DataFantasy{% endblock %}
+
+{% block content %}
+<section class="inner-page">
+  <div class="container container--narrow">
+    <div class="section-header">
+      <h2 class="section-title">{{ "Editar artículo" if article.id else "Nuevo artículo" }}</h2>
+      {% if article.status %}
+      <span class="status-badge status-badge--{{ article.status }}">
+        {{ "Publicado" if article.status == "published" else "Borrador" }}
+      </span>
+      {% endif %}
+    </div>
+
+    <form method="post" action="{{ url_for('admin_save_article') }}" enctype="multipart/form-data" class="admin-form" id="article-form">
+      <input type="hidden" name="id" value="{{ article.id or '' }}">
+      <input type="hidden" name="existing_cover" value="{{ article.cover or '' }}">
+      <input type="hidden" name="blocks_order" id="blocks-order" value="">
+
+      <label class="field">
+        <span class="field-label">Título</span>
+        <input type="text" name="title" value="{{ article.title }}" required>
+      </label>
+
+      <label class="field">
+        <span class="field-label">Resumen</span>
+        <textarea name="summary" rows="3" required>{{ article.summary }}</textarea>
+      </label>
+
+      <div class="field-row">
+        <label class="field">
+          <span class="field-label">Fecha</span>
+          <input type="date" name="date" value="{{ article.date }}">
+        </label>
+
+        <label class="field">
+          <span class="field-label">Categoría</span>
+          <select name="tag">
+            {% for t in tags %}
+            <option value="{{ t }}" {{ "selected" if article.tag == t }}>{{ t }}</option>
+            {% endfor %}
+          </select>
+        </label>
+
+        <label class="field">
+          <span class="field-label">Autor</span>
+          <input type="text" name="author" value="{{ article.author }}">
+        </label>
+      </div>
+
+      <fieldset class="field">
+        <legend class="field-label">Equipos relacionados</legend>
+        <div class="teams-checkboxes">
+          {% for t in teams %}
+          <label class="checkbox-pill">
+            <input type="checkbox" name="teams" value="{{ t.slug }}" {{ "checked" if t.slug in article.teams }}>
+            {{ t.short }}
+          </label>
+          {% endfor %}
+        </div>
+      </fieldset>
+
+      <label class="field">
+        <span class="field-label">Imagen de portada</span>
+        {% if article.cover %}
+        <img src="{{ url_for('static', filename='img/articles/' ~ article.cover) }}" class="current-image-preview" alt="Portada actual">
+        {% endif %}
+        <input type="file" name="cover" accept="image/*">
+      </label>
+
+      <div class="field">
+        <span class="field-label">Contenido del artículo</span>
+        <div id="blocks-container" class="blocks-container">
+          {% for block in article.body %}
+            {% if block.type == "text" %}
+            <div class="block-row" data-block-type="text" data-block-id="existing-{{ loop.index0 }}">
+              <div class="block-row-header">
+                <span class="block-row-badge">Texto</span>
+                <div class="block-row-move">
+                  <button type="button" class="btn-icon" data-action="move-up" title="Subir">↑</button>
+                  <button type="button" class="btn-icon" data-action="move-down" title="Bajar">↓</button>
+                  <button type="button" class="btn-icon btn-icon--danger" data-action="remove" title="Eliminar">✕</button>
+                </div>
+              </div>
+              <input type="hidden" name="block_type_existing-{{ loop.index0 }}" value="text">
+              <textarea name="block_content_existing-{{ loop.index0 }}" rows="4" placeholder="Texto del párrafo...">{{ block.content }}</textarea>
+            </div>
+            {% elif block.type == "image" %}
+            <div class="block-row" data-block-type="image" data-block-id="existing-{{ loop.index0 }}">
+              <div class="block-row-header">
+                <span class="block-row-badge">Imagen</span>
+                <div class="block-row-move">
+                  <button type="button" class="btn-icon" data-action="move-up" title="Subir">↑</button>
+                  <button type="button" class="btn-icon" data-action="move-down" title="Bajar">↓</button>
+                  <button type="button" class="btn-icon btn-icon--danger" data-action="remove" title="Eliminar">✕</button>
+                </div>
+              </div>
+              <input type="hidden" name="block_type_existing-{{ loop.index0 }}" value="image">
+              <input type="hidden" name="block_existing_existing-{{ loop.index0 }}" value="{{ block.src }}">
+              <img src="{{ url_for('static', filename='img/articles/' ~ block.src) }}" class="current-image-preview" alt="">
+              <input type="file" name="block_image_existing-{{ loop.index0 }}" accept="image/*">
+              <input type="text" name="block_caption_existing-{{ loop.index0 }}" value="{{ block.caption or '' }}" placeholder="Pie de foto (opcional)">
+            </div>
+            {% endif %}
+          {% endfor %}
+        </div>
+
+        <div class="blocks-add-buttons">
+          <button type="button" class="btn btn--ghost" id="add-text-block">+ Bloque de texto</button>
+          <button type="button" class="btn btn--ghost" id="add-image-block">+ Bloque de imagen</button>
+        </div>
+      </div>
+
+      <div class="admin-form-actions">
+        <button type="submit" name="action" value="preview" formtarget="_blank" class="btn btn--ghost">Vista previa</button>
+        <button type="submit" name="action" value="save" class="btn btn--ghost">Guardar artículo</button>
+        <button type="submit" name="action" value="publish" class="btn btn--primary">Publicar artículo</button>
+        <button type="button" class="btn btn--disabled" disabled title="Próximamente">Publicar en redes sociales (próximamente)</button>
+      </div>
+    </form>
+
+    {% if article.id %}
+    <form method="post" action="{{ url_for('admin_delete_article', article_id=article.id) }}"
+          onsubmit="return confirm('¿Seguro que quieres eliminar este artículo? Esta acción no se puede deshacer.');"
+          class="delete-form">
+      <button type="submit" class="btn btn--danger">Eliminar artículo</button>
+    </form>
+    {% endif %}
+
+    <a href="{{ url_for('admin_articles') }}" class="back-link">← Volver a la lista de artículos</a>
+  </div>
+</section>
+
+<template id="block-template-text">
+  <div class="block-row" data-block-type="text">
+    <div class="block-row-header">
+      <span class="block-row-badge">Texto</span>
+      <div class="block-row-move">
+        <button type="button" class="btn-icon" data-action="move-up" title="Subir">↑</button>
+        <button type="button" class="btn-icon" data-action="move-down" title="Bajar">↓</button>
+        <button type="button" class="btn-icon btn-icon--danger" data-action="remove" title="Eliminar">✕</button>
+      </div>
+    </div>
+    <input type="hidden" name="__TYPE__" value="text">
+    <textarea name="__CONTENT__" rows="4" placeholder="Texto del párrafo..."></textarea>
+  </div>
+</template>
+
+<template id="block-template-image">
+  <div class="block-row" data-block-type="image">
+    <div class="block-row-header">
+      <span class="block-row-badge">Imagen</span>
+      <div class="block-row-move">
+        <button type="button" class="btn-icon" data-action="move-up" title="Subir">↑</button>
+        <button type="button" class="btn-icon" data-action="move-down" title="Bajar">↓</button>
+        <button type="button" class="btn-icon btn-icon--danger" data-action="remove" title="Eliminar">✕</button>
+      </div>
+    </div>
+    <input type="hidden" name="__TYPE__" value="image">
+    <input type="file" name="__IMAGE__" accept="image/*">
+    <input type="text" name="__CAPTION__" placeholder="Pie de foto (opcional)">
+  </div>
+</template>
+
+<script src="{{ url_for('static', filename='js/admin_article.js') }}"></script>
+{% endblock %}

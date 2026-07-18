@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Admin · Artículos · DataFantasy{% endblock %}
+
+{% block content %}
+<section class="inner-page">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Gestión de artículos</h2>
+      <a href="{{ url_for('admin_new_article') }}" class="btn btn--primary">+ Nuevo artículo</a>
+    </div>
+
+    <h3 class="admin-subheading">Borradores</h3>
+    {% set drafts = articles | selectattr("status", "equalto", "draft") | list %}
+    {% if drafts %}
+    <div class="admin-list">
+      {% for a in drafts %}
+      <div class="admin-row">
+        <div class="admin-row-info">
+          <span class="status-badge status-badge--draft">Borrador</span>
+          <span class="admin-row-title">{{ a.title or "(Sin título)" }}</span>
+          <span class="card-date">{{ a.date }}</span>
+        </div>
+        <div class="admin-row-actions">
+          <a href="{{ url_for('admin_edit_article', article_id=a.id) }}" class="btn btn--ghost">Editar</a>
+          <form method="post" action="{{ url_for('admin_publish_article', article_id=a.id) }}">
+            <button type="submit" class="btn btn--primary">Publicar</button>
+          </form>
+          <form method="post" action="{{ url_for('admin_delete_article', article_id=a.id) }}"
+                onsubmit="return confirm('¿Seguro que quieres eliminar este artículo? Esta acción no se puede deshacer.');">
+            <button type="submit" class="btn btn--danger">Eliminar</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="admin-empty">No hay borradores.</p>
+    {% endif %}
+
+    <h3 class="admin-subheading">Publicados</h3>
+    {% set published = articles | selectattr("status", "equalto", "published") | list %}
+    {% if published %}
+    <div class="admin-list">
+      {% for a in published %}
+      <div class="admin-row">
+        <div class="admin-row-info">
+          <span class="status-badge status-badge--published">Publicado</span>
+          <span class="admin-row-title">{{ a.title }}</span>
+          <span class="card-date">{{ a.date }}</span>
+        </div>
+        <div class="admin-row-actions">
+          <a href="{{ url_for('article', article_id=a.id) }}" class="btn btn--ghost" target="_blank">Ver</a>
+          <a href="{{ url_for('admin_edit_article', article_id=a.id) }}" class="btn btn--ghost">Editar</a>
+          <form method="post" action="{{ url_for('admin_delete_article', article_id=a.id) }}"
+                onsubmit="return confirm('¿Seguro que quieres eliminar este artículo? Esta acción no se puede deshacer.');">
+            <button type="submit" class="btn btn--danger">Eliminar</button>
+          </form>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="admin-empty">No hay artículos publicados.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
