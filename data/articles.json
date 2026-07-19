@@ -147,5 +147,19 @@
       }
     ],
     "status": "published"
+  },
+  {
+    "id": 5,
+    "title": "Y por qué no?",
+    "summary": "Si si, y por qué no?",
+    "date": "2026-07-19",
+    "tag": "Jornada",
+    "author": "DataFantasy",
+    "teams": [
+      "real-madrid"
+    ],
+    "cover": "5-cover-38c0a2a4.png",
+    "body": [],
+    "status": "published"
   }
 ]

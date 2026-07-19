@@ -52,6 +52,9 @@
         <div class="admin-row-actions">
           <a href="{{ url_for('article', article_id=a.id) }}" class="btn btn--ghost" target="_blank">Ver</a>
           <a href="{{ url_for('admin_edit_article', article_id=a.id) }}" class="btn btn--ghost">Editar</a>
+          <form method="post" action="{{ url_for('admin_tweet_article', article_id=a.id) }}">
+            <button type="submit" class="btn btn--twitter">Tuitear</button>
+          </form>
           <form method="post" action="{{ url_for('admin_delete_article', article_id=a.id) }}"
                 onsubmit="return confirm('¿Seguro que quieres eliminar este artículo? Esta acción no se puede deshacer.');">
             <button type="submit" class="btn btn--danger">Eliminar</button>

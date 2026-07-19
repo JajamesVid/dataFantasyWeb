@@ -3,8 +3,13 @@ import uuid
 from datetime import date
 from pathlib import Path
 
+from dotenv import load_dotenv
 from flask import Flask, abort, flash, redirect, render_template, request, url_for
 from werkzeug.utils import secure_filename
+
+from twitter_post import post_tweet_for_article
+
+load_dotenv()
 
 app = Flask(__name__)
 app.secret_key = "dev-only-secret-key"  # TODO: move to env var once admin auth is added
@@ -227,6 +232,27 @@ def admin_publish_article(article_id):
     save_all_articles(articles)
     flash("Artículo publicado.")
     return redirect(url_for("admin_articles"))
+
+
+@app.route("/admin/articles/<int:article_id>/tweet", methods=["POST"])
+def admin_tweet_article(article_id):
+    articles = load_all_articles()
+    match = next((a for a in articles if a["id"] == article_id), None)
+    if match is None:
+        abort(404)
+
+    if match["status"] != "published":
+        flash("Publica el artículo antes de tuitearlo.")
+        return redirect(url_for("admin_edit_article", article_id=article_id))
+
+    result = post_tweet_for_article(match)
+    if result["sent"]:
+        flash("Tuit enviado.")
+    elif result["reason"] == "missing_credentials":
+        flash("Tuit no enviado: faltan credenciales de Twitter en el entorno.")
+    else:
+        flash(f"Falló el tuit: {result['reason']}")
+    return redirect(url_for("admin_edit_article", article_id=article_id))
 
 
 @app.route("/admin/articles/<int:article_id>/delete", methods=["POST"])

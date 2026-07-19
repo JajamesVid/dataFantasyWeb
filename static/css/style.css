@@ -701,6 +701,25 @@ a.card:not(:has(.card-cover)) .card-content {
   margin: 1.5rem 0;
 }
 
+.btn--twitter {
+  border-color: #1d4a5f;
+  color: #60a5fa;
+}
+
+.btn--twitter:hover {
+  background: #1d4a5f;
+  border-color: #1d4a5f;
+  color: #dbeafe;
+}
+
+.admin-form-actions--secondary {
+  align-items: center;
+}
+
+.admin-form-actions--secondary .delete-form {
+  margin: 0;
+}
+
 .preview-banner {
   position: sticky;
   top: 64px;

@@ -117,16 +117,25 @@
         <button type="submit" name="action" value="preview" formtarget="_blank" class="btn btn--ghost">Vista previa</button>
         <button type="submit" name="action" value="save" class="btn btn--ghost">Guardar artículo</button>
         <button type="submit" name="action" value="publish" class="btn btn--primary">Publicar artículo</button>
-        <button type="button" class="btn btn--disabled" disabled title="Próximamente">Publicar en redes sociales (próximamente)</button>
       </div>
     </form>
 
     {% if article.id %}
-    <form method="post" action="{{ url_for('admin_delete_article', article_id=article.id) }}"
-          onsubmit="return confirm('¿Seguro que quieres eliminar este artículo? Esta acción no se puede deshacer.');"
-          class="delete-form">
-      <button type="submit" class="btn btn--danger">Eliminar artículo</button>
-    </form>
+    <div class="admin-form-actions admin-form-actions--secondary">
+      {% if article.status == "published" %}
+      <form method="post" action="{{ url_for('admin_tweet_article', article_id=article.id) }}">
+        <button type="submit" class="btn btn--twitter">Publicar en Twitter</button>
+      </form>
+      {% else %}
+      <button type="button" class="btn btn--disabled" disabled title="Publica el artículo primero">Publicar en Twitter</button>
+      {% endif %}
+
+      <form method="post" action="{{ url_for('admin_delete_article', article_id=article.id) }}"
+            onsubmit="return confirm('¿Seguro que quieres eliminar este artículo? Esta acción no se puede deshacer.');"
+            class="delete-form">
+        <button type="submit" class="btn btn--danger">Eliminar artículo</button>
+      </form>
+    </div>
     {% endif %}
 
     <a href="{{ url_for('admin_articles') }}" class="back-link">← Volver a la lista de artículos</a>
