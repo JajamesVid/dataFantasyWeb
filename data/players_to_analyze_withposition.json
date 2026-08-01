@@ -1,0 +1,161 @@
+{
+  "name": "Real Madrid",
+  "sofascore_id": 2829,
+  "players": [
+    {
+      "name": "kylian-mbappe",
+      "sofascore_id": 826643,
+      "position": "delantero"
+    },
+    {
+      "name": "vinicius-junior",
+      "sofascore_id": 868812,
+      "position": "delantero"
+    },
+    {
+      "name": "rodrygo",
+      "sofascore_id": 910536,
+      "position": "delantero"
+    },
+    {
+      "name": "franco-mastantuono",
+      "sofascore_id": 1403559,
+      "position": "mediocampista"
+    },
+    {
+      "name": "gonzalo-garcia",
+      "sofascore_id": 1402716,
+      "position": "delantero"
+    },
+    {
+      "name": "jude-bellingham",
+      "sofascore_id": 991011,
+      "position": "mediocampista"
+    },
+    {
+      "name": "federico-valverde",
+      "sofascore_id": 831808,
+      "position": "mediocampista"
+    },
+    {
+      "name": "arda-gler",
+      "sofascore_id": 1091116,
+      "position": "mediocampista"
+    },
+    {
+      "name": "brahim-diaz",
+      "sofascore_id": 835485,
+      "position": "delantero"
+    },
+    {
+      "name": "eduardo-camavinga",
+      "sofascore_id": 973887,
+      "position": "mediocampista"
+    },
+    {
+      "name": "aurelien-tchouameni",
+      "sofascore_id": 859025,
+      "position": "mediocampista"
+    },
+    {
+      "name": "dani-ceballos",
+      "sofascore_id": 547838,
+      "position": "mediocampista"
+    },
+    {
+      "name": "thiago-pitarch",
+      "sofascore_id": 2237795,
+      "position": "defensa"
+    },
+    {
+      "name": "manuel-ngel",
+      "sofascore_id": 1142683,
+      "position": "defensa"
+    },
+    {
+      "name": "cesar-palacios",
+      "sofascore_id": 1402688,
+      "position": "mediocampista"
+    },
+    {
+      "name": "jorge-cestero",
+      "sofascore_id": 1590121,
+      "position": "defensa"
+    },
+    {
+      "name": "trent-alexander-arnold",
+      "sofascore_id": 795064,
+      "position": "defensa"
+    },
+    {
+      "name": "antonio-rudiger",
+      "sofascore_id": 142622,
+      "position": "defensa"
+    },
+    {
+      "name": "dean-huijsen",
+      "sofascore_id": 1176744,
+      "position": "defensa"
+    },
+    {
+      "name": "der-milito",
+      "sofascore_id": 822519,
+      "position": "defensa"
+    },
+    {
+      "name": "daniel-carvajal",
+      "sofascore_id": 138572,
+      "position": "defensa"
+    },
+    {
+      "name": "raul-asencio-1",
+      "sofascore_id": 1156645,
+      "position": "defensa"
+    },
+    {
+      "name": "david-alaba",
+      "sofascore_id": 66492,
+      "position": "defensa"
+    },
+    {
+      "name": "lvaro-fernandez-1",
+      "sofascore_id": 1085081,
+      "position": "portero"
+    },
+    {
+      "name": "ferland-mendy",
+      "sofascore_id": 792073,
+      "position": "defensa"
+    },
+    {
+      "name": "fran-garcia",
+      "sofascore_id": 851271,
+      "position": "defensa"
+    },
+    {
+      "name": "manuel-serrano",
+      "sofascore_id": 1145644,
+      "position": "defensa"
+    },
+    {
+      "name": "thibaut-courtois",
+      "sofascore_id": 70988,
+      "position": "portero"
+    },
+    {
+      "name": "andriy-lunin",
+      "sofascore_id": 857574,
+      "position": "portero"
+    },
+    {
+      "name": "fran-gonzalez-2",
+      "sofascore_id": 1493226,
+      "position": "portero"
+    },
+    {
+      "name": "alvaro-gonzalez-1",
+      "sofascore_id": 1542706,
+      "position": "portero"
+    }
+  ]
+}

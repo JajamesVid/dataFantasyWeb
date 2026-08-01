@@ -16,7 +16,9 @@ app.secret_key = "dev-only-secret-key"  # TODO: move to env var once admin auth 
 
 DATA = Path(__file__).parent / "data"
 ARTICLES_IMG = Path(__file__).parent / "static" / "img" / "articles"
+BADGES_DIR = Path(__file__).parent / "static" / "img" / "escudos"
 ALLOWED_IMAGE_EXT = {"jpg", "jpeg", "png", "webp", "gif"}
+BADGE_EXTENSIONS = ("webp", "png", "svg", "jpg", "jpeg")
 TAGS = ["Jornada", "Análisis", "Mercado"]
 
 # 4-3-3: (left%, top%) within the pitch container
@@ -51,6 +53,22 @@ def load_articles():
 
 def load_teams():
     return load_json("teams.json")
+
+
+def team_badge_url(slug):
+    """Look up a team crest in static/img/escudos/<slug>.<ext>, if one has been uploaded."""
+    for ext in BADGE_EXTENSIONS:
+        if (BADGES_DIR / f"{slug}.{ext}").exists():
+            return url_for("static", filename=f"img/escudos/{slug}.{ext}")
+    return None
+
+
+def load_points_evolution():
+    """Sample/placeholder points until real jornada-by-jornada data is wired up."""
+    data = load_json("team_points_evolution_sample.json")
+    for team in data["teams"]:
+        team["badge"] = team_badge_url(team["slug"])
+    return data
 
 
 def format_name(slug):
@@ -133,7 +151,11 @@ def article_from_form(existing):
 
 @app.route("/")
 def index():
-    return render_template("index.html", articles=load_articles())
+    return render_template(
+        "index.html",
+        articles=load_articles(),
+        points_evolution=load_points_evolution(),
+    )
 
 
 @app.route("/article/<int:article_id>")
