@@ -1,0 +1,50 @@
+{
+  "metrics": [
+    "Goles",
+    "Asistencias",
+    "Regularidad",
+    "Valoración",
+    "Puntos Fantasy"
+  ],
+  "players": [
+    {
+      "slug": "kylian-mbappe",
+      "name": "Kylian Mbappé",
+      "team_slug": "real-madrid",
+      "team_short": "RMA",
+      "values": [
+        92,
+        58,
+        70,
+        85,
+        90
+      ]
+    },
+    {
+      "slug": "lamine-yamal",
+      "name": "Lamine Yamal",
+      "team_slug": "barcelona",
+      "team_short": "BAR",
+      "values": [
+        75,
+        88,
+        65,
+        80,
+        82
+      ]
+    },
+    {
+      "slug": "julian-alvarez",
+      "name": "Julián Álvarez",
+      "team_slug": "atletico-madrid",
+      "team_short": "ATM",
+      "values": [
+        80,
+        70,
+        78,
+        76,
+        79
+      ]
+    }
+  ]
+}

@@ -11,20 +11,35 @@
 
 <section class="evolution-section">
   <div class="container">
-    <div class="section-header">
-      <h2 class="section-title">Evolución de puntos por equipo</h2>
-      <span class="section-count">{{ points_evolution.jornadas[-1] }}</span>
-    </div>
-    <p class="chart-hint">Pasa el ratón sobre una línea para resaltarla, o haz clic en un equipo para aislar su evolución.</p>
-    <div class="chart-toolbar">
-      <div class="chart-focus" id="chartFocus">
-        <span class="chart-focus-badge" id="chartFocusBadge"></span>
-        <span class="chart-focus-name" id="chartFocusName"></span>
+    <div class="charts-row">
+      <div class="chart-col chart-col--wide">
+        <div class="section-header">
+          <h2 class="section-title">Evolución de puntos por equipo</h2>
+          <span class="section-count">{{ points_evolution.jornadas[-1] }}</span>
+        </div>
+        <p class="chart-hint">Pasa el ratón sobre una línea para resaltarla, o haz clic en un equipo para aislar su evolución.</p>
+        <div class="chart-toolbar">
+          <div class="chart-focus" id="chartFocus">
+            <span class="chart-focus-badge" id="chartFocusBadge"></span>
+            <span class="chart-focus-name" id="chartFocusName"></span>
+          </div>
+          <button type="button" class="chart-reset-btn" id="chartResetBtn">← Ver todos los equipos</button>
+        </div>
+        <div class="chart-card">
+          <canvas id="points-evolution-chart"></canvas>
+        </div>
       </div>
-      <button type="button" class="chart-reset-btn" id="chartResetBtn">← Ver todos los equipos</button>
-    </div>
-    <div class="chart-card">
-      <canvas id="points-evolution-chart"></canvas>
+
+      <div class="chart-col chart-col--narrow">
+        <div class="section-header">
+          <h2 class="section-title">Comparativa de jugadores</h2>
+          <span class="section-count">5 métricas</span>
+        </div>
+        <p class="chart-hint">Un crack de cada grande, cara a cara.</p>
+        <div class="chart-card chart-card--radar">
+          <canvas id="player-radar-chart"></canvas>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -36,7 +51,7 @@
       <span class="section-count">{{ articles|length }} artículos</span>
     </div>
 
-    <div class="articles-grid">
+    <div class="articles-grid articles-grid--compact">
       {% for article in articles %}
       <a href="{{ url_for('article', article_id=article.id) }}" class="card">
         {% if article.cover %}
@@ -88,53 +103,72 @@
       ctx.font = '700 11px Inter, system-ui, sans-serif';
       const paddingX = 5;
       const textBoxHeight = 18;
-      const imgBoxSize = 47;
+      const imgBoxSize = 54;
 
-      const badges = chart.data.datasets
+      // All badges anchor on each team's current (last-jornada) value — like the original
+      // idea — but rank 1, 2, 3... alternate between two side-by-side lanes ("staircase"),
+      // so the full ranking reads top-to-bottom at a glance and each lane only has to fit
+      // half the teams, keeping the crest size big even with 20 teams on the chart.
+      const totalJornadas = chart.data.labels.length;
+      const lastIndex = totalJornadas - 1;
+      const laneGap = 10;
+      const rowGap = 16;
+
+      const ranked = chart.data.datasets
         .map((dataset, i) => {
           const meta = chart.getDatasetMeta(i);
           if (meta.hidden) return null;
-          const point = meta.data[meta.data.length - 1];
-          if (!point) return null;
-          const { x, y } = point.tooltipPosition();
-          const image = badgeImages[dataset.teamSlug];
-          const size = imgBoxSize;
-          return {
-            datasetIndex: i,
-            x, y, origY: y,
-            label: dataset.teamShort,
-            color: dataset.fullColor,
-            image: image || null,
-            width: image ? size : ctx.measureText(dataset.teamShort).width + paddingX * 2,
-            height: image ? size : textBoxHeight,
-          };
+          if (!meta.data.length) return null;
+          return { datasetIndex: i, meta, dataset, finalValue: dataset.data[dataset.data.length - 1] };
         })
         .filter(Boolean)
-        .sort((a, b) => a.origY - b.origY);
+        .sort((a, b) => b.finalValue - a.finalValue); // best team first
+
+      // With many teams on the chart, lay the two lanes out as a strict, evenly-spaced grid
+      // (rank-based, not value-based) so the second lane always lands exactly halfway
+      // between two consecutive badges of the first lane — a true brick-wall staircase.
+      // With few teams visible (e.g. a single pinned/isolated team) there's no crowding to
+      // solve, so just anchor directly on the real value instead of snapping to a grid.
+      const useGrid = ranked.length > 4;
+      const rowStep = imgBoxSize + rowGap;
+      const topAnchor = chartArea.top + imgBoxSize / 2 + 4;
+
+      const badges = ranked.map((entry, rank) => {
+        const lane = rank % 2;
+        const point = entry.meta.data[lastIndex];
+        const { x, y } = point.tooltipPosition();
+        const image = badgeImages[entry.dataset.teamSlug];
+        const width = image ? imgBoxSize : ctx.measureText(entry.dataset.teamShort).width + paddingX * 2;
+        const height = image ? imgBoxSize : textBoxHeight;
+        const indexInLane = Math.floor(rank / 2);
+        const gridY = topAnchor + indexInLane * rowStep + lane * (rowStep / 2);
+        return {
+          datasetIndex: entry.datasetIndex,
+          lane,
+          x: x + 6 + lane * (imgBoxSize + laneGap),
+          y: useGrid ? gridY : y,
+          label: entry.dataset.teamShort,
+          color: entry.dataset.fullColor,
+          image: image || null,
+          width,
+          height,
+        };
+      });
 
       if (!badges.length) return;
 
-      // Badges can have very different sizes (some teams get a bigger crest), so the gap
-      // between two stacked badges is based on both their heights rather than a flat constant.
-      for (let i = 1; i < badges.length; i++) {
-        const gap = badges[i - 1].height / 2 + badges[i].height / 2 + 6;
-        if (badges[i].y < badges[i - 1].y + gap) {
-          badges[i].y = badges[i - 1].y + gap;
-        }
-      }
-      const bottomLimit = chartArea.bottom - badges[badges.length - 1].height / 2;
-      const overflow = badges[badges.length - 1].y - bottomLimit;
+      // If the grid runs past the bottom of the plot area, shift every badge up by the
+      // same amount so the staggered spacing between lanes is preserved exactly.
+      const maxY = Math.max(...badges.map((b) => b.y + b.height / 2));
+      const overflow = maxY - chartArea.bottom;
       if (overflow > 0) badges.forEach((b) => (b.y -= overflow));
-      const topLimit = chartArea.top + badges[0].height / 2;
-      const underflow = topLimit - badges[0].y;
-      if (underflow > 0) badges.forEach((b) => (b.y += underflow));
 
       const hitboxes = [];
 
       function drawBadge(b, { scale = 1, alpha = 1 } = {}) {
         const w = b.width * scale;
         const h = b.height * scale;
-        const boxX = b.x + 6 - (w - b.width) / 2;
+        const boxX = b.x - (w - b.width) / 2;
         const boxY = b.y - h / 2;
         const hitPad = 2;
         hitboxes.push({
@@ -147,18 +181,6 @@
 
         ctx.save();
         ctx.globalAlpha = alpha;
-
-        if (Math.abs(b.y - b.origY) > 1) {
-          ctx.save();
-          ctx.strokeStyle = b.color;
-          ctx.globalAlpha = alpha * 0.5;
-          ctx.lineWidth = 1;
-          ctx.beginPath();
-          ctx.moveTo(b.x, b.origY);
-          ctx.lineTo(b.x + 6, b.y);
-          ctx.stroke();
-          ctx.restore();
-        }
 
         if (b.image) {
           ctx.fillStyle = '#e2e8f0';
@@ -334,7 +356,7 @@
         responsive: true,
         maintainAspectRatio: false,
         interaction: { mode: 'nearest', axis: 'xy', intersect: false },
-        layout: { padding: { right: 70 } },
+        layout: { padding: { right: 150 } },
         scales: {
           x: { ticks: { color: '#64748b' }, grid: { color: '#1e2d45' } },
           y: { ticks: { color: '#64748b' }, grid: { color: '#1e2d45' } },
@@ -349,11 +371,6 @@
             bodyColor: '#e2e8f0',
           },
         },
-        onHover(event, elements, chartInstance) {
-          if (pinnedIndex !== null) return;
-          const index = getDatasetIndexAtEvent(chartInstance, event.native, elements);
-          setHoveredDataset(chartInstance, index);
-        },
       },
       plugins: [teamBadgePlugin],
     });
@@ -362,8 +379,21 @@
       if (pinnedIndex === null) setHoveredDataset(chart, null);
     });
 
-    // Handled as a plain DOM listener (rather than the Chart.js `onClick` option) so a click
-    // squarely on a nudged-away badge — outside the line's own hit area — still resolves.
+    // Handled as plain DOM listeners (rather than the Chart.js `onHover`/`onClick` options)
+    // because Chart.js only invokes those within the plotted chart area — badges live in the
+    // right-hand padding margin, outside it, so hovering/clicking one would otherwise be ignored.
+    canvas.addEventListener('mousemove', (nativeEvent) => {
+      if (pinnedIndex !== null) return;
+      const elements = chart.getElementsAtEventForMode(
+        nativeEvent,
+        'nearest',
+        { intersect: false, axis: 'xy' },
+        false
+      );
+      const index = getDatasetIndexAtEvent(chart, nativeEvent, elements);
+      setHoveredDataset(chart, index);
+    });
+
     canvas.addEventListener('click', (nativeEvent) => {
       const elements = chart.getElementsAtEventForMode(
         nativeEvent,
@@ -381,6 +411,53 @@
     });
 
     chartResetBtn.addEventListener('click', () => unpinDataset(chart));
+  });
+
+  // ── Player comparison radar ──────────────────────────────────────────
+  const radarData = {{ player_radar | tojson }};
+  const RADAR_COLORS = ['#f87171', '#facc15', '#38bdf8'];
+
+  new Chart(document.getElementById('player-radar-chart'), {
+    type: 'radar',
+    data: {
+      labels: radarData.metrics,
+      datasets: radarData.players.map((player, i) => ({
+        label: player.name,
+        data: player.values,
+        borderColor: RADAR_COLORS[i % RADAR_COLORS.length],
+        backgroundColor: RADAR_COLORS[i % RADAR_COLORS.length] + '33',
+        pointBackgroundColor: RADAR_COLORS[i % RADAR_COLORS.length],
+        pointRadius: 3,
+        borderWidth: 2,
+      })),
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        r: {
+          min: 0,
+          max: 100,
+          ticks: { display: false, stepSize: 25 },
+          grid: { color: '#1e2d45' },
+          angleLines: { color: '#1e2d45' },
+          pointLabels: { color: '#94a3b8', font: { size: 11 } },
+        },
+      },
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: '#e2e8f0', boxWidth: 10, font: { size: 11 } },
+        },
+        tooltip: {
+          backgroundColor: '#111827',
+          borderColor: '#1e2d45',
+          borderWidth: 1,
+          titleColor: '#e2e8f0',
+          bodyColor: '#e2e8f0',
+        },
+      },
+    },
   });
 </script>
 {% endblock %}

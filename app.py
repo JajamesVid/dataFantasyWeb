@@ -71,6 +71,14 @@ def load_points_evolution():
     return data
 
 
+def load_player_radar():
+    """Sample/placeholder player comparison until real per-player stats are wired up."""
+    data = load_json("player_radar_sample.json")
+    for player in data["players"]:
+        player["team_badge"] = team_badge_url(player["team_slug"])
+    return data
+
+
 def format_name(slug):
     return " ".join(w.capitalize() for w in slug.split("-"))
 
@@ -155,6 +163,7 @@ def index():
         "index.html",
         articles=load_articles(),
         points_evolution=load_points_evolution(),
+        player_radar=load_player_radar(),
     )
 
 

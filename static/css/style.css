@@ -151,6 +151,24 @@ body {
   padding: 0 0 2.5rem;
 }
 
+.charts-row {
+  display: grid;
+  grid-template-columns: 2fr 1fr;
+  gap: 1.5rem;
+  align-items: start;
+}
+
+.chart-col--wide,
+.chart-col--narrow {
+  min-width: 0;
+}
+
+@media (max-width: 900px) {
+  .charts-row {
+    grid-template-columns: 1fr;
+  }
+}
+
 .chart-hint {
   font-size: 0.85rem;
   color: var(--muted);
@@ -226,11 +244,15 @@ body {
   border: 1px solid var(--border);
   border-radius: var(--radius);
   padding: 1.5rem;
-  height: 800px;
+  height: 820px;
 }
 
 .chart-card canvas {
   cursor: pointer;
+}
+
+.chart-card--radar {
+  height: 460px;
 }
 
 /* ── Board section ────────────────────────────────── */
@@ -262,6 +284,37 @@ body {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 1.25rem;
+}
+
+/* Smaller thumbnails/cards so more announcements fit per row (used on the home board). */
+.articles-grid--compact {
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+.articles-grid--compact .card-cover {
+  height: 100px;
+}
+
+.articles-grid--compact .card-content {
+  padding: 1rem;
+  gap: 0.5rem;
+}
+
+.articles-grid--compact .card-title {
+  font-size: 0.95rem;
+}
+
+.articles-grid--compact .card-summary {
+  font-size: 0.8rem;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+.articles-grid--compact .card-footer {
+  padding-top: 0.5rem;
 }
 
 .card {

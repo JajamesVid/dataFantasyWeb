@@ -266,6 +266,91 @@
         80,
         90
       ]
+    },
+    {
+      "slug": "racing",
+      "name": "Racing de Santander",
+      "short": "RAC",
+      "points": [
+        7,
+        15,
+        21,
+        31,
+        37,
+        46,
+        51,
+        54,
+        63,
+        68
+      ]
+    },
+    {
+      "slug": "malaga",
+      "name": "Málaga CF",
+      "short": "MLG",
+      "points": [
+        5,
+        10,
+        18,
+        23,
+        26,
+        35,
+        43,
+        52,
+        60,
+        64
+      ]
+    },
+    {
+      "slug": "deportivo-coruna",
+      "name": "Deportivo de La Coruña",
+      "short": "DEP",
+      "points": [
+        4,
+        12,
+        18,
+        27,
+        35,
+        44,
+        54,
+        70,
+        76,
+        84
+      ]
+    },
+    {
+      "slug": "levante",
+      "name": "Levante UD",
+      "short": "LEV",
+      "points": [
+        3,
+        7,
+        14,
+        23,
+        32,
+        39,
+        48,
+        53,
+        67,
+        74
+      ]
+    },
+    {
+      "slug": "elche",
+      "name": "Elche CF",
+      "short": "ELC",
+      "points": [
+        8,
+        15,
+        18,
+        26,
+        35,
+        43,
+        52,
+        60,
+        69,
+        76
+      ]
     }
   ]
 }
