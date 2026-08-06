@@ -13,7 +13,11 @@
     <div class="teams-grid">
       {% for team in teams %}
       <a href="{{ url_for('equipo', slug=team.slug) }}" class="team-card">
+        {% if team.badge %}
+        <span class="team-badge team-badge--crest"><img src="{{ team.badge }}" alt="{{ team.name }}"></span>
+        {% else %}
         <span class="team-badge">{{ team.short }}</span>
+        {% endif %}
         <span class="team-name">{{ team.name }}</span>
         <span class="team-arrow">→</span>
       </a>

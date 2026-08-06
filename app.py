@@ -66,8 +66,21 @@ def team_badge_url(slug):
 def load_points_evolution():
     """Sample/placeholder points until real jornada-by-jornada data is wired up."""
     data = load_json("team_points_evolution_sample.json")
+    real_slugs = {t["slug"] for t in load_teams()}
     for team in data["teams"]:
         team["badge"] = team_badge_url(team["slug"])
+        # A few chart-only entries (e.g. Segunda clubs) don't have a real team page.
+        team["has_page"] = team["slug"] in real_slugs
+    return data
+
+
+def load_classification_evolution():
+    """Sample/placeholder LaLiga standings (1st-20th) until real results are wired up."""
+    data = load_json("team_classification_sample.json")
+    real_slugs = {t["slug"] for t in load_teams()}
+    for team in data["teams"]:
+        team["badge"] = team_badge_url(team["slug"])
+        team["has_page"] = team["slug"] in real_slugs
     return data
 
 
@@ -77,6 +90,29 @@ def load_player_radar():
     for player in data["players"]:
         player["team_badge"] = team_badge_url(player["team_slug"])
     return data
+
+
+def load_team_evolution(slug):
+    """A single team's jornada-by-jornada points and league position, overlaid on the
+    strip chart on its own page.
+
+    Not every team in teams.json has sample data yet (the chart's sample sets don't
+    perfectly mirror the real roster), so this returns None when there's nothing to plot.
+    """
+    points_data = load_json("team_points_evolution_sample.json")
+    team = next((t for t in points_data["teams"] if t["slug"] == slug), None)
+    if team is None:
+        return None
+
+    classification_data = load_json("team_classification_sample.json")
+    classification_team = next((t for t in classification_data["teams"] if t["slug"] == slug), None)
+
+    return {
+        "jornadas": points_data["jornadas"],
+        "points": team["points"],
+        "positions": classification_team["positions"] if classification_team else None,
+        "badge": team_badge_url(slug),
+    }
 
 
 def format_name(slug):
@@ -163,6 +199,7 @@ def index():
         "index.html",
         articles=load_articles(),
         points_evolution=load_points_evolution(),
+        classification_evolution=load_classification_evolution(),
         player_radar=load_player_radar(),
     )
 
@@ -177,7 +214,10 @@ def article(article_id):
 
 @app.route("/equipos")
 def equipos():
-    return render_template("equipos.html", teams=load_teams())
+    teams = load_teams()
+    for team in teams:
+        team["badge"] = team_badge_url(team["slug"])
+    return render_template("equipos.html", teams=teams)
 
 
 @app.route("/equipos/<slug>")
@@ -186,9 +226,13 @@ def equipo(slug):
     team = next((t for t in teams if t["slug"] == slug), None)
     if team is None:
         abort(404)
+    team["badge"] = team_badge_url(slug)
     articles = [a for a in load_articles() if slug in a.get("teams", [])]
     lineup = get_lineup(team["sofascore_id"])
-    return render_template("equipo.html", team=team, articles=articles, lineup=lineup)
+    points_evolution = load_team_evolution(slug)
+    return render_template(
+        "equipo.html", team=team, articles=articles, lineup=lineup, points_evolution=points_evolution
+    )
 
 
 # ── Admin: gestión de artículos ─────────────────────────────────────

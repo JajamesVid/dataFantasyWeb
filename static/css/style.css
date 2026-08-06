@@ -169,6 +169,35 @@ body {
   }
 }
 
+.chart-tabs {
+  display: flex;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+}
+
+.chart-tab {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  color: var(--muted);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1rem;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background 0.15s, border-color 0.15s, color 0.15s;
+}
+
+.chart-tab:hover { color: var(--text); }
+
+.chart-tab.is-active {
+  background: var(--bg-card-h);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+.chart-tab-panel { display: none; }
+.chart-tab-panel.is-active { display: block; }
+
 .chart-hint {
   font-size: 0.85rem;
   color: var(--muted);
@@ -213,6 +242,19 @@ body {
   height: 100%;
   object-fit: contain;
   padding: 2px;
+}
+
+.chart-focus-link {
+  color: var(--accent);
+  text-decoration: none;
+  font-size: 0.85rem;
+  font-weight: 600;
+  white-space: nowrap;
+}
+
+.chart-focus-link:hover {
+  color: var(--accent-d);
+  text-decoration: underline;
 }
 
 .chart-reset-btn {
@@ -449,6 +491,28 @@ body {
   min-width: 52px;
 }
 
+.team-badge--crest {
+  background: #e2e8f0;
+  padding: 4px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 36px;
+  height: 36px;
+}
+
+.team-badge--crest.team-badge--lg {
+  width: 52px;
+  height: 52px;
+  padding: 6px;
+}
+
+.team-badge--crest img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
 .team-name {
   font-size: 0.95rem;
   font-weight: 500;
@@ -473,6 +537,59 @@ body {
 
 .team-header .section-title {
   font-size: 2rem;
+}
+
+/* ── Team evolution strip ─────────────────────────── */
+.team-evolution-strip {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem 1.5rem;
+  margin: -1rem 0 2rem;
+}
+
+.team-evolution-header {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  margin-bottom: 0.5rem;
+}
+
+.team-evolution-label {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.team-evolution-stats {
+  display: flex;
+  align-items: baseline;
+  gap: 1.25rem;
+}
+
+.team-evolution-total {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 1.1rem;
+  font-weight: 800;
+  color: var(--text);
+}
+
+.team-evolution-dot {
+  width: 9px;
+  height: 9px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.team-evolution-dot--points { background: var(--accent); }
+.team-evolution-dot--position { background: #38bdf8; }
+
+.team-evolution-chart {
+  height: 140px;
 }
 
 /* ── Empty state ──────────────────────────────────── */

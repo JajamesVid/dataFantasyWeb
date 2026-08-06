@@ -8,9 +8,34 @@
     <a href="/equipos" class="back-link">← Todos los equipos</a>
 
     <div class="team-header">
+      {% if team.badge %}
+      <span class="team-badge team-badge--lg team-badge--crest"><img src="{{ team.badge }}" alt="{{ team.name }}"></span>
+      {% else %}
       <span class="team-badge team-badge--lg">{{ team.short }}</span>
+      {% endif %}
       <h1 class="section-title">{{ team.name }}</h1>
     </div>
+
+    {% if points_evolution %}
+    <div class="team-evolution-strip">
+      <div class="team-evolution-header">
+        <span class="team-evolution-label">Evolución · {{ points_evolution.jornadas[-1] }}</span>
+        <span class="team-evolution-stats">
+          <span class="team-evolution-total team-evolution-total--points">
+            <span class="team-evolution-dot team-evolution-dot--points"></span>{{ points_evolution.points[-1] }} pts
+          </span>
+          {% if points_evolution.positions %}
+          <span class="team-evolution-total team-evolution-total--position">
+            <span class="team-evolution-dot team-evolution-dot--position"></span>{{ points_evolution.positions[-1] }}º clasificación
+          </span>
+          {% endif %}
+        </span>
+      </div>
+      <div class="team-evolution-chart">
+        <canvas id="team-points-chart"></canvas>
+      </div>
+    </div>
+    {% endif %}
 
     {% if lineup %}
     <div class="team-layout">
@@ -127,4 +152,79 @@
 
   </div>
 </section>
+{% endblock %}
+
+{% block scripts %}
+{% if points_evolution %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  const teamPositions = {{ (points_evolution.positions or none) | tojson }};
+
+  const teamEvolutionDatasets = [
+    {
+      label: 'Puntos Fantasy',
+      data: {{ points_evolution.points | tojson }},
+      yAxisID: 'yPoints',
+      borderColor: '#22c55e',
+      backgroundColor: 'rgba(34, 197, 94, 0.12)',
+      fill: true,
+      borderWidth: 2,
+      pointRadius: 0,
+      pointHoverRadius: 4,
+      tension: 0.3,
+    },
+  ];
+
+  if (teamPositions) {
+    teamEvolutionDatasets.push({
+      label: 'Clasificación',
+      data: teamPositions,
+      yAxisID: 'yPosition',
+      borderColor: '#38bdf8',
+      backgroundColor: 'transparent',
+      fill: false,
+      borderWidth: 2,
+      borderDash: [4, 3],
+      pointRadius: 0,
+      pointHoverRadius: 4,
+      tension: 0.3,
+    });
+  }
+
+  new Chart(document.getElementById('team-points-chart'), {
+    type: 'line',
+    data: {
+      labels: {{ points_evolution.jornadas | tojson }},
+      datasets: teamEvolutionDatasets,
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', axis: 'x', intersect: false },
+      scales: {
+        x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { display: false } },
+        yPoints: { display: false },
+        // Position 1 (best) at the top, 20 (worst) at the bottom — opposite of points.
+        yPosition: { display: false, reverse: true, min: 1, max: 20 },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#111827',
+          borderColor: '#1e2d45',
+          borderWidth: 1,
+          titleColor: '#e2e8f0',
+          bodyColor: '#e2e8f0',
+          callbacks: {
+            label(ctx) {
+              const suffix = ctx.dataset.yAxisID === 'yPosition' ? 'º' : ' pts';
+              return `${ctx.dataset.label}: ${ctx.parsed.y}${suffix}`;
+            },
+          },
+        },
+      },
+    },
+  });
+</script>
+{% endif %}
 {% endblock %}
