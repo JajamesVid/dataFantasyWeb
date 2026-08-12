@@ -12,7 +12,7 @@ import unicodedata
 from collections import defaultdict
 from pathlib import Path
 
-from supabase_client import fetch_all, fetch_in_chunks
+from supabase_client import fetch_all, fetch_in_chunks, fetch_many
 
 DATA_DIR = Path(__file__).parent / "data"
 CACHE_TTL_SECONDS = 900
@@ -69,26 +69,46 @@ def _load_teams_json():
 
 
 def _fetch_season_bundle(temporada):
-    partidos = fetch_all("partidos", {
-        "temporada": f"eq.{temporada}",
-        "select": "partido_id,jornada,fecha_partido,equipo_local_id,equipo_visitante_id,"
-                  "abreviatura_local,abreviatura_visitante",
-    })
+    # Primera tanda: independientes entre sí, se piden todas a la vez.
+    first = fetch_many([
+        ("partidos", lambda: fetch_all("partidos", {
+            "temporada": f"eq.{temporada}",
+            "select": "partido_id,jornada,fecha_partido,equipo_local_id,equipo_visitante_id,"
+                      "abreviatura_local,abreviatura_visitante",
+            "order": "partido_id.asc",
+        })),
+        ("historial", lambda: fetch_all("historial_equipos_jugador", {"order": "historial_id.asc"})),
+        ("jugadores", lambda: fetch_all("jugadores", {
+            "select": "jugador_id,nombre_jugador,fecha_nacimiento", "order": "jugador_id.asc",
+        })),
+        ("equipos", lambda: fetch_all("equipos", {"select": "equipo_id,nombre_equipo", "order": "equipo_id.asc"})),
+    ])
+    partidos = first["partidos"]
+    historial = first["historial"]
+    jugadores = first["jugadores"]
+    equipos = first["equipos"]
+
     partido_ids = [p["partido_id"] for p in partidos]
     partidos_by_id = {p["partido_id"]: p for p in partidos}
 
-    statsequipos = fetch_in_chunks("statsequipos", "partido_id", partido_ids, {
-        "select": "partido_id,equipo_id,puntos_acumulados,diferencia_goles_acumulada,goles_favor_acumulados",
-    })
-    puntuaciones = fetch_in_chunks("puntuaciones", "partido_id", partido_ids, {
-        "select": "partido_id,jugador_id,puntuacion_media,racha_puntuacion_media_14d",
-    })
-    statsjugadores = fetch_in_chunks("statsjugadores", "partido_id", partido_ids, {
-        "select": "partido_id,jugador_id,equipo_id,goles,asistencias_gol,pases_precisos,pases_totales",
-    })
-    historial = fetch_all("historial_equipos_jugador")
-    jugadores = fetch_all("jugadores", {"select": "jugador_id,nombre_jugador,fecha_nacimiento"})
-    equipos = fetch_all("equipos", {"select": "equipo_id,nombre_equipo"})
+    # Segunda tanda: dependen de partido_ids, pero son independientes entre sí.
+    second = fetch_many([
+        ("statsequipos", lambda: fetch_in_chunks("statsequipos", "partido_id", partido_ids, {
+            "select": "partido_id,equipo_id,puntos_acumulados,diferencia_goles_acumulada,goles_favor_acumulados",
+            "order": "estadistica_equipo_id.asc",
+        })),
+        ("puntuaciones", lambda: fetch_in_chunks("puntuaciones", "partido_id", partido_ids, {
+            "select": "partido_id,jugador_id,puntuacion_media,racha_puntuacion_media_14d",
+            "order": "puntuacion_id.asc",
+        })),
+        ("statsjugadores", lambda: fetch_in_chunks("statsjugadores", "partido_id", partido_ids, {
+            "select": "partido_id,jugador_id,equipo_id,goles,asistencias_gol,pases_precisos,pases_totales",
+            "order": "estadistica_id.asc",
+        })),
+    ])
+    statsequipos = second["statsequipos"]
+    puntuaciones = second["puntuaciones"]
+    statsjugadores = second["statsjugadores"]
 
     statsjugadores_idx = {(s["partido_id"], s["jugador_id"]): s["equipo_id"] for s in statsjugadores}
 
