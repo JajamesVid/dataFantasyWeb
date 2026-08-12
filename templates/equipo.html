@@ -37,38 +37,28 @@
     </div>
     {% endif %}
 
-    {% if lineup %}
+    {% if player_stats %}
     <div class="team-layout">
 
-      <!-- Left: pitch -->
-      <div class="pitch-column">
-        <p class="pitch-title">Once más probable</p>
-        <div class="pitch-wrap">
-          <svg class="pitch-svg" viewBox="0 0 100 150" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
-            <rect x="2" y="2" width="96" height="146" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <line x1="2" y1="75" x2="98" y2="75" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <circle cx="50" cy="75" r="13" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <circle cx="50" cy="75" r="0.6" fill="white" fill-opacity="0.5"/>
-            <rect x="22" y="2" width="56" height="25" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <rect x="36" y="2" width="28" height="9" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <circle cx="50" cy="18" r="0.6" fill="white" fill-opacity="0.5"/>
-            <rect x="22" y="123" width="56" height="25" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <rect x="36" y="139" width="28" height="9" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <circle cx="50" cy="132" r="0.6" fill="white" fill-opacity="0.5"/>
-            <path d="M2 5 A3 3 0 0 1 5 2"      fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <path d="M95 2 A3 3 0 0 1 98 5"     fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <path d="M98 145 A3 3 0 0 1 95 148" fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-            <path d="M5 148 A3 3 0 0 1 2 145"   fill="none" stroke="white" stroke-width="0.6" stroke-opacity="0.35"/>
-          </svg>
-
-          {% for player in lineup %}
-          <div class="player-marker" style="left:{{ player.x }}%; top:{{ player.y }}%">
-            <svg class="player-icon" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <circle cx="12" cy="8" r="4" fill="white" fill-opacity="0.9"/>
-              <path d="M4 21c0-4.4 3.6-8 8-8s8 3.6 8 8" stroke="white" stroke-width="1.8" stroke-linecap="round" fill="none" opacity="0.9"/>
-            </svg>
-            <span class="player-name">{{ player.name }}</span>
-            <span class="player-prob">{% if player.probability is not none %}{{ player.probability }}%{% else %}—{% endif %}</span>
+      <!-- Left: player stats -->
+      <div class="player-stats-column">
+        <p class="pitch-title">Jugadores destacados</p>
+        <div class="player-stats-grid">
+          {% for player in player_stats.players %}
+          <div class="player-stat-card">
+            <span class="player-stat-category">{{ player.category_label }}</span>
+            <h3 class="player-stat-name">{{ player.name }}</h3>
+            <p class="player-stat-desc">{{ player.category_description }}</p>
+            <div class="player-stat-sparkline">
+              {% for score in player.scores %}
+              <div class="player-stat-bar" style="height: {{ (score / 14 * 100) | round(1) }}%" title="{{ player_stats.jornadas[loop.index0] }}: {{ score }} pts"></div>
+              {% endfor %}
+            </div>
+            <div class="player-stat-footer">
+              <span>Media {{ player.avg }}</span>
+              <span>{{ player.goals }} goles</span>
+              <span>{{ player.assists }} asist.</span>
+            </div>
           </div>
           {% endfor %}
         </div>
@@ -114,7 +104,7 @@
     </div>
 
     {% else %}
-    <!-- No lineup: articles full width -->
+    <!-- No player stats yet: articles full width -->
     {% if articles %}
     <div class="section-header" style="margin-top:2rem;">
       <h2 class="section-title" style="font-size:1.1rem;font-weight:600;">Artículos relacionados</h2>

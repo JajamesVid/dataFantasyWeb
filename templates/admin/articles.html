@@ -5,6 +5,9 @@
 {% block content %}
 <section class="inner-page">
   <div class="container">
+    {% set active = "articles" %}
+    {% include "admin/_nav.html" %}
+
     <div class="section-header">
       <h2 class="section-title">Gestión de artículos</h2>
       <a href="{{ url_for('admin_new_article') }}" class="btn btn--primary">+ Nuevo artículo</a>

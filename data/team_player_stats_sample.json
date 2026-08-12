@@ -1,0 +1,2282 @@
+{
+  "real-madrid": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Rodrygo",
+        "scores": [
+          6,
+          5,
+          7,
+          6,
+          5,
+          7
+        ],
+        "avg": 6.0,
+        "goals": 1,
+        "assists": 3,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Eduardo Camavinga",
+        "scores": [
+          6,
+          11,
+          6,
+          7,
+          7,
+          8
+        ],
+        "avg": 7.5,
+        "goals": 0,
+        "assists": 3,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Jude Bellingham",
+        "scores": [
+          1,
+          6,
+          4,
+          8,
+          7,
+          0
+        ],
+        "avg": 4.3,
+        "goals": 3,
+        "assists": 2,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Gonzalo Garcia",
+        "scores": [
+          2,
+          0,
+          2,
+          1,
+          5,
+          7
+        ],
+        "avg": 2.8,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Kylian Mbappe",
+        "scores": [
+          7,
+          10,
+          4,
+          6,
+          1,
+          9
+        ],
+        "avg": 6.2,
+        "goals": 0,
+        "assists": 3,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Arda Gler",
+        "scores": [
+          0,
+          7,
+          9,
+          13,
+          2,
+          3
+        ],
+        "avg": 5.7,
+        "goals": 3,
+        "assists": 0,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "barcelona": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Raphinha",
+        "scores": [
+          6,
+          4,
+          5,
+          6,
+          4,
+          3
+        ],
+        "avg": 4.7,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Ferran Torres",
+        "scores": [
+          9,
+          12,
+          7,
+          8,
+          9,
+          6
+        ],
+        "avg": 8.5,
+        "goals": 0,
+        "assists": 0,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Robert Lewandowski",
+        "scores": [
+          10,
+          9,
+          9,
+          7,
+          7,
+          3
+        ],
+        "avg": 7.5,
+        "goals": 3,
+        "assists": 4,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Pedri Gonzalez",
+        "scores": [
+          5,
+          5,
+          5,
+          7,
+          12,
+          6
+        ],
+        "avg": 6.7,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Pablo Gavi",
+        "scores": [
+          11,
+          12,
+          6,
+          12,
+          8,
+          11
+        ],
+        "avg": 10.0,
+        "goals": 4,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Roony Bardghji",
+        "scores": [
+          8,
+          9,
+          13,
+          7,
+          8,
+          9
+        ],
+        "avg": 9.0,
+        "goals": 3,
+        "assists": 2,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "atletico-madrid": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Ademola Lookman",
+        "scores": [
+          8,
+          7,
+          6,
+          6,
+          9,
+          7
+        ],
+        "avg": 7.2,
+        "goals": 4,
+        "assists": 2,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Alexander Sorloth",
+        "scores": [
+          8,
+          8,
+          7,
+          9,
+          10,
+          6
+        ],
+        "avg": 8.0,
+        "goals": 3,
+        "assists": 1,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Julian Lvarez",
+        "scores": [
+          8,
+          10,
+          3,
+          9,
+          5,
+          3
+        ],
+        "avg": 6.3,
+        "goals": 4,
+        "assists": 2,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Johnny Cardoso",
+        "scores": [
+          0,
+          2,
+          8,
+          4,
+          6,
+          4
+        ],
+        "avg": 4.0,
+        "goals": 0,
+        "assists": 3,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Nicolas Gonzalez",
+        "scores": [
+          9,
+          9,
+          11,
+          9,
+          9,
+          12
+        ],
+        "avg": 9.8,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Giuliano Simeone",
+        "scores": [
+          3,
+          7,
+          13,
+          2,
+          4,
+          4
+        ],
+        "avg": 5.5,
+        "goals": 0,
+        "assists": 0,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "athletic-club": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Alex Berenguer",
+        "scores": [
+          5,
+          7,
+          8,
+          5,
+          7,
+          5
+        ],
+        "avg": 6.2,
+        "goals": 1,
+        "assists": 1,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Inigo Ruiz De Galarreta",
+        "scores": [
+          10,
+          11,
+          10,
+          5,
+          8,
+          9
+        ],
+        "avg": 8.8,
+        "goals": 1,
+        "assists": 1,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Mikel Jauregizar",
+        "scores": [
+          8,
+          8,
+          10,
+          3,
+          6,
+          4
+        ],
+        "avg": 6.5,
+        "goals": 5,
+        "assists": 0,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Oihan Sancet",
+        "scores": [
+          5,
+          4,
+          10,
+          11,
+          9,
+          3
+        ],
+        "avg": 7.0,
+        "goals": 0,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Inaki Williams",
+        "scores": [
+          9,
+          6,
+          10,
+          5,
+          3,
+          5
+        ],
+        "avg": 6.3,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Nico Williams",
+        "scores": [
+          4,
+          10,
+          7,
+          9,
+          1,
+          6
+        ],
+        "avg": 6.2,
+        "goals": 3,
+        "assists": 0,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "real-sociedad": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Jon Karrikaburu",
+        "scores": [
+          5,
+          6,
+          9,
+          9,
+          7,
+          4
+        ],
+        "avg": 6.7,
+        "goals": 0,
+        "assists": 0,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Takefusa Kubo",
+        "scores": [
+          8,
+          11,
+          6,
+          12,
+          6,
+          5
+        ],
+        "avg": 8.0,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Mikel Oyarzabal",
+        "scores": [
+          3,
+          6,
+          1,
+          1,
+          8,
+          9
+        ],
+        "avg": 4.7,
+        "goals": 4,
+        "assists": 2,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Carlos Soler",
+        "scores": [
+          5,
+          2,
+          2,
+          5,
+          7,
+          9
+        ],
+        "avg": 5.0,
+        "goals": 1,
+        "assists": 3,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Wesley Gassova",
+        "scores": [
+          6,
+          13,
+          7,
+          12,
+          7,
+          4
+        ],
+        "avg": 8.2,
+        "goals": 2,
+        "assists": 1,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Orri Steinn Skarsson",
+        "scores": [
+          8,
+          5,
+          3,
+          7,
+          3,
+          11
+        ],
+        "avg": 6.2,
+        "goals": 2,
+        "assists": 2,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "real-betis": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Isco Alarcon",
+        "scores": [
+          2,
+          2,
+          3,
+          3,
+          4,
+          7
+        ],
+        "avg": 3.5,
+        "goals": 4,
+        "assists": 4,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Ezequiel Avila",
+        "scores": [
+          3,
+          7,
+          11,
+          10,
+          7,
+          5
+        ],
+        "avg": 7.2,
+        "goals": 2,
+        "assists": 1,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Sofyan Amrabat",
+        "scores": [
+          1,
+          2,
+          2,
+          8,
+          3,
+          1
+        ],
+        "avg": 2.8,
+        "goals": 1,
+        "assists": 3,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Lvaro Fidalgo",
+        "scores": [
+          6,
+          4,
+          3,
+          2,
+          7,
+          6
+        ],
+        "avg": 4.7,
+        "goals": 0,
+        "assists": 2,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Giovani Lo Celso",
+        "scores": [
+          6,
+          7,
+          5,
+          9,
+          3,
+          5
+        ],
+        "avg": 5.8,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Abde Ezzalzouli",
+        "scores": [
+          3,
+          3,
+          10,
+          5,
+          4,
+          5
+        ],
+        "avg": 5.0,
+        "goals": 1,
+        "assists": 1,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "valencia": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Pepelu",
+        "scores": [
+          6,
+          9,
+          7,
+          8,
+          9,
+          9
+        ],
+        "avg": 8.0,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Javi Guerra 1",
+        "scores": [
+          7,
+          8,
+          3,
+          7,
+          6,
+          7
+        ],
+        "avg": 6.3,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Largie Ramazani",
+        "scores": [
+          9,
+          4,
+          6,
+          6,
+          8,
+          3
+        ],
+        "avg": 6.0,
+        "goals": 5,
+        "assists": 2,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Arnaut Danjuma",
+        "scores": [
+          2,
+          5,
+          4,
+          8,
+          5,
+          4
+        ],
+        "avg": 4.7,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Umar Sadiq",
+        "scores": [
+          7,
+          12,
+          5,
+          4,
+          5,
+          5
+        ],
+        "avg": 6.3,
+        "goals": 2,
+        "assists": 2,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Hugo Duro",
+        "scores": [
+          4,
+          7,
+          7,
+          2,
+          10,
+          5
+        ],
+        "avg": 5.8,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "villarreal": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Pape Gueye",
+        "scores": [
+          9,
+          7,
+          11,
+          10,
+          11,
+          10
+        ],
+        "avg": 9.7,
+        "goals": 1,
+        "assists": 1,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Thomas Teye",
+        "scores": [
+          8,
+          2,
+          4,
+          8,
+          11,
+          10
+        ],
+        "avg": 7.2,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Tajon Buchanan",
+        "scores": [
+          8,
+          10,
+          10,
+          3,
+          8,
+          4
+        ],
+        "avg": 7.2,
+        "goals": 3,
+        "assists": 2,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Nicolas Pepe",
+        "scores": [
+          5,
+          1,
+          4,
+          8,
+          2,
+          8
+        ],
+        "avg": 4.7,
+        "goals": 0,
+        "assists": 3,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Ayoze Perez",
+        "scores": [
+          4,
+          12,
+          4,
+          4,
+          6,
+          6
+        ],
+        "avg": 6.0,
+        "goals": 0,
+        "assists": 3,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Hugo Lopez",
+        "scores": [
+          7,
+          0,
+          6,
+          5,
+          5,
+          10
+        ],
+        "avg": 5.5,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "celta": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Ferran Jutgla",
+        "scores": [
+          9,
+          9,
+          8,
+          9,
+          9,
+          6
+        ],
+        "avg": 8.3,
+        "goals": 0,
+        "assists": 2,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Borja Iglesias",
+        "scores": [
+          7,
+          12,
+          12,
+          9,
+          7,
+          10
+        ],
+        "avg": 9.5,
+        "goals": 3,
+        "assists": 1,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Pablo Duran",
+        "scores": [
+          6,
+          8,
+          6,
+          9,
+          9,
+          5
+        ],
+        "avg": 7.2,
+        "goals": 3,
+        "assists": 2,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Scar Mingueza",
+        "scores": [
+          4,
+          3,
+          4,
+          8,
+          7,
+          7
+        ],
+        "avg": 5.5,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Fer Lopez",
+        "scores": [
+          10,
+          8,
+          10,
+          9,
+          3,
+          11
+        ],
+        "avg": 8.5,
+        "goals": 1,
+        "assists": 1,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Williot Swedberg",
+        "scores": [
+          12,
+          6,
+          5,
+          6,
+          6,
+          8
+        ],
+        "avg": 7.2,
+        "goals": 2,
+        "assists": 1,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "osasuna": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Raul Garcia 1",
+        "scores": [
+          3,
+          5,
+          6,
+          5,
+          3,
+          4
+        ],
+        "avg": 4.3,
+        "goals": 0,
+        "assists": 2,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Kike Barja",
+        "scores": [
+          15,
+          8,
+          8,
+          9,
+          5,
+          10
+        ],
+        "avg": 9.2,
+        "goals": 0,
+        "assists": 4,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Aimar Oroz",
+        "scores": [
+          11,
+          5,
+          10,
+          8,
+          9,
+          8
+        ],
+        "avg": 8.5,
+        "goals": 4,
+        "assists": 2,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Raul Moro",
+        "scores": [
+          6,
+          2,
+          4,
+          9,
+          7,
+          5
+        ],
+        "avg": 5.5,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Jon Moncayola",
+        "scores": [
+          2,
+          5,
+          12,
+          9,
+          11,
+          7
+        ],
+        "avg": 7.7,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Ante Budimir",
+        "scores": [
+          2,
+          10,
+          4,
+          2,
+          3,
+          2
+        ],
+        "avg": 3.8,
+        "goals": 1,
+        "assists": 1,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "getafe": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Mario Martin",
+        "scores": [
+          6,
+          8,
+          5,
+          7,
+          9,
+          4
+        ],
+        "avg": 6.5,
+        "goals": 3,
+        "assists": 0,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Borja Mayoral",
+        "scores": [
+          8,
+          7,
+          6,
+          6,
+          6,
+          1
+        ],
+        "avg": 5.7,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Adrian Liso",
+        "scores": [
+          2,
+          11,
+          3,
+          6,
+          3,
+          4
+        ],
+        "avg": 4.8,
+        "goals": 3,
+        "assists": 2,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Martin Satriano",
+        "scores": [
+          3,
+          2,
+          6,
+          8,
+          9,
+          5
+        ],
+        "avg": 5.5,
+        "goals": 4,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Mauro Arambarri",
+        "scores": [
+          12,
+          5,
+          11,
+          11,
+          9,
+          10
+        ],
+        "avg": 9.7,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Luis Milla",
+        "scores": [
+          7,
+          6,
+          5,
+          7,
+          3,
+          12
+        ],
+        "avg": 6.7,
+        "goals": 2,
+        "assists": 2,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "rayo-vallecano": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Randy Nteka",
+        "scores": [
+          9,
+          9,
+          6,
+          9,
+          8,
+          8
+        ],
+        "avg": 8.2,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Jorge De Frutos",
+        "scores": [
+          5,
+          7,
+          7,
+          7,
+          7,
+          12
+        ],
+        "avg": 7.5,
+        "goals": 2,
+        "assists": 2,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Pedro Diaz",
+        "scores": [
+          12,
+          10,
+          7,
+          3,
+          6,
+          6
+        ],
+        "avg": 7.3,
+        "goals": 2,
+        "assists": 3,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Alemo",
+        "scores": [
+          3,
+          5,
+          2,
+          4,
+          7,
+          11
+        ],
+        "avg": 5.3,
+        "goals": 0,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Sergio Camello",
+        "scores": [
+          5,
+          10,
+          9,
+          8,
+          10,
+          5
+        ],
+        "avg": 7.8,
+        "goals": 3,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Isi Palazon",
+        "scores": [
+          12,
+          3,
+          8,
+          8,
+          6,
+          6
+        ],
+        "avg": 7.2,
+        "goals": 1,
+        "assists": 2,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "sevilla": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Akor Adams",
+        "scores": [
+          5,
+          8,
+          7,
+          5,
+          5,
+          4
+        ],
+        "avg": 5.7,
+        "goals": 3,
+        "assists": 0,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Alexis Sanchez",
+        "scores": [
+          7,
+          6,
+          10,
+          9,
+          6,
+          6
+        ],
+        "avg": 7.3,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Isaac Romero",
+        "scores": [
+          8,
+          8,
+          8,
+          9,
+          4,
+          7
+        ],
+        "avg": 7.3,
+        "goals": 3,
+        "assists": 1,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Nemanja Gudelj",
+        "scores": [
+          5,
+          6,
+          5,
+          7,
+          3,
+          11
+        ],
+        "avg": 6.2,
+        "goals": 1,
+        "assists": 3,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Neal Maupay",
+        "scores": [
+          11,
+          5,
+          7,
+          6,
+          10,
+          6
+        ],
+        "avg": 7.5,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Lucien Agoume",
+        "scores": [
+          2,
+          7,
+          11,
+          9,
+          7,
+          6
+        ],
+        "avg": 7.0,
+        "goals": 3,
+        "assists": 0,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "alaves": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Carles Alena",
+        "scores": [
+          7,
+          3,
+          6,
+          6,
+          4,
+          5
+        ],
+        "avg": 5.2,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Ibrahim Diabate",
+        "scores": [
+          4,
+          8,
+          7,
+          9,
+          7,
+          8
+        ],
+        "avg": 7.2,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Antonio Martinez",
+        "scores": [
+          3,
+          2,
+          3,
+          8,
+          6,
+          5
+        ],
+        "avg": 4.5,
+        "goals": 5,
+        "assists": 0,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Antonio Blanco",
+        "scores": [
+          0,
+          6,
+          5,
+          6,
+          8,
+          6
+        ],
+        "avg": 5.2,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Aitor Manas",
+        "scores": [
+          15,
+          8,
+          7,
+          4,
+          10,
+          9
+        ],
+        "avg": 8.8,
+        "goals": 1,
+        "assists": 1,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Lucas Boye",
+        "scores": [
+          10,
+          9,
+          3,
+          5,
+          10,
+          5
+        ],
+        "avg": 7.0,
+        "goals": 1,
+        "assists": 1,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "espanyol": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Tyrhys Dolan",
+        "scores": [
+          5,
+          8,
+          8,
+          6,
+          8,
+          5
+        ],
+        "avg": 6.7,
+        "goals": 3,
+        "assists": 3,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Roberto Fernandez 1",
+        "scores": [
+          9,
+          6,
+          8,
+          11,
+          8,
+          7
+        ],
+        "avg": 8.2,
+        "goals": 0,
+        "assists": 2,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Kike Garcia",
+        "scores": [
+          8,
+          3,
+          6,
+          3,
+          5,
+          4
+        ],
+        "avg": 4.8,
+        "goals": 3,
+        "assists": 3,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Charles Pickel",
+        "scores": [
+          9,
+          7,
+          4,
+          8,
+          8,
+          10
+        ],
+        "avg": 7.7,
+        "goals": 2,
+        "assists": 1,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Javi Puado",
+        "scores": [
+          14,
+          7,
+          10,
+          4,
+          9,
+          6
+        ],
+        "avg": 8.3,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Lluc Castell",
+        "scores": [
+          6,
+          5,
+          10,
+          5,
+          11,
+          10
+        ],
+        "avg": 7.8,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "racing": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Gustavo Puerta",
+        "scores": [
+          4,
+          4,
+          3,
+          2,
+          6,
+          2
+        ],
+        "avg": 3.5,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Suleiman Camara",
+        "scores": [
+          6,
+          7,
+          11,
+          10,
+          9,
+          12
+        ],
+        "avg": 9.2,
+        "goals": 1,
+        "assists": 0,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Belal Ateya",
+        "scores": [
+          0,
+          5,
+          7,
+          6,
+          5,
+          6
+        ],
+        "avg": 4.8,
+        "goals": 5,
+        "assists": 3,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Andres Martin",
+        "scores": [
+          11,
+          5,
+          4,
+          11,
+          11,
+          8
+        ],
+        "avg": 8.3,
+        "goals": 2,
+        "assists": 1,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Asier Villalibre",
+        "scores": [
+          8,
+          8,
+          8,
+          12,
+          6,
+          10
+        ],
+        "avg": 8.7,
+        "goals": 4,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Maguette Gueye",
+        "scores": [
+          9,
+          11,
+          4,
+          2,
+          4,
+          4
+        ],
+        "avg": 5.7,
+        "goals": 0,
+        "assists": 0,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "malaga": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Rafa Rodriguez",
+        "scores": [
+          8,
+          7,
+          7,
+          7,
+          6,
+          7
+        ],
+        "avg": 7.0,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "David Larrubia",
+        "scores": [
+          6,
+          9,
+          11,
+          6,
+          11,
+          8
+        ],
+        "avg": 8.5,
+        "goals": 0,
+        "assists": 4,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Dani Lorenzo 1",
+        "scores": [
+          5,
+          10,
+          10,
+          3,
+          8,
+          9
+        ],
+        "avg": 7.5,
+        "goals": 2,
+        "assists": 3,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Aaron Ochoa",
+        "scores": [
+          5,
+          1,
+          3,
+          3,
+          7,
+          6
+        ],
+        "avg": 4.2,
+        "goals": 3,
+        "assists": 1,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Adrian Nino",
+        "scores": [
+          4,
+          13,
+          9,
+          8,
+          12,
+          7
+        ],
+        "avg": 8.8,
+        "goals": 0,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Izan Merino",
+        "scores": [
+          6,
+          7,
+          14,
+          10,
+          7,
+          6
+        ],
+        "avg": 8.3,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "deportivo-coruna": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Luismi Cruz",
+        "scores": [
+          9,
+          11,
+          9,
+          8,
+          10,
+          7
+        ],
+        "avg": 9.0,
+        "goals": 0,
+        "assists": 2,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Zakaria Eddahchouri",
+        "scores": [
+          8,
+          10,
+          7,
+          6,
+          9,
+          9
+        ],
+        "avg": 8.2,
+        "goals": 3,
+        "assists": 3,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Yeremay Hernandez",
+        "scores": [
+          8,
+          5,
+          5,
+          3,
+          4,
+          8
+        ],
+        "avg": 5.5,
+        "goals": 5,
+        "assists": 2,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Mohamed Bouldini",
+        "scores": [
+          2,
+          6,
+          0,
+          6,
+          7,
+          6
+        ],
+        "avg": 4.5,
+        "goals": 4,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Charlie Patino",
+        "scores": [
+          10,
+          7,
+          8,
+          4,
+          6,
+          10
+        ],
+        "avg": 7.5,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Bil Nsongo",
+        "scores": [
+          8,
+          12,
+          5,
+          4,
+          8,
+          5
+        ],
+        "avg": 7.0,
+        "goals": 3,
+        "assists": 1,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "levante": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Iker Losada",
+        "scores": [
+          4,
+          3,
+          5,
+          5,
+          4,
+          5
+        ],
+        "avg": 4.3,
+        "goals": 0,
+        "assists": 1,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Carlos Alvarez",
+        "scores": [
+          2,
+          6,
+          15,
+          7,
+          12,
+          7
+        ],
+        "avg": 8.2,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Jose Luis Morales",
+        "scores": [
+          5,
+          3,
+          6,
+          8,
+          2,
+          12
+        ],
+        "avg": 6.0,
+        "goals": 3,
+        "assists": 3,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Etta Eyong",
+        "scores": [
+          2,
+          6,
+          6,
+          9,
+          11,
+          5
+        ],
+        "avg": 6.5,
+        "goals": 2,
+        "assists": 0,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Oriol Rey",
+        "scores": [
+          10,
+          8,
+          9,
+          8,
+          10,
+          5
+        ],
+        "avg": 8.3,
+        "goals": 4,
+        "assists": 0,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Ivan Romero",
+        "scores": [
+          9,
+          0,
+          6,
+          6,
+          7,
+          4
+        ],
+        "avg": 5.3,
+        "goals": 3,
+        "assists": 0,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  },
+  "elche": {
+    "jornadas": [
+      "J5",
+      "J6",
+      "J7",
+      "J8",
+      "J9",
+      "J10"
+    ],
+    "players": [
+      {
+        "name": "Alvaro Rodriguez",
+        "scores": [
+          4,
+          5,
+          3,
+          3,
+          5,
+          5
+        ],
+        "avg": 4.2,
+        "goals": 3,
+        "assists": 1,
+        "category_key": "regularidad",
+        "category_label": "Más regular",
+        "category_description": "El más fiable jornada tras jornada"
+      },
+      {
+        "name": "Alex Sanchez 2",
+        "scores": [
+          10,
+          9,
+          8,
+          9,
+          7,
+          10
+        ],
+        "avg": 8.8,
+        "goals": 2,
+        "assists": 1,
+        "category_key": "acierto",
+        "category_label": "Más acertado",
+        "category_description": "El que más veces raya el partidazo"
+      },
+      {
+        "name": "Lucas Cepeda",
+        "scores": [
+          6,
+          10,
+          3,
+          7,
+          11,
+          3
+        ],
+        "avg": 6.7,
+        "goals": 4,
+        "assists": 4,
+        "category_key": "influencia",
+        "category_label": "Más influyente",
+        "category_description": "El que más decide con goles y asistencias"
+      },
+      {
+        "name": "Grady Diangana",
+        "scores": [
+          7,
+          5,
+          9,
+          11,
+          8,
+          8
+        ],
+        "avg": 8.0,
+        "goals": 3,
+        "assists": 1,
+        "category_key": "racha",
+        "category_label": "En racha",
+        "category_description": "El que más está subiendo últimamente"
+      },
+      {
+        "name": "Rafa Mir",
+        "scores": [
+          2,
+          6,
+          11,
+          3,
+          6,
+          7
+        ],
+        "avg": 5.8,
+        "goals": 3,
+        "assists": 1,
+        "category_key": "valorado",
+        "category_label": "Mejor valorado",
+        "category_description": "La media más alta de la plantilla"
+      },
+      {
+        "name": "Adam Boayar",
+        "scores": [
+          8,
+          9,
+          1,
+          4,
+          4,
+          5
+        ],
+        "avg": 5.2,
+        "goals": 3,
+        "assists": 1,
+        "category_key": "revelacion",
+        "category_label": "La revelación",
+        "category_description": "El techo más alto en una sola jornada"
+      }
+    ]
+  }
+}

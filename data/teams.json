@@ -11,12 +11,12 @@
   {"slug": "osasuna",          "name": "CA Osasuna",         "short": "OSA", "sofascore_id": 2820},
   {"slug": "getafe",           "name": "Getafe CF",          "short": "GET", "sofascore_id": 2859},
   {"slug": "rayo-vallecano",   "name": "Rayo Vallecano",     "short": "RAY", "sofascore_id": 2818},
-  {"slug": "mallorca",         "name": "RCD Mallorca",       "short": "MAL", "sofascore_id": 2826},
-  {"slug": "las-palmas",       "name": "UD Las Palmas",      "short": "LPA", "sofascore_id": null},
-  {"slug": "girona",           "name": "Girona FC",          "short": "GIR", "sofascore_id": 24264},
   {"slug": "sevilla",          "name": "Sevilla FC",         "short": "SEV", "sofascore_id": 2833},
   {"slug": "alaves",           "name": "Deportivo Alavés",   "short": "ALA", "sofascore_id": 2885},
-  {"slug": "leganes",          "name": "CD Leganés",         "short": "LEG", "sofascore_id": null},
-  {"slug": "valladolid",       "name": "Real Valladolid",    "short": "VLL", "sofascore_id": null},
-  {"slug": "espanyol",         "name": "RCD Espanyol",       "short": "ESP", "sofascore_id": 2814}
+  {"slug": "espanyol",         "name": "RCD Espanyol",       "short": "ESP", "sofascore_id": 2814},
+  {"slug": "racing",           "name": "Racing de Santander", "short": "RAC", "sofascore_id": 2835},
+  {"slug": "malaga",           "name": "Málaga CF",          "short": "MLG", "sofascore_id": 2830},
+  {"slug": "deportivo-coruna", "name": "Deportivo de La Coruña", "short": "DEP", "sofascore_id": 2832},
+  {"slug": "levante",          "name": "Levante UD",         "short": "LEV", "sofascore_id": 2849},
+  {"slug": "elche",            "name": "Elche CF",           "short": "ELC", "sofascore_id": 2846}
 ]

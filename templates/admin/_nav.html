@@ -1,0 +1,9 @@
+<nav class="panel-nav">
+  <div class="panel-nav-links">
+    <a href="{{ url_for('admin_articles') }}" class="panel-nav-link{% if active == 'articles' %} panel-nav-link--active{% endif %}">Artículos</a>
+    <a href="{{ url_for('admin_analytics') }}" class="panel-nav-link{% if active == 'analytics' %} panel-nav-link--active{% endif %}">Analíticas</a>
+  </div>
+  <form method="post" action="{{ url_for('admin_logout') }}">
+    <button type="submit" class="btn btn--ghost">Cerrar sesión</button>
+  </form>
+</nav>

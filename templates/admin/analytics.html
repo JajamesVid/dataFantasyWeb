@@ -1,0 +1,92 @@
+{% extends "base.html" %}
+
+{% block title %}Admin · Analíticas · DataFantasy{% endblock %}
+
+{% block content %}
+<section class="inner-page">
+  <div class="container">
+    {% set active = "analytics" %}
+    {% include "admin/_nav.html" %}
+
+    <div class="section-header">
+      <h2 class="section-title">Analíticas</h2>
+    </div>
+
+    <div class="analytics-top">
+      <div class="analytics-stats">
+        <div class="stat-tile">
+          <span class="stat-tile-value">{{ total_visits }}</span>
+          <span class="stat-tile-label">Visitas totales a la web</span>
+        </div>
+        <div class="stat-tile">
+          <span class="stat-tile-value">{{ current_month_visits }}</span>
+          <span class="stat-tile-label">Visitas este mes</span>
+        </div>
+      </div>
+      <div class="chart-card chart-card--compact">
+        <canvas id="monthly-visits-chart"></canvas>
+      </div>
+    </div>
+
+    <h3 class="admin-subheading">Visitas por artículo</h3>
+    {% if articles %}
+    <div class="admin-list">
+      {% for a in articles %}
+      <div class="admin-row">
+        <div class="admin-row-info">
+          <span class="status-badge status-badge--{{ a.status }}">{{ "Publicado" if a.status == "published" else "Borrador" }}</span>
+          <span class="admin-row-title">{{ a.title or "(Sin título)" }}</span>
+          <span class="card-date">{{ a.date }}</span>
+        </div>
+        <div class="admin-row-actions">
+          <span class="stat-inline">{{ a.visits }} visita{{ "s" if a.visits != 1 else "" }}</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <p class="admin-empty">No hay artículos todavía.</p>
+    {% endif %}
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  const monthlyChartData = {{ monthly_chart | tojson }};
+
+  new Chart(document.getElementById('monthly-visits-chart'), {
+    type: 'bar',
+    data: {
+      labels: monthlyChartData.labels,
+      datasets: [{
+        label: 'Visitas',
+        data: monthlyChartData.values,
+        backgroundColor: '#22c55e',
+        borderRadius: 4,
+        borderSkipped: false,
+        maxBarThickness: 40,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      scales: {
+        x: { ticks: { color: '#64748b' }, grid: { display: false } },
+        y: { ticks: { color: '#64748b' }, grid: { color: '#1e2d45' }, beginAtZero: true },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#111827',
+          borderColor: '#1e2d45',
+          borderWidth: 1,
+          titleColor: '#e2e8f0',
+          bodyColor: '#e2e8f0',
+        },
+      },
+    },
+  });
+</script>
+{% endblock %}

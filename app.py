@@ -1,18 +1,26 @@
 import json
+import os
 import uuid
 from datetime import date
+from functools import wraps
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask, abort, flash, redirect, render_template, request, url_for
+from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
+from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
+import supabase_data
 from twitter_post import post_tweet_for_article
 
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = "dev-only-secret-key"  # TODO: move to env var once admin auth is added
+app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-only-secret-key")
+
+ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")
+ADMIN_PASSWORD_HASH = os.environ.get("ADMIN_PASSWORD_HASH")
+SUPABASE_TEMPORADA = os.environ.get("SUPABASE_TEMPORADA", "25/26")
 
 DATA = Path(__file__).parent / "data"
 ARTICLES_IMG = Path(__file__).parent / "static" / "img" / "articles"
@@ -20,15 +28,6 @@ BADGES_DIR = Path(__file__).parent / "static" / "img" / "escudos"
 ALLOWED_IMAGE_EXT = {"jpg", "jpeg", "png", "webp", "gif"}
 BADGE_EXTENSIONS = ("webp", "png", "svg", "jpg", "jpeg")
 TAGS = ["Jornada", "Análisis", "Mercado"]
-
-# 4-3-3: (left%, top%) within the pitch container
-# SVG viewBox is 0 0 100 150; top% = svgY / 150 * 100
-FORMATION_433 = [
-    (50, 86),                                          # GK
-    (13, 72), (35, 72), (65, 72), (87, 72),           # DEF
-    (22, 52), (50, 52), (78, 52),                     # MID
-    (15, 27), (50, 27), (85, 27),                     # FWD
-]
 
 
 def load_json(filename):
@@ -55,6 +54,46 @@ def load_teams():
     return load_json("teams.json")
 
 
+def load_analytics():
+    return load_json("analytics.json")
+
+
+def save_analytics(analytics):
+    with open(DATA / "analytics.json", "w", encoding="utf-8") as f:
+        json.dump(analytics, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+
+
+def login_required(view):
+    @wraps(view)
+    def wrapped(*args, **kwargs):
+        if not session.get("admin_logged_in"):
+            return redirect(url_for("admin_login", next=request.path))
+        return view(*args, **kwargs)
+    return wrapped
+
+
+MESES_ABREV = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
+
+
+def month_label(month_key):
+    """'2026-08' -> 'ago 2026'."""
+    year, month = month_key.split("-")
+    return f"{MESES_ABREV[int(month) - 1]} {year}"
+
+
+@app.before_request
+def track_visit():
+    if request.path.startswith("/panel") or request.path.startswith("/static"):
+        return
+    analytics = load_analytics()
+    analytics["total_visits"] = analytics.get("total_visits", 0) + 1
+    month_key = date.today().strftime("%Y-%m")
+    monthly_visits = analytics.setdefault("monthly_visits", {})
+    monthly_visits[month_key] = monthly_visits.get(month_key, 0) + 1
+    save_analytics(analytics)
+
+
 def team_badge_url(slug):
     """Look up a team crest in static/img/escudos/<slug>.<ext>, if one has been uploaded."""
     for ext in BADGE_EXTENSIONS:
@@ -64,19 +103,17 @@ def team_badge_url(slug):
 
 
 def load_points_evolution():
-    """Sample/placeholder points until real jornada-by-jornada data is wired up."""
-    data = load_json("team_points_evolution_sample.json")
+    data = supabase_data.build_points_evolution(SUPABASE_TEMPORADA)
     real_slugs = {t["slug"] for t in load_teams()}
     for team in data["teams"]:
         team["badge"] = team_badge_url(team["slug"])
-        # A few chart-only entries (e.g. Segunda clubs) don't have a real team page.
+        # A few chart-only entries (e.g. teams from a different season) don't have a real team page.
         team["has_page"] = team["slug"] in real_slugs
     return data
 
 
 def load_classification_evolution():
-    """Sample/placeholder LaLiga standings (1st-20th) until real results are wired up."""
-    data = load_json("team_classification_sample.json")
+    data = supabase_data.build_classification_evolution(SUPABASE_TEMPORADA)
     real_slugs = {t["slug"] for t in load_teams()}
     for team in data["teams"]:
         team["badge"] = team_badge_url(team["slug"])
@@ -85,8 +122,7 @@ def load_classification_evolution():
 
 
 def load_player_radar():
-    """Sample/placeholder player comparison until real per-player stats are wired up."""
-    data = load_json("player_radar_sample.json")
+    data = supabase_data.build_player_radar(SUPABASE_TEMPORADA)
     for player in data["players"]:
         player["team_badge"] = team_badge_url(player["team_slug"])
     return data
@@ -96,48 +132,20 @@ def load_team_evolution(slug):
     """A single team's jornada-by-jornada points and league position, overlaid on the
     strip chart on its own page.
 
-    Not every team in teams.json has sample data yet (the chart's sample sets don't
-    perfectly mirror the real roster), so this returns None when there's nothing to plot.
+    Not every team in teams.json has data for the configured temporada, so this
+    returns None when there's nothing to plot.
     """
-    points_data = load_json("team_points_evolution_sample.json")
-    team = next((t for t in points_data["teams"] if t["slug"] == slug), None)
-    if team is None:
+    data = supabase_data.build_team_evolution(slug, SUPABASE_TEMPORADA)
+    if data is None:
         return None
-
-    classification_data = load_json("team_classification_sample.json")
-    classification_team = next((t for t in classification_data["teams"] if t["slug"] == slug), None)
-
-    return {
-        "jornadas": points_data["jornadas"],
-        "points": team["points"],
-        "positions": classification_team["positions"] if classification_team else None,
-        "badge": team_badge_url(slug),
-    }
+    return {**data, "badge": team_badge_url(slug)}
 
 
-def format_name(slug):
-    return " ".join(w.capitalize() for w in slug.split("-"))
-
-
-def get_lineup(sofascore_id):
-    if not sofascore_id:
-        return []
-    all_players = load_json("players_to_analyze.json")
-    team_data = next(
-        (t for t in all_players["teams"] if t["sofascore_id"] == sofascore_id),
-        None,
-    )
-    if not team_data:
-        return []
-    lineup = []
-    for player, (px, py) in zip(team_data["players"][:11], FORMATION_433):
-        lineup.append({
-            "name": format_name(player["name"]),
-            "x": px,
-            "y": py,
-            "probability": player.get("probability"),
-        })
-    return lineup
+def load_team_player_stats(slug):
+    """Not every team has a roster to draw from yet (see load_team_evolution), so this
+    returns None when there's nothing to show.
+    """
+    return supabase_data.build_team_player_stats(slug, SUPABASE_TEMPORADA)
 
 
 def allowed_image(filename):
@@ -209,6 +217,12 @@ def article(article_id):
     match = next((a for a in load_articles() if a["id"] == article_id), None)
     if match is None:
         abort(404)
+
+    analytics = load_analytics()
+    article_visits = analytics.setdefault("article_visits", {})
+    article_visits[str(article_id)] = article_visits.get(str(article_id), 0) + 1
+    save_analytics(analytics)
+
     return render_template("article.html", article=match)
 
 
@@ -228,28 +242,82 @@ def equipo(slug):
         abort(404)
     team["badge"] = team_badge_url(slug)
     articles = [a for a in load_articles() if slug in a.get("teams", [])]
-    lineup = get_lineup(team["sofascore_id"])
+    player_stats = load_team_player_stats(slug)
     points_evolution = load_team_evolution(slug)
     return render_template(
-        "equipo.html", team=team, articles=articles, lineup=lineup, points_evolution=points_evolution
+        "equipo.html",
+        team=team,
+        articles=articles,
+        player_stats=player_stats,
+        points_evolution=points_evolution,
     )
 
 
-# ── Admin: gestión de artículos ─────────────────────────────────────
-# TODO: proteger esta sección con autenticación de administrador.
+# ── Panel de administración (protegido con login) ───────────────────
 
-@app.route("/admin")
+@app.route("/panel/login", methods=["GET", "POST"])
+def admin_login():
+    if request.method == "POST":
+        username = request.form.get("username", "")
+        password = request.form.get("password", "")
+        valid_user = ADMIN_USERNAME is not None and username == ADMIN_USERNAME
+        valid_password = ADMIN_PASSWORD_HASH is not None and check_password_hash(ADMIN_PASSWORD_HASH, password)
+        if valid_user and valid_password:
+            session["admin_logged_in"] = True
+            next_url = request.form.get("next") or url_for("admin_articles")
+            return redirect(next_url)
+        flash("Usuario o contraseña incorrectos.")
+    return render_template("admin/login.html", next=request.args.get("next", ""))
+
+
+@app.route("/panel/logout", methods=["POST"])
+def admin_logout():
+    session.pop("admin_logged_in", None)
+    return redirect(url_for("admin_login"))
+
+
+@app.route("/panel/analiticas")
+@login_required
+def admin_analytics():
+    analytics = load_analytics()
+    article_visits = analytics.get("article_visits", {})
+    articles = [
+        {**a, "visits": article_visits.get(str(a["id"]), 0)}
+        for a in load_all_articles()
+    ]
+    articles.sort(key=lambda a: a["visits"], reverse=True)
+
+    monthly_visits = analytics.get("monthly_visits", {})
+    current_month_key = date.today().strftime("%Y-%m")
+    sorted_months = sorted(monthly_visits)
+
+    return render_template(
+        "admin/analytics.html",
+        total_visits=analytics.get("total_visits", 0),
+        current_month_visits=monthly_visits.get(current_month_key, 0),
+        monthly_chart={
+            "labels": [month_label(m) for m in sorted_months],
+            "values": [monthly_visits[m] for m in sorted_months],
+        },
+        articles=articles,
+    )
+
+
+@app.route("/panel")
+@login_required
 def admin_home():
     return redirect(url_for("admin_articles"))
 
 
-@app.route("/admin/articles")
+@app.route("/panel/articles")
+@login_required
 def admin_articles():
     articles = sorted(load_all_articles(), key=lambda a: a["date"], reverse=True)
     return render_template("admin/articles.html", articles=articles)
 
 
-@app.route("/admin/articles/new")
+@app.route("/panel/articles/new")
+@login_required
 def admin_new_article():
     empty = {
         "id": None, "title": "", "summary": "", "date": date.today().isoformat(),
@@ -259,7 +327,8 @@ def admin_new_article():
     return render_template("admin/article_form.html", article=empty, teams=load_teams(), tags=TAGS)
 
 
-@app.route("/admin/articles/<int:article_id>/edit")
+@app.route("/panel/articles/<int:article_id>/edit")
+@login_required
 def admin_edit_article(article_id):
     match = next((a for a in load_all_articles() if a["id"] == article_id), None)
     if match is None:
@@ -267,7 +336,8 @@ def admin_edit_article(article_id):
     return render_template("admin/article_form.html", article=match, teams=load_teams(), tags=TAGS)
 
 
-@app.route("/admin/articles/save", methods=["POST"])
+@app.route("/panel/articles/save", methods=["POST"])
+@login_required
 def admin_save_article():
     articles = load_all_articles()
     article_id = request.form.get("id")
@@ -297,7 +367,8 @@ def admin_save_article():
     return redirect(url_for("admin_edit_article", article_id=updated["id"]))
 
 
-@app.route("/admin/articles/<int:article_id>/publish", methods=["POST"])
+@app.route("/panel/articles/<int:article_id>/publish", methods=["POST"])
+@login_required
 def admin_publish_article(article_id):
     articles = load_all_articles()
     match = next((a for a in articles if a["id"] == article_id), None)
@@ -309,7 +380,8 @@ def admin_publish_article(article_id):
     return redirect(url_for("admin_articles"))
 
 
-@app.route("/admin/articles/<int:article_id>/tweet", methods=["POST"])
+@app.route("/panel/articles/<int:article_id>/tweet", methods=["POST"])
+@login_required
 def admin_tweet_article(article_id):
     articles = load_all_articles()
     match = next((a for a in articles if a["id"] == article_id), None)
@@ -330,7 +402,8 @@ def admin_tweet_article(article_id):
     return redirect(url_for("admin_edit_article", article_id=article_id))
 
 
-@app.route("/admin/articles/<int:article_id>/delete", methods=["POST"])
+@app.route("/panel/articles/<int:article_id>/delete", methods=["POST"])
+@login_required
 def admin_delete_article(article_id):
     articles = load_all_articles()
     match = next((a for a in articles if a["id"] == article_id), None)

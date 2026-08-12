@@ -1,0 +1,23 @@
+{% extends "base.html" %}
+
+{% block title %}Acceso · Panel · DataFantasy{% endblock %}
+
+{% block content %}
+<section class="inner-page">
+  <div class="container container--narrow">
+    <h2 class="section-title">Acceso al panel</h2>
+    <form method="post" class="login-form">
+      <input type="hidden" name="next" value="{{ next }}" />
+      <label class="login-form-field">
+        Usuario
+        <input type="text" name="username" autocomplete="username" required autofocus />
+      </label>
+      <label class="login-form-field">
+        Contraseña
+        <input type="password" name="password" autocomplete="current-password" required />
+      </label>
+      <button type="submit" class="btn btn--primary">Entrar</button>
+    </form>
+  </div>
+</section>
+{% endblock %}
