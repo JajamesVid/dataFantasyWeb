@@ -25,6 +25,7 @@ SUPABASE_TEMPORADA = os.environ.get("SUPABASE_TEMPORADA", "25/26")
 DATA = Path(__file__).parent / "data"
 ARTICLES_IMG = Path(__file__).parent / "static" / "img" / "articles"
 BADGES_DIR = Path(__file__).parent / "static" / "img" / "escudos"
+PLAYERS_DIR = Path(__file__).parent / "static" / "img" / "jugadores"
 ALLOWED_IMAGE_EXT = {"jpg", "jpeg", "png", "webp", "gif"}
 BADGE_EXTENSIONS = ("webp", "png", "svg", "jpg", "jpeg")
 TAGS = ["Jornada", "Análisis", "Mercado"]
@@ -102,6 +103,18 @@ def team_badge_url(slug):
     return None
 
 
+def player_photo_url(jugador_id):
+    """Look up a player photo in static/img/jugadores/<jugador_id>.<ext>.
+
+    No real photo source is wired up yet, so this is a placeholder hook: templates
+    fall back to an initials avatar when it returns None, same as team_badge_url.
+    """
+    for ext in BADGE_EXTENSIONS:
+        if (PLAYERS_DIR / f"{jugador_id}.{ext}").exists():
+            return url_for("static", filename=f"img/jugadores/{jugador_id}.{ext}")
+    return None
+
+
 def load_points_evolution():
     data = supabase_data.build_points_evolution(SUPABASE_TEMPORADA)
     real_slugs = {t["slug"] for t in load_teams()}
@@ -146,6 +159,25 @@ def load_team_player_stats(slug):
     returns None when there's nothing to show.
     """
     return supabase_data.build_team_player_stats(slug, SUPABASE_TEMPORADA)
+
+
+def load_players():
+    players = supabase_data.build_player_directory(SUPABASE_TEMPORADA)
+    real_slugs = {t["slug"] for t in load_teams()}
+    for player in players:
+        player["team_has_page"] = player["team_slug"] in real_slugs
+        player["photo"] = player_photo_url(player["jugador_id"])
+    return players
+
+
+def load_player(slug):
+    player = supabase_data.build_player_detail(slug, SUPABASE_TEMPORADA)
+    if player is None:
+        return None
+    real_slugs = {t["slug"] for t in load_teams()}
+    player["team_has_page"] = player["team_slug"] in real_slugs
+    player["photo"] = player_photo_url(player["jugador_id"])
+    return player
 
 
 def allowed_image(filename):
@@ -251,6 +283,19 @@ def equipo(slug):
         player_stats=player_stats,
         points_evolution=points_evolution,
     )
+
+
+@app.route("/jugadores")
+def jugadores():
+    return render_template("jugadores.html", players=load_players())
+
+
+@app.route("/jugadores/<slug>")
+def jugador(slug):
+    player = load_player(slug)
+    if player is None:
+        abort(404)
+    return render_template("jugador.html", player=player)
 
 
 # ── Panel de administración (protegido con login) ───────────────────

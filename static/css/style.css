@@ -532,6 +532,169 @@ body {
 
 .team-card:hover .team-arrow { color: var(--accent); }
 
+/* ── Players grid ─────────────────────────────────── */
+.player-search-input {
+  display: block;
+  width: 100%;
+  font-family: var(--font);
+  font-size: 0.95rem;
+  padding: 0.65rem 0.85rem;
+  border-radius: 8px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text);
+  margin: 1.25rem 0;
+}
+
+.players-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 0.9rem;
+}
+
+.player-card[hidden] {
+  display: none;
+}
+
+.player-card {
+  display: flex;
+  flex-direction: column;
+  gap: 0.9rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem 1.5rem;
+  text-decoration: none;
+  color: var(--text);
+  transition: background 0.2s, border-color 0.2s, transform 0.15s;
+}
+
+.player-card-top {
+  display: flex;
+  align-items: center;
+  gap: 1.1rem;
+}
+
+.player-card-rank {
+  flex-shrink: 0;
+  width: 2rem;
+  font-size: 1rem;
+  font-weight: 700;
+  color: var(--muted);
+  text-align: center;
+}
+
+.player-card-recent {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.player-card:hover {
+  background: var(--bg-card-h);
+  border-color: #2a3f5f;
+  transform: translateY(-2px);
+}
+
+.player-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: 54px;
+  height: 54px;
+  border-radius: 50%;
+  background: var(--bg-card-h);
+  color: var(--accent);
+  font-weight: 800;
+  font-size: 1.3rem;
+}
+
+.player-avatar--lg {
+  width: 64px;
+  height: 64px;
+  font-size: 1.4rem;
+}
+
+.player-avatar--photo {
+  padding: 0;
+  overflow: hidden;
+  background: var(--border);
+}
+
+.player-avatar--photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.player-card-info {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.15rem;
+}
+
+.player-card-name {
+  font-size: 1.15rem;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-card-meta {
+  font-size: 0.9rem;
+  color: var(--muted);
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.player-card-total {
+  font-size: 1.3rem;
+  font-weight: 800;
+  color: var(--accent);
+  flex-shrink: 0;
+}
+
+.score-chip {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 2.6rem;
+  padding: 0.3rem 0.55rem;
+  border-radius: 6px;
+  font-size: 0.85rem;
+  font-weight: 700;
+  font-variant-numeric: tabular-nums;
+}
+
+.score-chip--red { background: rgba(239, 68, 68, 0.15); color: #f87171; }
+.score-chip--orange { background: rgba(249, 115, 22, 0.15); color: #fb923c; }
+.score-chip--green { background: rgba(34, 197, 94, 0.15); color: #4ade80; }
+.score-chip--blue { background: rgba(56, 189, 248, 0.15); color: #38bdf8; }
+
+.load-more-btn {
+  display: flex;
+  margin: 1.5rem auto 0;
+}
+
+.player-header-meta {
+  color: var(--muted);
+  font-size: 0.9rem;
+  margin-top: 0.35rem;
+}
+
+.player-header-meta a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+.player-header-meta a:hover {
+  text-decoration: underline;
+}
+
 /* ── Team header ──────────────────────────────────── */
 .team-header {
   display: flex;

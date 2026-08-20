@@ -10,6 +10,7 @@ import statistics
 import time
 import unicodedata
 from collections import defaultdict
+from datetime import date
 from pathlib import Path
 
 from supabase_client import fetch_all, fetch_in_chunks, fetch_many
@@ -46,6 +47,20 @@ MIN_MATCHES_REVELACION = 3
 MIN_PASES_ACIERTO = 50
 RECENT_JORNADAS_WINDOW = 6
 
+POSITION_LABELS = {
+    "POR": "Portero",
+    "LD": "Lateral derecho",
+    "LI": "Lateral izquierdo",
+    "DFC": "Defensa central",
+    "MCD": "Mediocentro defensivo",
+    "MC": "Centrocampista",
+    "MCO": "Mediapunta",
+    "ED": "Extremo derecho",
+    "EI": "Extremo izquierdo",
+    "DC": "Delantero centro",
+    "SD": "Segundo delantero",
+}
+
 CATEGORY_META = {
     "valorado": ("Mejor valorado", "El más consistente en valoración esta temporada"),
     "regularidad": ("Más regular", "El más fiable jornada tras jornada"),
@@ -79,7 +94,7 @@ def _fetch_season_bundle(temporada):
         })),
         ("historial", lambda: fetch_all("historial_equipos_jugador", {"order": "historial_id.asc"})),
         ("jugadores", lambda: fetch_all("jugadores", {
-            "select": "jugador_id,nombre_jugador,fecha_nacimiento", "order": "jugador_id.asc",
+            "select": "jugador_id,nombre_jugador,fecha_nacimiento,posicion,altura_cm", "order": "jugador_id.asc",
         })),
         ("equipos", lambda: fetch_all("equipos", {"select": "equipo_id,nombre_equipo", "order": "equipo_id.asc"})),
     ])
@@ -102,7 +117,7 @@ def _fetch_season_bundle(temporada):
             "order": "puntuacion_id.asc",
         })),
         ("statsjugadores", lambda: fetch_in_chunks("statsjugadores", "partido_id", partido_ids, {
-            "select": "partido_id,jugador_id,equipo_id,goles,asistencias_gol,pases_precisos,pases_totales",
+            "select": "partido_id,jugador_id,equipo_id,goles,asistencias_gol,pases_precisos,pases_totales,minutos_jugados",
             "order": "estadistica_id.asc",
         })),
     ])
@@ -434,3 +449,187 @@ def build_team_player_stats(slug, temporada):
         })
 
     return {"jornadas": [f"J{n}" for n in recent_jornadas], "players": players_out}
+
+
+def _player_slug(jugador_id, nombre):
+    return f"{_slugify(nombre)}-{jugador_id}"
+
+
+def _jugador_id_from_slug(slug):
+    match = re.search(r"-(\d+)$", slug or "")
+    return int(match.group(1)) if match else None
+
+
+def _age_from_birthdate(fecha_nacimiento):
+    if not fecha_nacimiento:
+        return None
+    born = date.fromisoformat(fecha_nacimiento)
+    today = date.today()
+    return today.year - born.year - ((today.month, today.day) < (born.month, born.day))
+
+
+RECENT_SCORES_WINDOW = 5
+
+
+def _score_band(value):
+    """Código de colores usado en toda la sección de jugadores para una puntuación
+    individual de partido: <=1 rojo, (1,5] naranja, (5,9] verde, >9 azul."""
+    if value <= 1:
+        return "red"
+    if value <= 5:
+        return "orange"
+    if value <= 9:
+        return "green"
+    return "blue"
+
+
+def build_player_directory(temporada):
+    bundle = _load_season_bundle(temporada)
+    equipo_info = _equipo_lookup(bundle)
+
+    agg = defaultdict(lambda: {"sum_media": 0.0, "matches": 0, "goles": 0, "asistencias": 0, "by_jornada": {}})
+    for punt in bundle["puntuaciones"]:
+        media = punt.get("puntuacion_media")
+        if media is None:
+            continue
+        partido = bundle["partidos_by_id"].get(punt["partido_id"])
+        if not partido:
+            continue
+        a = agg[punt["jugador_id"]]
+        a["sum_media"] += media
+        a["matches"] += 1
+        a["by_jornada"][partido["jornada"]] = media
+
+    for sj in bundle["statsjugadores"]:
+        a = agg[sj["jugador_id"]]
+        a["goles"] += sj.get("goles") or 0
+        a["asistencias"] += sj.get("asistencias_gol") or 0
+
+    players_out = []
+    for jid, a in agg.items():
+        if a["matches"] < 1:
+            continue
+        jugador = bundle["jugadores_by_id"].get(jid, {})
+        nombre = jugador.get("nombre_jugador", f"Jugador {jid}")
+        team_id = _current_team_for_player(jid, bundle["historial_by_jugador"])
+        team = equipo_info.get(team_id, {})
+        posicion = jugador.get("posicion")
+
+        recent_jornadas = sorted(a["by_jornada"])[-RECENT_SCORES_WINDOW:]
+        recent_scores = [
+            {"jornada": j, "score": round(a["by_jornada"][j], 1), "band": _score_band(a["by_jornada"][j])}
+            for j in recent_jornadas
+        ]
+
+        players_out.append({
+            "slug": _player_slug(jid, nombre),
+            "jugador_id": jid,
+            "name": nombre,
+            "age": _age_from_birthdate(jugador.get("fecha_nacimiento")),
+            "position": posicion,
+            "position_label": POSITION_LABELS.get(posicion, posicion),
+            "team_slug": team.get("slug"),
+            "team_name": team.get("name"),
+            "team_short": team.get("short"),
+            "matches": a["matches"],
+            "total": round(a["sum_media"], 1),
+            "avg": round(a["sum_media"] / a["matches"], 1),
+            "goals": a["goles"],
+            "assists": a["asistencias"],
+            "recent_scores": recent_scores,
+        })
+
+    players_out.sort(key=lambda p: p["total"], reverse=True)
+    return players_out
+
+
+def build_player_detail(slug, temporada):
+    jugador_id = _jugador_id_from_slug(slug)
+    if jugador_id is None:
+        return None
+
+    bundle = _load_season_bundle(temporada)
+    jugador = bundle["jugadores_by_id"].get(jugador_id)
+    if jugador is None:
+        return None
+
+    equipo_info = _equipo_lookup(bundle)
+    statsjugadores_by_match = {
+        (sj["partido_id"], sj["jugador_id"]): sj for sj in bundle["statsjugadores"] if sj["jugador_id"] == jugador_id
+    }
+
+    matches_out = []
+    sum_media, goles, asistencias, minutos = 0.0, 0, 0, 0
+    for punt in bundle["puntuaciones"]:
+        if punt["jugador_id"] != jugador_id:
+            continue
+        partido = bundle["partidos_by_id"].get(punt["partido_id"])
+        if not partido:
+            continue
+        media = punt.get("puntuacion_media")
+        if media is None:
+            continue
+
+        equipo_id = _resolve_equipo(jugador_id, punt["partido_id"], partido["fecha_partido"], bundle)
+        if equipo_id == partido["equipo_local_id"]:
+            rival = partido["abreviatura_visitante"]
+        elif equipo_id == partido["equipo_visitante_id"]:
+            rival = partido["abreviatura_local"]
+        else:
+            rival = None
+
+        sj = statsjugadores_by_match.get((punt["partido_id"], jugador_id), {})
+        match_goles = sj.get("goles") or 0
+        match_asistencias = sj.get("asistencias_gol") or 0
+        match_minutos = sj.get("minutos_jugados") or 0
+
+        sum_media += media
+        goles += match_goles
+        asistencias += match_asistencias
+        minutos += match_minutos
+
+        matches_out.append({
+            "jornada": partido["jornada"],
+            "fecha": partido["fecha_partido"],
+            "rival": rival,
+            "score": round(media, 1),
+            "band": _score_band(media),
+            "goals": match_goles,
+            "assists": match_asistencias,
+            "minutes": match_minutos,
+        })
+
+    matches_out.sort(key=lambda m: m["jornada"])
+    total_matches = len(matches_out)
+
+    team_id = _current_team_for_player(jugador_id, bundle["historial_by_jugador"])
+    team = equipo_info.get(team_id, {})
+    posicion = jugador.get("posicion")
+
+    valoraciones = fetch_all("valoraciones_jugador", {
+        "jugador_id": f"eq.{jugador_id}",
+        "select": "fecha,valor_eur",
+        "order": "fecha.asc",
+    })
+
+    return {
+        "slug": slug,
+        "name": jugador.get("nombre_jugador", f"Jugador {jugador_id}"),
+        "jugador_id": jugador_id,
+        "age": _age_from_birthdate(jugador.get("fecha_nacimiento")),
+        "height_cm": jugador.get("altura_cm"),
+        "position": posicion,
+        "position_label": POSITION_LABELS.get(posicion, posicion),
+        "team_slug": team.get("slug"),
+        "team_name": team.get("name"),
+        "team_short": team.get("short"),
+        "matches": matches_out,
+        "totals": {
+            "matches": total_matches,
+            "avg": round(sum_media / total_matches, 1) if total_matches else 0,
+            "goals": goles,
+            "assists": asistencias,
+            "minutes": minutos,
+        },
+        "valuations": valoraciones or None,
+    }

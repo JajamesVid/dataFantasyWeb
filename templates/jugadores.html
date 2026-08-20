@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Jugadores · DataFantasy{% endblock %}
+
+{% block content %}
+<section class="inner-page">
+  <div class="container">
+    <div class="section-header">
+      <h2 class="section-title">Jugadores de La Liga</h2>
+      <span class="section-count">{{ players|length }} jugadores</span>
+    </div>
+
+    <input
+      type="text"
+      id="playerSearch"
+      class="player-search-input"
+      placeholder="Buscar jugador por nombre…"
+      autocomplete="off"
+    />
+
+    <div class="players-grid" id="playersGrid">
+      {% for player in players %}
+      <a href="{{ url_for('jugador', slug=player.slug) }}" class="player-card"
+         data-name="{{ player.name | lower }}" data-rank="{{ loop.index0 }}"
+         {% if loop.index0 >= 20 %}hidden{% endif %}>
+        <span class="player-card-top">
+          <span class="player-card-rank">{{ loop.index }}</span>
+          {% if player.photo %}
+          <span class="player-avatar player-avatar--photo"><img src="{{ player.photo }}" alt="{{ player.name }}"></span>
+          {% else %}
+          <span class="player-avatar">{{ player.name[:1] }}</span>
+          {% endif %}
+          <span class="player-card-info">
+            <span class="player-card-name">{{ player.name }}</span>
+            <span class="player-card-meta">
+              {% if player.position_label %}{{ player.position_label }} · {% endif %}
+              {{ player.team_name or "Sin equipo" }} · Media {{ player.avg }}
+            </span>
+          </span>
+          <span class="player-card-total">{{ player.total }}</span>
+        </span>
+        {% if player.recent_scores %}
+        <span class="player-card-recent">
+          {% for s in player.recent_scores %}
+          <span class="score-chip score-chip--{{ s.band }}" title="J{{ s.jornada }}: {{ s.score }} pts">{{ s.score }}</span>
+          {% endfor %}
+        </span>
+        {% endif %}
+      </a>
+      {% endfor %}
+    </div>
+
+    <p class="empty-text" id="playersEmpty" hidden>No hay jugadores que coincidan con esa búsqueda.</p>
+
+    <button type="button" id="loadMoreBtn" class="btn btn--ghost load-more-btn">Ver siguientes 20 →</button>
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+<script>
+  const searchInput = document.getElementById('playerSearch');
+  const cards = Array.from(document.querySelectorAll('#playersGrid .player-card'));
+  const emptyMessage = document.getElementById('playersEmpty');
+  const loadMoreBtn = document.getElementById('loadMoreBtn');
+  const PAGE_SIZE = 20;
+  let visibleLimit = PAGE_SIZE;
+
+  function renderPaged() {
+    let visibleCount = 0;
+    cards.forEach((card) => {
+      const visible = Number(card.dataset.rank) < visibleLimit;
+      card.hidden = !visible;
+      if (visible) visibleCount += 1;
+    });
+    emptyMessage.hidden = visibleCount !== 0;
+    loadMoreBtn.hidden = visibleLimit >= cards.length;
+  }
+
+  function renderSearch(query) {
+    let visibleCount = 0;
+    cards.forEach((card) => {
+      const matches = card.dataset.name.includes(query);
+      card.hidden = !matches;
+      if (matches) visibleCount += 1;
+    });
+    emptyMessage.hidden = visibleCount !== 0;
+    loadMoreBtn.hidden = true;
+  }
+
+  searchInput.addEventListener('input', () => {
+    const query = searchInput.value.trim().toLowerCase();
+    if (query) {
+      renderSearch(query);
+    } else {
+      renderPaged();
+    }
+  });
+
+  loadMoreBtn.addEventListener('click', () => {
+    visibleLimit += PAGE_SIZE;
+    renderPaged();
+  });
+
+  renderPaged();
+</script>
+{% endblock %}

@@ -1,0 +1,181 @@
+{% extends "base.html" %}
+
+{% block title %}{{ player.name }} · DataFantasy{% endblock %}
+
+{% block content %}
+<section class="inner-page">
+  <div class="container">
+    <a href="/jugadores" class="back-link">← Todos los jugadores</a>
+
+    <div class="team-header player-header">
+      {% if player.photo %}
+      <span class="player-avatar player-avatar--photo player-avatar--lg"><img src="{{ player.photo }}" alt="{{ player.name }}"></span>
+      {% else %}
+      <span class="player-avatar player-avatar--lg">{{ player.name[:1] }}</span>
+      {% endif %}
+      <div>
+        <h1 class="section-title">{{ player.name }}</h1>
+        <p class="player-header-meta">
+          {% if player.position_label %}{{ player.position_label }}{% endif %}
+          {% if player.age %}· {{ player.age }} años{% endif %}
+          {% if player.height_cm %}· {{ player.height_cm }} cm{% endif %}
+          {% if player.team_name %}
+          ·
+          {% if player.team_has_page %}
+          <a href="{{ url_for('equipo', slug=player.team_slug) }}">{{ player.team_name }}</a>
+          {% else %}
+          {{ player.team_name }}
+          {% endif %}
+          {% endif %}
+        </p>
+      </div>
+    </div>
+
+    <div class="team-evolution-strip">
+      <div class="team-evolution-header">
+        <span class="team-evolution-label">Temporada · {{ player.totals.matches }} partidos</span>
+        <span class="team-evolution-stats">
+          <span class="team-evolution-total team-evolution-total--points">
+            <span class="team-evolution-dot team-evolution-dot--points"></span>Media {{ player.totals.avg }}
+          </span>
+          <span class="team-evolution-total">{{ player.totals.goals }} goles</span>
+          <span class="team-evolution-total">{{ player.totals.assists }} asist.</span>
+          <span class="team-evolution-total">{{ player.totals.minutes }} min.</span>
+        </span>
+      </div>
+      {% if player.matches %}
+      <div class="team-evolution-chart">
+        <canvas id="player-score-chart"></canvas>
+      </div>
+      {% endif %}
+    </div>
+
+    {% if player.matches %}
+    <div class="section-header" style="margin-top:2rem;">
+      <h2 class="section-title" style="font-size:1.1rem;font-weight:600;">Partido a partido</h2>
+      <span class="section-count">{{ player.matches|length }}</span>
+    </div>
+    <div class="admin-list">
+      {% for match in player.matches %}
+      <div class="admin-row">
+        <div class="admin-row-info">
+          <span class="status-badge status-badge--published">J{{ match.jornada }}</span>
+          <span class="admin-row-title">{{ match.fecha }}{% if match.rival %} · vs {{ match.rival }}{% endif %}</span>
+        </div>
+        <div class="admin-row-actions">
+          <span class="score-chip score-chip--{{ match.band }}">{{ match.score }} pts</span>
+          <span>{{ match.goals }} goles</span>
+          <span>{{ match.assists }} asist.</span>
+          <span>{{ match.minutes }}'</span>
+        </div>
+      </div>
+      {% endfor %}
+    </div>
+    {% else %}
+    <div class="empty-state" style="margin-top:2rem;">
+      <p class="empty-icon">📋</p>
+      <p class="empty-text">Todavía no hay datos de partidos para este jugador esta temporada.</p>
+    </div>
+    {% endif %}
+
+    {% if player.valuations %}
+    <div class="section-header" style="margin-top:2rem;">
+      <h2 class="section-title" style="font-size:1.1rem;font-weight:600;">Valor de mercado</h2>
+    </div>
+    <div class="team-evolution-strip">
+      <div class="team-evolution-chart">
+        <canvas id="player-value-chart"></canvas>
+      </div>
+    </div>
+    {% endif %}
+
+  </div>
+</section>
+{% endblock %}
+
+{% block scripts %}
+{% if player.matches or player.valuations %}
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.4/dist/chart.umd.min.js"></script>
+<script>
+  {% if player.matches %}
+  new Chart(document.getElementById('player-score-chart'), {
+    type: 'line',
+    data: {
+      labels: {{ player.matches | map(attribute='jornada') | list | tojson }}.map((j) => `J${j}`),
+      datasets: [{
+        label: 'Puntuación',
+        data: {{ player.matches | map(attribute='score') | list | tojson }},
+        borderColor: '#22c55e',
+        backgroundColor: 'rgba(34, 197, 94, 0.12)',
+        fill: true,
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.3,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', axis: 'x', intersect: false },
+      scales: {
+        x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { display: false } },
+        y: { display: false },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#111827',
+          borderColor: '#1e2d45',
+          borderWidth: 1,
+          titleColor: '#e2e8f0',
+          bodyColor: '#e2e8f0',
+          callbacks: { label: (ctx) => `${ctx.parsed.y} pts` },
+        },
+      },
+    },
+  });
+  {% endif %}
+
+  {% if player.valuations %}
+  new Chart(document.getElementById('player-value-chart'), {
+    type: 'line',
+    data: {
+      labels: {{ player.valuations | map(attribute='fecha') | list | tojson }},
+      datasets: [{
+        label: 'Valor de mercado',
+        data: {{ player.valuations | map(attribute='valor_eur') | list | tojson }},
+        borderColor: '#38bdf8',
+        backgroundColor: 'rgba(56, 189, 248, 0.12)',
+        fill: true,
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.3,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      interaction: { mode: 'index', axis: 'x', intersect: false },
+      scales: {
+        x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { display: false } },
+        y: { display: false },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: {
+          backgroundColor: '#111827',
+          borderColor: '#1e2d45',
+          borderWidth: 1,
+          titleColor: '#e2e8f0',
+          bodyColor: '#e2e8f0',
+          callbacks: { label: (ctx) => `€${ctx.parsed.y.toLocaleString('es-ES')}` },
+        },
+      },
+    },
+  });
+  {% endif %}
+</script>
+{% endif %}
+{% endblock %}
