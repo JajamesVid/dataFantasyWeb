@@ -5,7 +5,7 @@
 {% block content %}
 <section class="inner-page">
   <div class="container">
-    <a href="/jugadores" class="back-link">← Todos los jugadores</a>
+    <a href="{{ url_for('jugadores') }}" class="back-link">← Todos los jugadores</a>
 
     <div class="team-header player-header">
       {% if player.photo %}

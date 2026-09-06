@@ -3,65 +3,81 @@
 {% block title %}DataFantasy · Análisis Fantasy La Liga{% endblock %}
 
 {% block content %}
-<section class="hero hero--compact">
+<section class="hero">
   <div class="container">
-    <h1 class="hero-title-sm">DataFantasy <span class="accent">· Temporada 2025/26</span></h1>
+    <h1 class="hero-title hero-title--script hero-title--oneline">DOMINA TU LIGA. SIN CUÑADOS. <span class="accent scribble">SOLO DATOS.</span></h1>
   </div>
 </section>
 
 <section class="evolution-section">
   <div class="container">
     <div class="charts-row">
-      <div class="chart-col chart-col--wide">
-        <div class="section-header">
-          <h2 class="section-title">Evolución por equipo</h2>
-          <span class="section-count">{{ points_evolution.jornadas[-1] }}</span>
-        </div>
-
-        <div class="chart-tabs">
-          <button type="button" class="chart-tab is-active" data-tab="points">Puntos Fantasy</button>
-          <button type="button" class="chart-tab" data-tab="classification">Clasificación Liga</button>
-        </div>
-
-        <div class="chart-tab-panel is-active" data-panel="points">
-          <p class="chart-hint">Haz clic en una línea para aislar su evolución, o en el escudo de un equipo para ir directo a su página.</p>
-          <div class="chart-toolbar">
-            <div class="chart-focus" id="pointsChartFocus">
-              <span class="chart-focus-badge" id="pointsChartFocusBadge"></span>
-              <span class="chart-focus-name" id="pointsChartFocusName"></span>
-              <a href="#" class="chart-focus-link" id="pointsChartFocusLink">Ver equipo →</a>
+      <div class="chart-col chart-col--main">
+        <div class="chart-card chart-card--main">
+          <div class="chart-card-header">
+            <div class="chart-card-title">
+              <span class="chart-card-title-text">Evolución por equipo</span>
+              <span class="chart-card-title-meta">{{ points_evolution.jornadas[-1] }}</span>
             </div>
-            <button type="button" class="chart-reset-btn" id="pointsChartResetBtn">← Ver todos los equipos</button>
-          </div>
-          <div class="chart-card">
-            <canvas id="points-evolution-chart"></canvas>
-          </div>
-        </div>
-
-        <div class="chart-tab-panel" data-panel="classification" hidden>
-          <p class="chart-hint">Haz clic en una línea para aislar su evolución, o en el escudo de un equipo para ir directo a su página.</p>
-          <div class="chart-toolbar">
-            <div class="chart-focus" id="classificationChartFocus">
-              <span class="chart-focus-badge" id="classificationChartFocusBadge"></span>
-              <span class="chart-focus-name" id="classificationChartFocusName"></span>
-              <a href="#" class="chart-focus-link" id="classificationChartFocusLink">Ver equipo →</a>
+            <div class="chart-tabs">
+              <button type="button" class="chart-tab is-active" data-tab="points">Puntos Fantasy</button>
+              <button type="button" class="chart-tab" data-tab="classification">Clasificación Liga</button>
             </div>
-            <button type="button" class="chart-reset-btn" id="classificationChartResetBtn">← Ver todos los equipos</button>
           </div>
-          <div class="chart-card">
-            <canvas id="classification-evolution-chart"></canvas>
+
+          <div class="chart-tab-panel is-active" data-panel="points">
+            <div class="chart-toolbar">
+              <div class="chart-focus" id="pointsChartFocus">
+                <span class="chart-focus-badge" id="pointsChartFocusBadge"></span>
+                <span class="chart-focus-name" id="pointsChartFocusName"></span>
+                <a href="#" class="chart-focus-link" id="pointsChartFocusLink">Ver equipo →</a>
+              </div>
+              <button type="button" class="chart-reset-btn" id="pointsChartResetBtn">← Ver todos los equipos</button>
+            </div>
+            <div class="chart-canvas-wrap">
+              <canvas id="points-evolution-chart"></canvas>
+            </div>
+          </div>
+
+          <div class="chart-tab-panel" data-panel="classification" hidden>
+            <div class="chart-toolbar">
+              <div class="chart-focus" id="classificationChartFocus">
+                <span class="chart-focus-badge" id="classificationChartFocusBadge"></span>
+                <span class="chart-focus-name" id="classificationChartFocusName"></span>
+                <a href="#" class="chart-focus-link" id="classificationChartFocusLink">Ver equipo →</a>
+              </div>
+              <button type="button" class="chart-reset-btn" id="classificationChartResetBtn">← Ver todos los equipos</button>
+            </div>
+            <div class="chart-canvas-wrap">
+              <canvas id="classification-evolution-chart"></canvas>
+            </div>
           </div>
         </div>
       </div>
 
-      <div class="chart-col chart-col--narrow">
-        <div class="section-header">
-          <h2 class="section-title">Comparativa de jugadores</h2>
-          <span class="section-count">5 métricas</span>
+      <div class="chart-col chart-col--side">
+        <div class="chart-card chart-card--circular">
+          <div class="chart-card-header">
+            <div class="chart-card-title">
+              <span class="chart-card-title-text">Comparativa de jugadores</span>
+              <span class="chart-card-title-meta">5 métricas</span>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="player-radar-chart"></canvas>
+          </div>
         </div>
-        <p class="chart-hint">Un crack de cada grande, cara a cara.</p>
-        <div class="chart-card chart-card--radar">
-          <canvas id="player-radar-chart"></canvas>
+
+        <div class="chart-card chart-card--circular">
+          <div class="chart-card-header">
+            <div class="chart-card-title">
+              <span class="chart-card-title-text">Reparto de puntos por posición</span>
+              <span class="chart-card-title-meta">temporada</span>
+            </div>
+          </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="position-breakdown-chart"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -409,8 +425,8 @@
           interaction: { mode: 'nearest', axis: 'xy', intersect: false },
           layout: { padding: { right: 150 } },
           scales: {
-            x: { ticks: { color: '#64748b' }, grid: { color: '#1e2d45' } },
-            y: { ticks: { color: '#64748b' }, grid: { color: '#1e2d45' }, ...yAxis },
+            x: { ticks: { color: '#64748b' }, grid: { color: '#e4e7eb' } },
+            y: { ticks: { color: '#64748b' }, grid: { color: '#e4e7eb' }, ...yAxis },
           },
           plugins: {
             legend: { display: false },
@@ -580,15 +596,15 @@
           min: 0,
           max: 100,
           ticks: { display: false, stepSize: 25 },
-          grid: { color: '#1e2d45' },
-          angleLines: { color: '#1e2d45' },
-          pointLabels: { color: '#94a3b8', font: { size: 11 } },
+          grid: { color: '#e4e7eb' },
+          angleLines: { color: '#e4e7eb' },
+          pointLabels: { color: '#6b7280', font: { size: 11 } },
         },
       },
       plugins: {
         legend: {
           position: 'bottom',
-          labels: { color: '#e2e8f0', boxWidth: 10, font: { size: 11 } },
+          labels: { color: '#374151', boxWidth: 10, font: { size: 11 } },
         },
         tooltip: {
           backgroundColor: '#111827',
@@ -596,6 +612,52 @@
           borderWidth: 1,
           titleColor: '#e2e8f0',
           bodyColor: '#e2e8f0',
+        },
+      },
+    },
+  });
+
+  // ── Reparto de puntos por posición ────────────────────────────────────
+  const positionData = {{ position_breakdown | tojson }};
+  const POSITION_COLORS = {
+    portero: '#2563eb',
+    defensa: '#7c3aed',
+    centrocampista: '#f59e0b',
+    delantero: '#16a34a',
+  };
+
+  new Chart(document.getElementById('position-breakdown-chart'), {
+    type: 'doughnut',
+    data: {
+      labels: positionData.map((p) => p.label),
+      datasets: [{
+        data: positionData.map((p) => p.value),
+        backgroundColor: positionData.map((p) => POSITION_COLORS[p.key]),
+        borderColor: '#ffffff',
+        borderWidth: 2,
+      }],
+    },
+    options: {
+      responsive: true,
+      maintainAspectRatio: false,
+      cutout: '62%',
+      plugins: {
+        legend: {
+          position: 'bottom',
+          labels: { color: '#374151', boxWidth: 10, font: { size: 11 } },
+        },
+        tooltip: {
+          backgroundColor: '#111827',
+          borderColor: '#1e2d45',
+          borderWidth: 1,
+          titleColor: '#e2e8f0',
+          bodyColor: '#e2e8f0',
+          callbacks: {
+            label(ctx) {
+              const pct = positionData[ctx.dataIndex].pct;
+              return `${ctx.label}: ${pct}%`;
+            },
+          },
         },
       },
     },

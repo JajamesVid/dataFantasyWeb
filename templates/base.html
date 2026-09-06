@@ -7,19 +7,27 @@
   <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;900&family=Kaushan+Script&display=swap" rel="stylesheet" />
 </head>
 <body>
   <header class="site-header">
     <div class="container header-inner">
-      <a href="/" class="logo">
+      <a href="{{ url_for('index') }}" class="logo">
         <img src="{{ url_for('static', filename='img/DATAFANTASYFINALLOGO.png') }}" alt="DataFantasy" class="logo-img" />
         <span class="logo-text">Data <span class="accent">Fantasy</span></span>
       </a>
       <nav class="nav">
-        <a href="/">Inicio</a>
-        <a href="/equipos">Equipos</a>
-        <a href="/jugadores">Jugadores</a>
+        <a href="{{ url_for('index') }}">Inicio</a>
+        <a href="{{ url_for('equipos') }}">Equipos</a>
+        <a href="{{ url_for('jugadores') }}">Jugadores</a>
+        {% if not request.path.startswith('/panel') %}
+        <div class="season-toggle">
+          {% for opt in temporada_options %}
+          <a href="{{ url_for(request.endpoint, temporada=opt.slug, **request.view_args) }}"
+             class="season-toggle-link{% if opt.slug == current_temporada_slug %} season-toggle-link--active{% endif %}">{{ opt.label }}</a>
+          {% endfor %}
+        </div>
+        {% endif %}
       </nav>
     </div>
   </header>

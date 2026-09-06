@@ -6,7 +6,7 @@ from functools import wraps
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask, abort, flash, redirect, render_template, request, session, url_for
+from flask import Flask, abort, flash, g, redirect, render_template, request, session, url_for
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -21,6 +21,16 @@ app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-only-secret-key")
 ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")
 ADMIN_PASSWORD_HASH = os.environ.get("ADMIN_PASSWORD_HASH")
 SUPABASE_TEMPORADA = os.environ.get("SUPABASE_TEMPORADA", "25/26")
+
+# Temporadas que el visitante puede elegir en el selector de la nav. La URL usa el
+# slug (sin barra, más limpio en un query string); Supabase usa el valor "db" tal cual
+# está guardado en la columna `temporada`.
+TEMPORADA_OPTIONS = [
+    {"slug": "25-26", "label": "2025/26", "db": "25/26"},
+    {"slug": "26-27", "label": "2026/27", "db": "26/27"},
+]
+TEMPORADA_BY_SLUG = {t["slug"]: t["db"] for t in TEMPORADA_OPTIONS}
+TEMPORADA_SLUG_BY_DB = {t["db"]: t["slug"] for t in TEMPORADA_OPTIONS}
 
 DATA = Path(__file__).parent / "data"
 ARTICLES_IMG = Path(__file__).parent / "static" / "img" / "articles"
@@ -95,6 +105,40 @@ def track_visit():
     save_analytics(analytics)
 
 
+@app.before_request
+def resolve_temporada():
+    """Which temporada to show, picked via ?temporada=<slug> (see TEMPORADA_OPTIONS).
+
+    Defaults to SUPABASE_TEMPORADA (the env-configured season) when missing or
+    unrecognised, so a bad/old query string can never point at a season that
+    doesn't exist.
+    """
+    slug = request.args.get("temporada")
+    g.temporada = TEMPORADA_BY_SLUG.get(slug, SUPABASE_TEMPORADA)
+    g.temporada_slug = TEMPORADA_SLUG_BY_DB.get(g.temporada, TEMPORADA_SLUG_BY_DB[SUPABASE_TEMPORADA])
+
+
+@app.context_processor
+def inject_temporada_context():
+    return {
+        "temporada_options": TEMPORADA_OPTIONS,
+        "current_temporada_slug": g.get("temporada_slug", TEMPORADA_SLUG_BY_DB[SUPABASE_TEMPORADA]),
+    }
+
+
+@app.url_defaults
+def inject_temporada(endpoint, values):
+    """Makes every url_for() inside a request keep the current ?temporada=... —
+    so switching season and then clicking around the site doesn't silently reset
+    to the default one. Left off entirely for the default season, so ordinary
+    URLs are unaffected (no query string noise) unless a non-default season is active.
+    """
+    if endpoint == "static" or "temporada" in values:
+        return
+    if g.get("temporada") and g.temporada != SUPABASE_TEMPORADA:
+        values["temporada"] = g.temporada_slug
+
+
 def team_badge_url(slug):
     """Look up a team crest in static/img/escudos/<slug>.<ext>, if one has been uploaded."""
     for ext in BADGE_EXTENSIONS:
@@ -116,7 +160,7 @@ def player_photo_url(jugador_id):
 
 
 def load_points_evolution():
-    data = supabase_data.build_points_evolution(SUPABASE_TEMPORADA)
+    data = supabase_data.build_points_evolution(g.temporada)
     real_slugs = {t["slug"] for t in load_teams()}
     for team in data["teams"]:
         team["badge"] = team_badge_url(team["slug"])
@@ -126,7 +170,7 @@ def load_points_evolution():
 
 
 def load_classification_evolution():
-    data = supabase_data.build_classification_evolution(SUPABASE_TEMPORADA)
+    data = supabase_data.build_classification_evolution(g.temporada)
     real_slugs = {t["slug"] for t in load_teams()}
     for team in data["teams"]:
         team["badge"] = team_badge_url(team["slug"])
@@ -135,10 +179,14 @@ def load_classification_evolution():
 
 
 def load_player_radar():
-    data = supabase_data.build_player_radar(SUPABASE_TEMPORADA)
+    data = supabase_data.build_player_radar(g.temporada)
     for player in data["players"]:
         player["team_badge"] = team_badge_url(player["team_slug"])
     return data
+
+
+def load_position_breakdown():
+    return supabase_data.build_position_points_breakdown(g.temporada)
 
 
 def load_team_evolution(slug):
@@ -148,7 +196,7 @@ def load_team_evolution(slug):
     Not every team in teams.json has data for the configured temporada, so this
     returns None when there's nothing to plot.
     """
-    data = supabase_data.build_team_evolution(slug, SUPABASE_TEMPORADA)
+    data = supabase_data.build_team_evolution(slug, g.temporada)
     if data is None:
         return None
     return {**data, "badge": team_badge_url(slug)}
@@ -158,11 +206,11 @@ def load_team_player_stats(slug):
     """Not every team has a roster to draw from yet (see load_team_evolution), so this
     returns None when there's nothing to show.
     """
-    return supabase_data.build_team_player_stats(slug, SUPABASE_TEMPORADA)
+    return supabase_data.build_team_player_stats(slug, g.temporada)
 
 
 def load_players():
-    players = supabase_data.build_player_directory(SUPABASE_TEMPORADA)
+    players = supabase_data.build_player_directory(g.temporada)
     real_slugs = {t["slug"] for t in load_teams()}
     for player in players:
         player["team_has_page"] = player["team_slug"] in real_slugs
@@ -171,7 +219,7 @@ def load_players():
 
 
 def load_player(slug):
-    player = supabase_data.build_player_detail(slug, SUPABASE_TEMPORADA)
+    player = supabase_data.build_player_detail(slug, g.temporada)
     if player is None:
         return None
     real_slugs = {t["slug"] for t in load_teams()}
@@ -241,6 +289,7 @@ def index():
         points_evolution=load_points_evolution(),
         classification_evolution=load_classification_evolution(),
         player_radar=load_player_radar(),
+        position_breakdown=load_position_breakdown(),
     )
 
 

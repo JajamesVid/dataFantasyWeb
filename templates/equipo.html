@@ -5,7 +5,7 @@
 {% block content %}
 <section class="inner-page">
   <div class="container">
-    <a href="/equipos" class="back-link">← Todos los equipos</a>
+    <a href="{{ url_for('equipos') }}" class="back-link">← Todos los equipos</a>
 
     <div class="team-header">
       {% if team.badge %}

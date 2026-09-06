@@ -12,7 +12,7 @@
   {% endif %}
 
   <div class="container article-container">
-    <a href="/" class="back-link">← Volver al tablón</a>
+    <a href="{{ url_for('index') }}" class="back-link">← Volver al tablón</a>
 
     <header class="article-header">
       <div class="article-meta">
@@ -47,7 +47,7 @@
 
     <div class="article-divider"></div>
 
-    <a href="/" class="back-link back-link--bottom">← Volver al tablón</a>
+    <a href="{{ url_for('index') }}" class="back-link back-link--bottom">← Volver al tablón</a>
   </div>
 </div>
 {% endblock %}

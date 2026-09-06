@@ -5,6 +5,7 @@ compartidas por las 4 vistas; cada `build_*` deriva su resultado de ese bundle
 sin volver a golpear la red.
 """
 import json
+import os
 import re
 import statistics
 import time
@@ -17,6 +18,19 @@ from supabase_client import fetch_all, fetch_in_chunks, fetch_many
 
 DATA_DIR = Path(__file__).parent / "data"
 CACHE_TTL_SECONDS = 900
+
+# Temporadas (formato "26/27") que todavía viven en tablas _stg (staging) en vez de
+# las de producción — para poder previsualizar un volcado antes de promocionarlo.
+# Se retira de aquí (variable de entorno) el día que esos datos pasen a producción.
+STAGING_TEMPORADAS = {
+    t.strip() for t in os.environ.get("SUPABASE_STAGING_TEMPORADAS", "").split(",") if t.strip()
+}
+
+
+def _table_name(base_name, temporada):
+    """`equipos`/`jugadores`/`historial_equipos_jugador` son catálogos compartidos entre
+    temporadas y nunca tienen variante _stg; solo las tablas por-partido la tienen."""
+    return f"{base_name}_stg" if temporada in STAGING_TEMPORADAS else base_name
 
 # nombre_equipo (Supabase) -> slug (teams.json), para los equipos que coinciden.
 # Los que faltan (p.ej. equipos de otra temporada/división) quedan como "solo gráfica":
@@ -61,6 +75,22 @@ POSITION_LABELS = {
     "SD": "Segundo delantero",
 }
 
+# Agrupación en las 4 líneas clásicas, para el reparto de puntos por posición
+# (gráfico de sectores de la home) — más legible que las 11 posiciones exactas.
+POSITION_GROUPS = {
+    "POR": "portero",
+    "LD": "defensa", "LI": "defensa", "DFC": "defensa",
+    "MCD": "centrocampista", "MC": "centrocampista", "MCO": "centrocampista",
+    "ED": "delantero", "EI": "delantero", "DC": "delantero", "SD": "delantero",
+}
+
+POSITION_GROUP_LABELS = {
+    "portero": "Portero",
+    "defensa": "Defensa",
+    "centrocampista": "Centrocampista",
+    "delantero": "Delantero",
+}
+
 CATEGORY_META = {
     "valorado": ("Mejor valorado", "El más consistente en valoración esta temporada"),
     "regularidad": ("Más regular", "El más fiable jornada tras jornada"),
@@ -86,7 +116,7 @@ def _load_teams_json():
 def _fetch_season_bundle(temporada):
     # Primera tanda: independientes entre sí, se piden todas a la vez.
     first = fetch_many([
-        ("partidos", lambda: fetch_all("partidos", {
+        ("partidos", lambda: fetch_all(_table_name("partidos", temporada), {
             "temporada": f"eq.{temporada}",
             "select": "partido_id,jornada,fecha_partido,equipo_local_id,equipo_visitante_id,"
                       "abreviatura_local,abreviatura_visitante",
@@ -108,15 +138,15 @@ def _fetch_season_bundle(temporada):
 
     # Segunda tanda: dependen de partido_ids, pero son independientes entre sí.
     second = fetch_many([
-        ("statsequipos", lambda: fetch_in_chunks("statsequipos", "partido_id", partido_ids, {
+        ("statsequipos", lambda: fetch_in_chunks(_table_name("statsequipos", temporada), "partido_id", partido_ids, {
             "select": "partido_id,equipo_id,puntos_acumulados,diferencia_goles_acumulada,goles_favor_acumulados",
             "order": "estadistica_equipo_id.asc",
         })),
-        ("puntuaciones", lambda: fetch_in_chunks("puntuaciones", "partido_id", partido_ids, {
+        ("puntuaciones", lambda: fetch_in_chunks(_table_name("puntuaciones", temporada), "partido_id", partido_ids, {
             "select": "partido_id,jugador_id,puntuacion_media,racha_puntuacion_media_14d",
             "order": "puntuacion_id.asc",
         })),
-        ("statsjugadores", lambda: fetch_in_chunks("statsjugadores", "partido_id", partido_ids, {
+        ("statsjugadores", lambda: fetch_in_chunks(_table_name("statsjugadores", temporada), "partido_id", partido_ids, {
             "select": "partido_id,jugador_id,equipo_id,goles,asistencias_gol,pases_precisos,pases_totales,minutos_jugados",
             "order": "estadistica_id.asc",
         })),
@@ -201,7 +231,7 @@ def _current_team_for_player(jugador_id, historial_by_jugador):
 def build_classification_evolution(temporada):
     bundle = _load_season_bundle(temporada)
     equipo_info = _equipo_lookup(bundle)
-    jornadas_max = max(p["jornada"] for p in bundle["partidos"])
+    jornadas_max = max((p["jornada"] for p in bundle["partidos"]), default=0)
 
     rows_by_equipo_jornada = {}
     for row in bundle["statsequipos"]:
@@ -238,7 +268,7 @@ def build_classification_evolution(temporada):
 def build_points_evolution(temporada):
     bundle = _load_season_bundle(temporada)
     equipo_info = _equipo_lookup(bundle)
-    jornadas_max = max(p["jornada"] for p in bundle["partidos"])
+    jornadas_max = max((p["jornada"] for p in bundle["partidos"]), default=0)
 
     points_by_equipo_jornada = defaultdict(lambda: defaultdict(float))
     unresolved = 0
@@ -344,6 +374,8 @@ def build_player_radar(temporada):
 
 def _season_date_bounds(partidos):
     fechas = [p["fecha_partido"] for p in partidos]
+    if not fechas:
+        return None, None
     return min(fechas), max(fechas)
 
 
@@ -354,7 +386,7 @@ def build_team_player_stats(slug, temporada):
     if equipo_id is None:
         return None
 
-    jornadas_max = max(p["jornada"] for p in bundle["partidos"])
+    jornadas_max = max((p["jornada"] for p in bundle["partidos"]), default=0)
     temporada_inicio, temporada_fin = _season_date_bounds(bundle["partidos"])
 
     per_player = defaultdict(lambda: {
@@ -541,6 +573,37 @@ def build_player_directory(temporada):
 
     players_out.sort(key=lambda p: p["total"], reverse=True)
     return players_out
+
+
+def build_position_points_breakdown(temporada):
+    """Reparto de los puntos Fantasy repartidos esta temporada entre las 4 líneas
+    (portero/defensa/centrocampista/delantero) — para el gráfico de sectores de la home."""
+    bundle = _load_season_bundle(temporada)
+
+    totals = defaultdict(float)
+    for punt in bundle["puntuaciones"]:
+        media = punt.get("puntuacion_media")
+        if media is None:
+            continue
+        jugador = bundle["jugadores_by_id"].get(punt["jugador_id"])
+        if not jugador:
+            continue
+        group = POSITION_GROUPS.get(jugador.get("posicion"))
+        if not group:
+            continue
+        totals[group] += media
+
+    total_sum = sum(totals.values()) or 1.0
+    order = ["portero", "defensa", "centrocampista", "delantero"]
+    return [
+        {
+            "key": key,
+            "label": POSITION_GROUP_LABELS[key],
+            "value": round(totals.get(key, 0.0), 1),
+            "pct": round(totals.get(key, 0.0) / total_sum * 100, 1),
+        }
+        for key in order
+    ]
 
 
 def build_player_detail(slug, temporada):
