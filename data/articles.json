@@ -9,7 +9,7 @@
     "teams": [
       "real-madrid"
     ],
-    "cover": null,
+    "cover": "example.jpg",
     "body": [
       {
         "type": "text",
@@ -42,7 +42,7 @@
       "barcelona",
       "atletico-madrid"
     ],
-    "cover": "jornada38.jpg",
+    "cover": "example.jpg",
     "body": [
       {
         "type": "text",
@@ -80,7 +80,7 @@
     "tag": "Análisis",
     "author": "DataFantasy",
     "teams": [],
-    "cover": null,
+    "cover": "example.jpg",
     "body": [
       {
         "type": "text",
@@ -118,7 +118,7 @@
     "tag": "Mercado",
     "author": "DataFantasy",
     "teams": [],
-    "cover": "mercado-portada.jpg",
+    "cover": "example.jpg",
     "body": [
       {
         "type": "text",
@@ -158,7 +158,7 @@
     "teams": [
       "real-madrid"
     ],
-    "cover": "5-cover-38c0a2a4.png",
+    "cover": "example.jpg",
     "body": [],
     "status": "published"
   }

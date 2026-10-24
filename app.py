@@ -159,18 +159,8 @@ def player_photo_url(jugador_id):
     return None
 
 
-def load_points_evolution():
-    data = supabase_data.build_points_evolution(g.temporada)
-    real_slugs = {t["slug"] for t in load_teams()}
-    for team in data["teams"]:
-        team["badge"] = team_badge_url(team["slug"])
-        # A few chart-only entries (e.g. teams from a different season) don't have a real team page.
-        team["has_page"] = team["slug"] in real_slugs
-    return data
-
-
-def load_classification_evolution():
-    data = supabase_data.build_classification_evolution(g.temporada)
+def load_team_matchday_snapshot():
+    data = supabase_data.build_team_matchday_snapshot(g.temporada)
     real_slugs = {t["slug"] for t in load_teams()}
     for team in data["teams"]:
         team["badge"] = team_badge_url(team["slug"])
@@ -182,6 +172,7 @@ def load_player_radar():
     data = supabase_data.build_player_radar(g.temporada)
     for player in data["players"]:
         player["team_badge"] = team_badge_url(player["team_slug"])
+        player["photo"] = player["photo_url"] or player_photo_url(player.get("jugador_id"))
     return data
 
 
@@ -214,7 +205,7 @@ def load_players():
     real_slugs = {t["slug"] for t in load_teams()}
     for player in players:
         player["team_has_page"] = player["team_slug"] in real_slugs
-        player["photo"] = player_photo_url(player["jugador_id"])
+        player["photo"] = player["photo_url"] or player_photo_url(player["jugador_id"])
     return players
 
 
@@ -224,7 +215,7 @@ def load_player(slug):
         return None
     real_slugs = {t["slug"] for t in load_teams()}
     player["team_has_page"] = player["team_slug"] in real_slugs
-    player["photo"] = player_photo_url(player["jugador_id"])
+    player["photo"] = player["photo_url"] or player_photo_url(player["jugador_id"])
     return player
 
 
@@ -286,8 +277,7 @@ def index():
     return render_template(
         "index.html",
         articles=load_articles(),
-        points_evolution=load_points_evolution(),
-        classification_evolution=load_classification_evolution(),
+        team_matchday=load_team_matchday_snapshot(),
         player_radar=load_player_radar(),
         position_breakdown=load_position_breakdown(),
     )

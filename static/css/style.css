@@ -91,7 +91,7 @@ body::after {
 .header-inner {
   display: flex;
   align-items: center;
-  justify-content: space-between;
+  gap: 2.5rem;
   height: 76px;
 }
 
@@ -118,23 +118,45 @@ body::after {
 
 .nav {
   display: flex;
-  gap: 2rem;
+  align-items: center;
+  gap: 0.35rem;
+  flex: 1;
 }
 
-.nav a {
+.nav-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  padding: 0.45rem 0.8rem;
+  border-radius: 999px;
   color: var(--muted);
   text-decoration: none;
   font-size: 0.9rem;
-  font-weight: 500;
-  transition: color 0.2s;
+  font-weight: 600;
+  transition: color 0.2s, background 0.2s;
 }
 
-.nav a:hover { color: var(--text); }
+.nav-icon {
+  width: 17px;
+  height: 17px;
+  flex-shrink: 0;
+}
+
+.nav-link:hover {
+  color: var(--text);
+  background: var(--bg-card-h);
+}
+
+.nav-link--active {
+  color: var(--accent-d);
+  background: rgba(34, 197, 94, 0.12);
+}
 
 .season-toggle {
   display: flex;
   gap: 0.25rem;
   padding: 0.2rem;
+  margin-left: auto;
   background: var(--bg-card);
   border: 1px solid var(--border);
   border-radius: 999px;
@@ -336,98 +358,6 @@ body::after {
   color: var(--accent-d);
 }
 
-.chart-tab-panel {
-  display: none;
-  flex-direction: column;
-  flex: 1;
-  min-height: 0;
-}
-.chart-tab-panel.is-active { display: flex; }
-
-.chart-hint {
-  font-size: 0.85rem;
-  color: var(--muted);
-  margin-bottom: 1rem;
-}
-
-.chart-toolbar {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  min-height: 2.25rem;
-  margin-bottom: 0.75rem;
-  flex-shrink: 0;
-}
-
-.chart-focus {
-  display: flex;
-  align-items: center;
-  gap: 0.6rem;
-  font-weight: 700;
-  font-size: 1rem;
-  opacity: 0;
-  transition: opacity 0.15s;
-}
-
-.chart-focus.is-visible { opacity: 1; }
-
-.chart-focus-badge {
-  width: 26px;
-  height: 26px;
-  border-radius: 7px;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.7rem;
-  font-weight: 800;
-  overflow: hidden;
-  flex-shrink: 0;
-}
-
-.chart-focus-badge img {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-  padding: 2px;
-}
-
-.chart-focus-link {
-  color: var(--accent-d);
-  text-decoration: none;
-  font-size: 0.85rem;
-  font-weight: 600;
-  white-space: nowrap;
-}
-
-.chart-focus-link:hover {
-  color: var(--accent-d);
-  text-decoration: underline;
-}
-
-.chart-reset-btn {
-  background: var(--bg-card-h);
-  border: 1px solid var(--border);
-  color: var(--text);
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 0.45rem 0.9rem;
-  border-radius: 8px;
-  cursor: pointer;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s, border-color 0.15s, color 0.15s;
-}
-
-.chart-reset-btn.is-visible {
-  opacity: 1;
-  pointer-events: auto;
-}
-
-.chart-reset-btn:hover {
-  border-color: var(--accent);
-  color: var(--accent-d);
-}
-
 .chart-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -451,6 +381,14 @@ body::after {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.chart-card--donut {
+  height: 336px;
+}
+
+.chart-card--radar {
+  height: 560px;
 }
 
 .chart-card--compact {
@@ -480,6 +418,122 @@ body::after {
 .section-count {
   font-size: 0.85rem;
   color: var(--muted);
+}
+
+/* ── Article board (home): un destacado grande + el resto más pequeños,
+   imagen de portada a sangre y título superpuesto — estilo portada de
+   medio deportivo. ─────────────────────────────────────────────────── */
+.article-board {
+  display: flex;
+  flex-direction: column;
+  gap: 1.25rem;
+}
+
+.article-board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 1.25rem;
+}
+
+.article-card {
+  position: relative;
+  display: block;
+  height: 230px;
+  border-radius: var(--radius);
+  border: 5px solid transparent;
+  overflow: hidden;
+  text-decoration: none;
+  box-shadow: var(--shadow-card);
+  transition: box-shadow 0.25s ease, transform 0.25s ease, border-color 0.25s ease;
+}
+
+/* Borde más grueso + halo del mismo color, para que se note el tipo de artículo
+   de un vistazo aunque la foto de fondo sea oscura. */
+.article-card--jornada  { border-color: var(--tag-jornada-col); box-shadow: var(--shadow-card), 0 0 0 3px rgba(29, 78, 216, 0.28); }
+.article-card--análisis { border-color: var(--tag-análisis-col); box-shadow: var(--shadow-card), 0 0 0 3px rgba(124, 58, 237, 0.28); }
+.article-card--mercado  { border-color: var(--tag-mercado-col); box-shadow: var(--shadow-card), 0 0 0 3px rgba(21, 128, 61, 0.28); }
+
+.article-card--jornada:hover  { box-shadow: var(--shadow-card-hover), 0 0 0 3px rgba(29, 78, 216, 0.4); }
+.article-card--análisis:hover { box-shadow: var(--shadow-card-hover), 0 0 0 3px rgba(124, 58, 237, 0.4); }
+.article-card--mercado:hover  { box-shadow: var(--shadow-card-hover), 0 0 0 3px rgba(21, 128, 61, 0.4); }
+
+.article-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-card-hover);
+}
+
+.article-card--featured {
+  height: 400px;
+}
+
+.article-card-cover {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(135deg, #1a2f22, var(--accent-d));
+  background-size: cover;
+  background-position: center;
+  transition: transform 0.45s ease;
+}
+
+.article-card:hover .article-card-cover {
+  transform: scale(1.06);
+}
+
+.article-card-scrim {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.82) 0%, rgba(0, 0, 0, 0.4) 45%, rgba(0, 0, 0, 0) 75%);
+}
+
+.article-card-body {
+  position: absolute;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  padding: 1.1rem 1.25rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.article-card-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.article-card-date {
+  font-size: 0.78rem;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+.article-card-title {
+  font-size: 1.05rem;
+  font-weight: 800;
+  line-height: 1.3;
+  color: #ffffff;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.45);
+}
+
+.article-card--featured .article-card-body {
+  padding: 1.75rem 2rem;
+  gap: 0.65rem;
+}
+
+.article-card--featured .article-card-title {
+  font-size: 1.75rem;
+  letter-spacing: -0.3px;
+}
+
+.article-card-author {
+  font-size: 0.8rem;
+  font-weight: 600;
+  color: rgba(255, 255, 255, 0.75);
+}
+
+@media (max-width: 700px) {
+  .article-card--featured { height: 280px; }
+  .article-card--featured .article-card-title { font-size: 1.35rem; }
 }
 
 /* ── Cards grid ───────────────────────────────────── */
@@ -762,19 +816,19 @@ body::after {
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
-  width: 54px;
-  height: 54px;
-  border-radius: 50%;
+  width: 96px;
+  height: 96px;
+  border-radius: 14px;
   background: var(--bg-card-h);
   color: var(--accent-d);
   font-weight: 800;
-  font-size: 1.3rem;
+  font-size: 1.5rem;
 }
 
 .player-avatar--lg {
-  width: 64px;
-  height: 64px;
-  font-size: 1.4rem;
+  width: 132px;
+  height: 132px;
+  font-size: 2rem;
 }
 
 .player-avatar--photo {
@@ -787,6 +841,45 @@ body::after {
   width: 100%;
   height: 100%;
   object-fit: cover;
+  object-position: center 15%;
+}
+
+/* Leyenda del radar de comparativa: sustituye a la de Chart.js — cada jugador
+   flota en una esquina/lado distinto del propio gráfico (arriba-izda, arriba-dcha,
+   abajo-centro) en vez de ir en fila debajo, con un anillo del color de su línea. */
+.radar-legend {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.radar-legend-badge {
+  position: absolute;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  pointer-events: auto;
+}
+
+.radar-legend-badge--tl { top: 0; left: 0; }
+.radar-legend-badge--tr { top: 0; right: 0; }
+.radar-legend-badge--bc { bottom: 0; left: 50%; transform: translateX(-50%); }
+
+.radar-legend-avatar {
+  width: 78px;
+  height: 78px;
+  border-radius: 12px;
+  font-size: 1.65rem;
+}
+
+.radar-legend-name {
+  font-size: 0.72rem;
+  font-weight: 700;
+  color: var(--text);
+  text-align: center;
+  line-height: 1.15;
+  max-width: 78px;
 }
 
 .player-card-info {

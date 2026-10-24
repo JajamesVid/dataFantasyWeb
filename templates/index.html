@@ -16,47 +16,22 @@
         <div class="chart-card chart-card--main">
           <div class="chart-card-header">
             <div class="chart-card-title">
-              <span class="chart-card-title-text">Evolución por equipo</span>
-              <span class="chart-card-title-meta">{{ points_evolution.jornadas[-1] }}</span>
+              <span class="chart-card-title-text">Puntos por equipo</span>
+              <span class="chart-card-title-meta">J{{ team_matchday.jornada }}</span>
             </div>
             <div class="chart-tabs">
-              <button type="button" class="chart-tab is-active" data-tab="points">Puntos Fantasy</button>
-              <button type="button" class="chart-tab" data-tab="classification">Clasificación Liga</button>
+              <button type="button" class="chart-tab is-active" data-tab="fantasy">Puntos Fantasy</button>
+              <button type="button" class="chart-tab" data-tab="official">Clasificación Liga</button>
             </div>
           </div>
-
-          <div class="chart-tab-panel is-active" data-panel="points">
-            <div class="chart-toolbar">
-              <div class="chart-focus" id="pointsChartFocus">
-                <span class="chart-focus-badge" id="pointsChartFocusBadge"></span>
-                <span class="chart-focus-name" id="pointsChartFocusName"></span>
-                <a href="#" class="chart-focus-link" id="pointsChartFocusLink">Ver equipo →</a>
-              </div>
-              <button type="button" class="chart-reset-btn" id="pointsChartResetBtn">← Ver todos los equipos</button>
-            </div>
-            <div class="chart-canvas-wrap">
-              <canvas id="points-evolution-chart"></canvas>
-            </div>
-          </div>
-
-          <div class="chart-tab-panel" data-panel="classification" hidden>
-            <div class="chart-toolbar">
-              <div class="chart-focus" id="classificationChartFocus">
-                <span class="chart-focus-badge" id="classificationChartFocusBadge"></span>
-                <span class="chart-focus-name" id="classificationChartFocusName"></span>
-                <a href="#" class="chart-focus-link" id="classificationChartFocusLink">Ver equipo →</a>
-              </div>
-              <button type="button" class="chart-reset-btn" id="classificationChartResetBtn">← Ver todos los equipos</button>
-            </div>
-            <div class="chart-canvas-wrap">
-              <canvas id="classification-evolution-chart"></canvas>
-            </div>
+          <div class="chart-canvas-wrap">
+            <canvas id="team-snapshot-chart"></canvas>
           </div>
         </div>
       </div>
 
       <div class="chart-col chart-col--side">
-        <div class="chart-card chart-card--circular">
+        <div class="chart-card chart-card--circular chart-card--radar">
           <div class="chart-card-header">
             <div class="chart-card-title">
               <span class="chart-card-title-text">Comparativa de jugadores</span>
@@ -65,13 +40,14 @@
           </div>
           <div class="chart-canvas-wrap">
             <canvas id="player-radar-chart"></canvas>
+            <div class="radar-legend" id="radarLegend"></div>
           </div>
         </div>
 
-        <div class="chart-card chart-card--circular">
+        <div class="chart-card chart-card--circular chart-card--donut">
           <div class="chart-card-header">
             <div class="chart-card-title">
-              <span class="chart-card-title-text">Reparto de puntos por posición</span>
+              <span class="chart-card-title-text">Puntos Fantasy medios por posición</span>
               <span class="chart-card-title-meta">temporada</span>
             </div>
           </div>
@@ -84,34 +60,49 @@
   </div>
 </section>
 
-<section class="board-section">
+<section class="board-section" id="tablon">
   <div class="container">
     <div class="section-header">
       <h2 class="section-title">Tablón de Anuncios</h2>
       <span class="section-count">{{ articles|length }} artículos</span>
     </div>
 
-    <div class="articles-grid articles-grid--compact">
-      {% for article in articles %}
-      <a href="{{ url_for('article', article_id=article.id) }}" class="card">
-        {% if article.cover %}
-        <div class="card-cover" style="background-image: url('{{ url_for('static', filename='img/articles/' ~ article.cover) }}')"></div>
-        {% endif %}
-        <div class="card-content">
-          <div class="card-top">
-            <span class="tag tag--{{ article.tag | lower }}">{{ article.tag }}</span>
-            <time class="card-date">{{ article.date }}</time>
+    {% if articles %}
+    <div class="article-board">
+      {% set featured = articles[0] %}
+      <a href="{{ url_for('article', article_id=featured.id) }}" class="article-card article-card--featured article-card--{{ featured.tag | lower }}">
+        <div class="article-card-cover"{% if featured.cover %} style="background-image: url('{{ url_for('static', filename='img/articles/' ~ featured.cover) }}')"{% endif %}></div>
+        <div class="article-card-scrim"></div>
+        <div class="article-card-body">
+          <div class="article-card-meta">
+            <span class="tag tag--{{ featured.tag | lower }}">{{ featured.tag }}</span>
+            <time class="article-card-date">{{ featured.date }}</time>
           </div>
-          <h3 class="card-title">{{ article.title }}</h3>
-          <p class="card-summary">{{ article.summary }}</p>
-          <div class="card-footer">
-            <span class="card-author">{{ article.author }}</span>
-            <span class="card-link">Leer más →</span>
-          </div>
+          <h3 class="article-card-title">{{ featured.title }}</h3>
+          <span class="article-card-author">{{ featured.author }}</span>
         </div>
       </a>
-      {% endfor %}
+
+      {% if articles[1:] %}
+      <div class="article-board-grid">
+        {% for article in articles[1:] %}
+        <a href="{{ url_for('article', article_id=article.id) }}" class="article-card article-card--{{ article.tag | lower }}">
+          <div class="article-card-cover"{% if article.cover %} style="background-image: url('{{ url_for('static', filename='img/articles/' ~ article.cover) }}')"{% endif %}></div>
+          <div class="article-card-scrim"></div>
+          <div class="article-card-body">
+            <div class="article-card-meta">
+              <span class="tag tag--{{ article.tag | lower }}">{{ article.tag }}</span>
+              <time class="article-card-date">{{ article.date }}</time>
+            </div>
+            <h3 class="article-card-title">{{ article.title }}</h3>
+            <span class="article-card-author">{{ article.author }}</span>
+          </div>
+        </a>
+        {% endfor %}
+      </div>
+      {% endif %}
     </div>
+    {% endif %}
   </div>
 </section>
 {% endblock %}
@@ -129,444 +120,232 @@
     ctx.closePath();
   }
 
-  // Draws each team's badge at its current/latest point — the real crest when we have one
-  // uploaded (static/img/escudos/<slug>.*), otherwise the short code as a placeholder chip.
-  // Overlapping badges get nudged apart vertically so close-together totals stay legible.
-  // The hovered team's badge is drawn last (on top) and enlarged; the rest fade out.
-  // Shared across every evolution chart on the page — "best" direction (points: higher is
-  // better; league position: lower is better) is read off the chart instance itself, and
-  // crests are looked up in the single shared `badgeImages` cache (same 20 teams, same URLs,
-  // regardless of which metric is being charted).
-  const teamBadgePlugin = {
-    id: 'teamBadge',
+  // ── Puntos por equipo (barras horizontales) ───────────────────────────
+  // Filas fijas en el orden de la clasificación oficial (1º arriba); solo cambia
+  // qué representa la longitud de la barra según la pestaña activa. Así se ve de
+  // un vistazo si un equipo bien situado en Liga rinde peor en Fantasy que sus
+  // vecinos en la tabla, o al revés.
+  const teamSnapshotData = {{ team_matchday | tojson }};
+  const snapshotTeams = teamSnapshotData.teams;
+  const badgeImages = {};
+
+  const SNAPSHOT_MODES = {
+    fantasy: {
+      label: 'Puntos Fantasy',
+      getValue: (t) => t.fantasy_points,
+      format: (v) => v.toFixed(1),
+      color: '#22c55e',
+    },
+    official: {
+      label: 'Puntos oficiales',
+      getValue: (t) => t.official_points,
+      format: (v) => String(Math.round(v)),
+      color: '#2563eb',
+    },
+  };
+
+  // Escudos a la izquierda del eje, en dos columnas en zigzag (mismo tamaño que en
+  // el antiguo gráfico de evolución) — pero cada escudo va anclado a la Y real de su
+  // propia barra (no a una rejilla aparte), así que fila y escudo coinciden siempre
+  // y la columna de escudos ocupa exactamente el mismo alto que las barras. Con 20
+  // equipos, un escudo a tamaño legible (54px) por fila no cabe sin solaparse con el
+  // de al lado, así que carriles alternos (par/impar) dejan el doble de hueco vertical
+  // entre escudos del mismo carril.
+  const teamRowBadgePlugin = {
+    id: 'teamRowBadge',
     afterDatasetsDraw(chart) {
+      const teams = chart.$teams;
+      if (!teams) return;
       const { ctx, chartArea } = chart;
-      const hoveredIndex = chart.$hoveredDatasetIndex ?? null;
-      const betterIsHigher = chart.$betterIsHigher ?? true;
-      ctx.font = '700 11px Inter, system-ui, sans-serif';
-      const paddingX = 5;
-      const textBoxHeight = 18;
+      const meta = chart.getDatasetMeta(0);
       const imgBoxSize = 54;
-
-      // All badges anchor on each team's current (last-jornada) value — like the original
-      // idea — but rank 1, 2, 3... alternate between two side-by-side lanes ("staircase"),
-      // so the full ranking reads top-to-bottom at a glance and each lane only has to fit
-      // half the teams, keeping the crest size big even with 20 teams on the chart.
-      const totalJornadas = chart.data.labels.length;
-      const lastIndex = totalJornadas - 1;
+      const textBoxHeight = 18;
+      const paddingX = 5;
       const laneGap = 10;
-      const rowGap = 16;
+      const laneBaseX = chartArea.left - 12;
 
-      const ranked = chart.data.datasets
-        .map((dataset, i) => {
-          const meta = chart.getDatasetMeta(i);
-          if (meta.hidden) return null;
-          if (!meta.data.length) return null;
-          return { datasetIndex: i, meta, dataset, finalValue: dataset.data[dataset.data.length - 1] };
-        })
-        .filter(Boolean)
-        .sort((a, b) => (betterIsHigher ? b.finalValue - a.finalValue : a.finalValue - b.finalValue));
-
-      // With many teams on the chart, lay the two lanes out as a strict, evenly-spaced grid
-      // (rank-based, not value-based) so the second lane always lands exactly halfway
-      // between two consecutive badges of the first lane — a true brick-wall staircase.
-      // With few teams visible (e.g. a single pinned/isolated team) there's no crowding to
-      // solve, so just anchor directly on the real value instead of snapping to a grid.
-      const useGrid = ranked.length > 4;
-      const rowStep = imgBoxSize + rowGap;
-      const topAnchor = chartArea.top + imgBoxSize / 2 + 4;
-
-      const badges = ranked.map((entry, rank) => {
-        const lane = rank % 2;
-        const point = entry.meta.data[lastIndex];
-        const { x, y } = point.tooltipPosition();
-        const image = badgeImages[entry.dataset.teamSlug];
-        const width = image ? imgBoxSize : ctx.measureText(entry.dataset.teamShort).width + paddingX * 2;
+      const badges = teams.map((team, i) => {
+        const lane = i % 2;
+        const image = badgeImages[team.slug];
+        const width = image ? imgBoxSize : ctx.measureText(team.short).width + paddingX * 2;
         const height = image ? imgBoxSize : textBoxHeight;
-        const indexInLane = Math.floor(rank / 2);
-        const gridY = topAnchor + indexInLane * rowStep + lane * (rowStep / 2);
         return {
-          datasetIndex: entry.datasetIndex,
-          lane,
-          x: x + 6 + lane * (imgBoxSize + laneGap),
-          y: useGrid ? gridY : y,
-          label: entry.dataset.teamShort,
-          color: entry.dataset.fullColor,
+          index: i,
+          x: laneBaseX - imgBoxSize - lane * (imgBoxSize + laneGap),
+          y: meta.data[i].y,
+          label: team.short,
           image: image || null,
           width,
           height,
         };
       });
 
-      if (!badges.length) return;
-
-      // If the grid runs past the bottom of the plot area, shift every badge up by the
-      // same amount so the staggered spacing between lanes is preserved exactly.
-      const maxY = Math.max(...badges.map((b) => b.y + b.height / 2));
-      const overflow = maxY - chartArea.bottom;
-      if (overflow > 0) badges.forEach((b) => (b.y -= overflow));
-
       const hitboxes = [];
-
-      function drawBadge(b, { scale = 1, alpha = 1 } = {}) {
-        const w = b.width * scale;
-        const h = b.height * scale;
-        const boxX = b.x - (w - b.width) / 2;
-        const boxY = b.y - h / 2;
+      ctx.save();
+      badges.forEach((b) => {
         const hitPad = 2;
         hitboxes.push({
-          datasetIndex: b.datasetIndex,
-          x: boxX - hitPad,
-          y: boxY - hitPad,
-          width: w + hitPad * 2,
-          height: h + hitPad * 2,
+          index: b.index,
+          x: b.x - hitPad,
+          y: b.y - b.height / 2 - hitPad,
+          width: b.width + hitPad * 2,
+          height: b.height + hitPad * 2,
         });
 
-        ctx.save();
-        ctx.globalAlpha = alpha;
-
         if (b.image) {
-          ctx.fillStyle = '#e2e8f0';
-          roundRect(ctx, boxX, boxY, w, h, 5);
+          roundRect(ctx, b.x, b.y - b.height / 2, b.width, b.height, 5);
+          ctx.fillStyle = '#f5f6f8';
           ctx.fill();
-          ctx.strokeStyle = b.color;
-          ctx.lineWidth = scale > 1 ? 2 : 1.5;
+          ctx.strokeStyle = '#e4e7eb';
+          ctx.lineWidth = 1.5;
           ctx.stroke();
-
-          const pad = 3 * scale;
-          const maxDim = w - pad * 2;
-          const imgScale = Math.min(maxDim / b.image.naturalWidth, maxDim / b.image.naturalHeight);
-          const dw = b.image.naturalWidth * imgScale;
-          const dh = b.image.naturalHeight * imgScale;
-          ctx.drawImage(b.image, boxX + (w - dw) / 2, boxY + (h - dh) / 2, dw, dh);
+          const pad = 3;
+          const maxDim = b.width - pad * 2;
+          const scale = Math.min(maxDim / b.image.naturalWidth, maxDim / b.image.naturalHeight);
+          const dw = b.image.naturalWidth * scale;
+          const dh = b.image.naturalHeight * scale;
+          ctx.drawImage(b.image, b.x + (b.width - dw) / 2, b.y - dh / 2, dw, dh);
         } else {
-          ctx.fillStyle = b.color;
-          roundRect(ctx, boxX, boxY, w, h, 4);
+          roundRect(ctx, b.x, b.y - b.height / 2, b.width, b.height, 4);
+          ctx.fillStyle = '#e4e7eb';
           ctx.fill();
-          ctx.fillStyle = '#0b0f1a';
-          ctx.font = `700 ${Math.round(11 * scale)}px Inter, system-ui, sans-serif`;
+          ctx.fillStyle = '#374151';
+          ctx.font = '700 11px Inter, system-ui, sans-serif';
           ctx.textBaseline = 'middle';
           ctx.textAlign = 'left';
-          ctx.fillText(b.label, boxX + paddingX * scale, b.y + 0.5);
+          ctx.fillText(b.label, b.x + paddingX, b.y + 0.5);
         }
-        ctx.restore();
-      }
-
-      let hoveredBadge = null;
-      badges.forEach((b) => {
-        if (b.datasetIndex === hoveredIndex) {
-          hoveredBadge = b;
-          return;
-        }
-        drawBadge(b, { alpha: hoveredIndex === null ? 1 : 0.3 });
       });
-      // Draw the hovered badge last so it renders on top, enlarged.
-      if (hoveredBadge) drawBadge(hoveredBadge, { scale: 1.35, alpha: 1 });
+      ctx.restore();
 
-      // Exposed so click/hover handlers can hit-test the badges themselves — they can sit
-      // away from their team's actual data point once nudged apart to avoid overlap.
       chart.$badgeHitboxes = hitboxes;
     },
   };
 
-  // Checks only the drawn badges (they can be nudged away from their real data point, so
-  // Chart.js's own line-hit detection can't find them) — used where a badge needs to be
-  // told apart from its line, e.g. clicking a crest navigates instead of pinning.
   function getBadgeIndexAtEvent(chart, event) {
     if (!event) return null;
     const hitboxes = chart.$badgeHitboxes || [];
     const pos = Chart.helpers.getRelativePosition(event, chart);
     for (const hb of hitboxes) {
       if (pos.x >= hb.x && pos.x <= hb.x + hb.width && pos.y >= hb.y && pos.y <= hb.y + hb.height) {
-        return hb.datasetIndex;
+        return hb.index;
       }
     }
     return null;
   }
 
-  // Resolves which team a hover/click event targets — checking the drawn badges first
-  // and falling back to Chart.js's own nearest-line detection (`elements`, already
-  // computed by the interaction mode). Used for the hover preview, where badge and line
-  // should behave the same way.
-  function getDatasetIndexAtEvent(chart, event, elements) {
-    const badgeIndex = getBadgeIndexAtEvent(chart, event);
-    if (badgeIndex !== null) return badgeIndex;
-    return elements && elements.length ? elements[0].datasetIndex : null;
-  }
+  // Número con el total al final de cada barra.
+  const barEndLabelPlugin = {
+    id: 'barEndLabel',
+    afterDatasetsDraw(chart) {
+      const teams = chart.$teams;
+      if (!teams) return;
+      const mode = SNAPSHOT_MODES[chart.$mode];
+      const meta = chart.getDatasetMeta(0);
+      const { ctx } = chart;
 
-  // Builds one full evolution chart — points or classification are both just "a value per
-  // team per jornada" as far as this is concerned. `valueKey` picks which array off each
-  // team object to plot; `betterIsHigher` flips the badge ranking (classification: 1st is
-  // best, i.e. the *lowest* number) and is stamped onto the chart for the plugin to read.
-  function setupEvolutionChart({ canvasId, data, valueKey, betterIsHigher, yAxis, focusIds, onReady }) {
-    const teamCount = data.teams.length;
-    const datasets = data.teams.map((team, i) => {
-      const hue = Math.round((i * 360) / teamCount);
-      return {
-        label: team.name,
-        teamShort: team.short,
-        teamSlug: team.slug,
-        data: team[valueKey],
-        // Resting / full / dimmed variants swapped in on hover to declutter 20 overlapping lines.
-        restColor: `hsla(${hue}, 65%, 60%, 0.85)`,
-        fullColor: `hsla(${hue}, 70%, 65%, 1)`,
-        dimColor: `hsla(${hue}, 25%, 55%, 0.12)`,
-        borderColor: `hsla(${hue}, 65%, 60%, 0.85)`,
-        backgroundColor: `hsla(${hue}, 65%, 60%, 0.85)`,
-        pointRadius: 0,
-        pointHoverRadius: 4,
-        borderWidth: 2,
-        tension: 0.3,
-      };
-    });
-
-    function setHoveredDataset(chart, index) {
-      if (chart.$hoveredDatasetIndex === index) return;
-      chart.$hoveredDatasetIndex = index;
-      chart.data.datasets.forEach((ds, i) => {
-        if (index === null) {
-          ds.borderColor = ds.restColor;
-          ds.borderWidth = 2;
-        } else if (i === index) {
-          ds.borderColor = ds.fullColor;
-          ds.borderWidth = 3;
-        } else {
-          ds.borderColor = ds.dimColor;
-          ds.borderWidth = 1;
-        }
+      ctx.save();
+      ctx.font = '700 12px Inter, system-ui, sans-serif';
+      ctx.fillStyle = '#111827';
+      ctx.textBaseline = 'middle';
+      ctx.textAlign = 'left';
+      meta.data.forEach((bar, i) => {
+        const value = mode.getValue(teams[i]);
+        ctx.fillText(mode.format(value), bar.x + 8, bar.y);
       });
-      chart.update('none');
-    }
+      ctx.restore();
+    },
+  };
 
-    // Pinning (click) fully hides every other team so only the selected evolution remains,
-    // for reading one team's curve in isolation. Hovering is disabled while a team is pinned.
-    let pinnedIndex = null;
-    const chartFocusEl = document.getElementById(focusIds.focus);
-    const chartFocusBadge = document.getElementById(focusIds.badge);
-    const chartFocusName = document.getElementById(focusIds.name);
-    const chartFocusLink = document.getElementById(focusIds.link);
-    const chartResetBtn = document.getElementById(focusIds.reset);
+  const snapshotBadgeLoads = snapshotTeams
+    .filter((team) => team.badge && !badgeImages[team.slug])
+    .map(
+      (team) =>
+        new Promise((resolve) => {
+          const img = new Image();
+          img.onload = () => {
+            badgeImages[team.slug] = img;
+            resolve();
+          };
+          img.onerror = resolve;
+          img.src = team.badge;
+        })
+    );
 
-    function showFocus(team, color) {
-      chartFocusBadge.style.background = team.badge ? '#e2e8f0' : color;
-      chartFocusBadge.style.color = '#0b0f1a';
-      chartFocusBadge.innerHTML = team.badge
-        ? `<img src="${team.badge}" alt="${team.name}">`
-        : team.short;
-      chartFocusName.textContent = team.name;
-      // A handful of chart-only teams (e.g. Segunda clubs shown for comparison) don't have
-      // a real team page yet, so only link through when one actually exists.
-      if (team.has_page) {
-        chartFocusLink.href = `/equipos/${team.slug}`;
-        chartFocusLink.style.display = '';
-      } else {
-        chartFocusLink.removeAttribute('href');
-        chartFocusLink.style.display = 'none';
-      }
-      chartFocusEl.classList.add('is-visible');
-      chartResetBtn.classList.add('is-visible');
-    }
+  Promise.all(snapshotBadgeLoads).then(() => {
+    const canvas = document.getElementById('team-snapshot-chart');
+    let mode = 'fantasy';
 
-    function hideFocus() {
-      chartFocusEl.classList.remove('is-visible');
-      chartResetBtn.classList.remove('is-visible');
-    }
-
-    function pinDataset(chart, index) {
-      pinnedIndex = index;
-      chart.$hoveredDatasetIndex = index;
-      chart.data.datasets.forEach((ds, i) => {
-        chart.getDatasetMeta(i).hidden = i !== index;
-        ds.borderColor = i === index ? ds.fullColor : ds.restColor;
-        ds.borderWidth = i === index ? 3 : 2;
-      });
-      chart.update('none');
-      showFocus(data.teams[index], datasets[index].fullColor);
-    }
-
-    function unpinDataset(chart) {
-      pinnedIndex = null;
-      chart.$hoveredDatasetIndex = null;
-      chart.data.datasets.forEach((ds, i) => {
-        chart.getDatasetMeta(i).hidden = false;
-        ds.borderColor = ds.restColor;
-        ds.borderWidth = 2;
-      });
-      chart.update('none');
-      hideFocus();
-    }
-
-    // Preload any uploaded crests before the first draw so `naturalWidth`/`naturalHeight`
-    // are available when the plugin sizes and positions them. Shared across chart instances
-    // (same 20 teams/URLs whichever metric is on screen), so repeat calls just hit the cache.
-    const badgeLoads = data.teams
-      .filter((team) => team.badge && !badgeImages[team.slug])
-      .map(
-        (team) =>
-          new Promise((resolve) => {
-            const img = new Image();
-            img.onload = () => {
-              badgeImages[team.slug] = img;
-              resolve();
-            };
-            img.onerror = resolve;
-            img.src = team.badge;
-          })
-      );
-
-    return Promise.all(badgeLoads).then(() => {
-      const canvas = document.getElementById(canvasId);
-      const chart = new Chart(canvas, {
-        type: 'line',
-        data: { labels: data.jornadas, datasets },
-        options: {
-          responsive: true,
-          maintainAspectRatio: false,
-          interaction: { mode: 'nearest', axis: 'xy', intersect: false },
-          layout: { padding: { right: 150 } },
-          scales: {
-            x: { ticks: { color: '#64748b' }, grid: { color: '#e4e7eb' } },
-            y: { ticks: { color: '#64748b' }, grid: { color: '#e4e7eb' }, ...yAxis },
-          },
-          plugins: {
-            legend: { display: false },
-            tooltip: {
-              backgroundColor: '#111827',
-              borderColor: '#1e2d45',
-              borderWidth: 1,
-              titleColor: '#e2e8f0',
-              bodyColor: '#e2e8f0',
+    const chart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: snapshotTeams.map((t) => t.name),
+        datasets: [{
+          data: snapshotTeams.map(SNAPSHOT_MODES.fantasy.getValue),
+          backgroundColor: SNAPSHOT_MODES.fantasy.color,
+          borderRadius: 4,
+          barThickness: 16,
+        }],
+      },
+      options: {
+        indexAxis: 'y',
+        responsive: true,
+        maintainAspectRatio: false,
+        layout: { padding: { left: 140, right: 56, top: 20, bottom: 20 } },
+        scales: {
+          x: { ticks: { color: '#64748b' }, grid: { color: '#e4e7eb' }, beginAtZero: true },
+          y: { ticks: { display: false }, grid: { display: false } },
+        },
+        plugins: {
+          legend: { display: false },
+          tooltip: {
+            backgroundColor: '#111827',
+            borderColor: '#1e2d45',
+            borderWidth: 1,
+            titleColor: '#e2e8f0',
+            bodyColor: '#e2e8f0',
+            callbacks: {
+              label(ctx) {
+                const team = snapshotTeams[ctx.dataIndex];
+                const m = SNAPSHOT_MODES[chart.$mode];
+                return `${m.label}: ${m.format(m.getValue(team))}`;
+              },
             },
           },
         },
-        plugins: [teamBadgePlugin],
-      });
-      chart.$betterIsHigher = betterIsHigher;
-
-      canvas.addEventListener('mouseleave', () => {
-        if (pinnedIndex === null) setHoveredDataset(chart, null);
-      });
-
-      // Handled as plain DOM listeners (rather than the Chart.js `onHover`/`onClick`
-      // options) because Chart.js only invokes those within the plotted chart area —
-      // badges live in the right-hand padding margin, outside it, so hovering/clicking
-      // one would otherwise be ignored.
-      canvas.addEventListener('mousemove', (nativeEvent) => {
-        if (pinnedIndex !== null) return;
-        const elements = chart.getElementsAtEventForMode(
-          nativeEvent,
-          'nearest',
-          { intersect: false, axis: 'xy' },
-          false
-        );
-        const index = getDatasetIndexAtEvent(chart, nativeEvent, elements);
-        setHoveredDataset(chart, index);
-      });
-
-      canvas.addEventListener('click', (nativeEvent) => {
-        // Clicking a crest jumps straight to that team's own page (skipping the isolate
-        // step here); clicking the line itself still isolates it in this chart, since
-        // that's for comparing right here rather than drilling into one team.
-        const badgeIndex = getBadgeIndexAtEvent(chart, nativeEvent);
-        if (badgeIndex !== null) {
-          const team = data.teams[badgeIndex];
-          if (team.has_page) {
-            window.location.href = `/equipos/${team.slug}`;
-            return;
-          }
-          if (pinnedIndex === badgeIndex) {
-            unpinDataset(chart);
-          } else {
-            pinDataset(chart, badgeIndex);
-          }
-          return;
-        }
-
-        const elements = chart.getElementsAtEventForMode(
-          nativeEvent,
-          'nearest',
-          { intersect: false, axis: 'xy' },
-          false
-        );
-        const index = elements.length ? elements[0].datasetIndex : null;
-        if (index === null) return;
-        if (pinnedIndex === index) {
-          unpinDataset(chart);
-        } else {
-          pinDataset(chart, index);
-        }
-      });
-
-      chartResetBtn.addEventListener('click', () => unpinDataset(chart));
-      if (onReady) onReady(chart);
-      return chart;
+      },
+      plugins: [teamRowBadgePlugin, barEndLabelPlugin],
     });
-  }
+    chart.$teams = snapshotTeams;
+    chart.$mode = mode;
 
-  const pointsChartData = {{ points_evolution | tojson }};
-  const classificationChartData = {{ classification_evolution | tojson }};
-  const badgeImages = {};
-
-  let pointsChart = null;
-  let classificationChart = null;
-  let classificationInitialized = false;
-
-  setupEvolutionChart({
-    canvasId: 'points-evolution-chart',
-    data: pointsChartData,
-    valueKey: 'points',
-    betterIsHigher: true,
-    yAxis: {},
-    focusIds: {
-      focus: 'pointsChartFocus',
-      badge: 'pointsChartFocusBadge',
-      name: 'pointsChartFocusName',
-      link: 'pointsChartFocusLink',
-      reset: 'pointsChartResetBtn',
-    },
-    onReady: (chart) => { pointsChart = chart; },
-  });
-
-  // Tabs switch which chart is visible. The classification chart is only built the first
-  // time its tab is opened — creating a Chart.js instance while its canvas is `hidden`
-  // would size it to zero, so there's nothing to gain from building it upfront.
-  document.querySelectorAll('.chart-tab').forEach((btn) => {
-    btn.addEventListener('click', () => {
-      if (btn.classList.contains('is-active')) return;
-      document.querySelectorAll('.chart-tab').forEach((b) => b.classList.remove('is-active'));
-      document.querySelectorAll('.chart-tab-panel').forEach((p) => {
-        p.classList.remove('is-active');
-        p.hidden = true;
-      });
-      btn.classList.add('is-active');
-      const panel = document.querySelector(`.chart-tab-panel[data-panel="${btn.dataset.tab}"]`);
-      panel.classList.add('is-active');
-      panel.hidden = false;
-
-      if (btn.dataset.tab === 'classification') {
-        if (!classificationInitialized) {
-          classificationInitialized = true;
-          setupEvolutionChart({
-            canvasId: 'classification-evolution-chart',
-            data: classificationChartData,
-            valueKey: 'positions',
-            betterIsHigher: false,
-            yAxis: { reverse: true, min: 1, max: classificationChartData.teams.length },
-            focusIds: {
-              focus: 'classificationChartFocus',
-              badge: 'classificationChartFocusBadge',
-              name: 'classificationChartFocusName',
-              link: 'classificationChartFocusLink',
-              reset: 'classificationChartResetBtn',
-            },
-            onReady: (chart) => { classificationChart = chart; },
-          });
-        } else if (classificationChart) {
-          classificationChart.resize();
-        }
-      } else if (pointsChart) {
-        pointsChart.resize();
+    // Los escudos viven fuera del área de trazado (en el margen izquierdo) y en zigzag,
+    // así que se comprueban aparte con sus propias hitboxes antes de caer al hit-test
+    // normal de Chart.js sobre las barras.
+    canvas.addEventListener('click', (nativeEvent) => {
+      const badgeIndex = getBadgeIndexAtEvent(chart, nativeEvent);
+      let index = badgeIndex;
+      if (index === null) {
+        const points = chart.getElementsAtEventForMode(nativeEvent, 'nearest', { intersect: true, axis: 'y' }, false);
+        index = points.length ? points[0].index : null;
       }
+      if (index === null) return;
+      const team = snapshotTeams[index];
+      if (team.has_page) window.location.href = `/equipos/${team.slug}`;
+    });
+
+    document.querySelectorAll('.chart-tab').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        if (btn.classList.contains('is-active')) return;
+        document.querySelectorAll('.chart-tab').forEach((b) => b.classList.remove('is-active'));
+        btn.classList.add('is-active');
+        mode = btn.dataset.tab;
+        chart.$mode = mode;
+        const m = SNAPSHOT_MODES[mode];
+        chart.data.datasets[0].data = snapshotTeams.map(m.getValue);
+        chart.data.datasets[0].backgroundColor = m.color;
+        chart.update();
+      });
     });
   });
 
@@ -591,6 +370,10 @@
     options: {
       responsive: true,
       maintainAspectRatio: false,
+      // Deja hueco arriba/abajo para que las insignias de la leyenda (fuera del
+      // propio pentágono, ancladas a las esquinas) no se solapen con las etiquetas
+      // del eje ("Goles", "Puntos Fantasy"...).
+      layout: { padding: { top: 40, bottom: 140, left: 8, right: 8 } },
       scales: {
         r: {
           min: 0,
@@ -602,10 +385,7 @@
         },
       },
       plugins: {
-        legend: {
-          position: 'bottom',
-          labels: { color: '#374151', boxWidth: 10, font: { size: 11 } },
-        },
+        legend: { display: false },
         tooltip: {
           backgroundColor: '#111827',
           borderColor: '#1e2d45',
@@ -616,6 +396,25 @@
       },
     },
   });
+
+  // Leyenda propia (en vez de la de Chart.js): cada jugador flota en una esquina o
+  // lado distinto del propio gráfico (arriba-izda / arriba-dcha / abajo-centro), en
+  // vez de ir en fila debajo, con su foto y un anillo del color de su línea.
+  const RADAR_BADGE_POSITIONS = ['tl', 'tr', 'bc'];
+  document.getElementById('radarLegend').innerHTML = radarData.players.map((player, i) => {
+    const color = RADAR_COLORS[i % RADAR_COLORS.length];
+    const posClass = `radar-legend-badge--${RADAR_BADGE_POSITIONS[i % RADAR_BADGE_POSITIONS.length]}`;
+    const ring = `box-shadow: 0 0 0 3px ${color};`;
+    const avatar = player.photo
+      ? `<span class="player-avatar player-avatar--photo radar-legend-avatar" style="${ring}"><img src="${player.photo}" alt="${player.name}"></span>`
+      : `<span class="player-avatar radar-legend-avatar" style="${ring}">${player.name.slice(0, 1)}</span>`;
+    return `
+      <span class="radar-legend-badge ${posClass}">
+        ${avatar}
+        <span class="radar-legend-name">${player.name}</span>
+      </span>
+    `;
+  }).join('');
 
   // ── Reparto de puntos por posición ────────────────────────────────────
   const positionData = {{ position_breakdown | tojson }};
@@ -654,8 +453,8 @@
           bodyColor: '#e2e8f0',
           callbacks: {
             label(ctx) {
-              const pct = positionData[ctx.dataIndex].pct;
-              return `${ctx.label}: ${pct}%`;
+              const value = positionData[ctx.dataIndex].value;
+              return `${ctx.label}: ${value} pts/jugador de media`;
             },
           },
         },

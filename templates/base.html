@@ -17,9 +17,22 @@
         <span class="logo-text">Data <span class="accent">Fantasy</span></span>
       </a>
       <nav class="nav">
-        <a href="{{ url_for('index') }}">Inicio</a>
-        <a href="{{ url_for('equipos') }}">Equipos</a>
-        <a href="{{ url_for('jugadores') }}">Jugadores</a>
+        <a href="{{ url_for('index') }}" class="nav-link{% if request.endpoint == 'index' %} nav-link--active{% endif %}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9a1 1 0 0 0 1 1H9.5v-6h5v6h3a1 1 0 0 0 1-1v-9"/></svg>
+          Inicio
+        </a>
+        <a href="{{ url_for('index') }}#tablon" class="nav-link">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="14" height="15" rx="1.5"/><path d="M17 8h3.5a.5.5 0 0 1 .5.5V18a2 2 0 0 1-2 2"/><path d="M7 9h6M7 12.5h6M7 16h3"/></svg>
+          Noticias
+        </a>
+        <a href="{{ url_for('equipos') }}" class="nav-link{% if request.endpoint in ['equipos', 'equipo'] %} nav-link--active{% endif %}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3 4.5 5.5v6c0 5 3.5 7.8 7.5 9.5 4-1.7 7.5-4.5 7.5-9.5v-6L12 3Z"/></svg>
+          Equipos
+        </a>
+        <a href="{{ url_for('jugadores') }}" class="nav-link{% if request.endpoint in ['jugadores', 'jugador'] %} nav-link--active{% endif %}">
+          <svg class="nav-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="3.2"/><path d="M5 20c0-4 3-6.5 7-6.5s7 2.5 7 6.5"/></svg>
+          Jugadores
+        </a>
         {% if not request.path.startswith('/panel') %}
         <div class="season-toggle">
           {% for opt in temporada_options %}

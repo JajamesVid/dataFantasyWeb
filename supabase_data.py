@@ -40,20 +40,31 @@ TEAM_NAME_TO_SLUG = {
     "Atlético Madrid": "atletico-madrid",
     "Celta Vigo": "celta",
     "Deportivo Alavés": "alaves",
+    "Deportivo de La Coruña": "deportivo-coruna",
     "Elche": "elche",
     "Espanyol": "espanyol",
     "FC Barcelona": "barcelona",
     "Getafe": "getafe",
+    "Girona FC": "girona",
     "Levante UD": "levante",
+    "Málaga CF": "malaga",
+    "Mallorca": "mallorca",
     "Osasuna": "osasuna",
     "Rayo Vallecano": "rayo-vallecano",
     "Real Betis": "real-betis",
     "Real Madrid": "real-madrid",
+    "Real Oviedo": "real-oviedo",
+    "Real Racing Club": "racing",
     "Real Sociedad": "real-sociedad",
     "Sevilla": "sevilla",
     "Valencia": "valencia",
     "Villarreal": "villarreal",
 }
+# Girona FC/Mallorca/Real Oviedo son de 25/26 (descendidos o fuera esta
+# temporada); Deportivo de La Coruña/Málaga CF/Real Racing Club son los
+# ascendidos de 26/27. Se dejan ambos juegos de entradas -- cada temporada
+# solo aparecen en los datos los equipos que de verdad jugaron esa campaña,
+# así que tenerlos todos no hace daño y evita tener que tocar esto cada año.
 
 MIN_MATCHES_RADAR = 10
 MIN_MATCHES_CATEGORY = 10
@@ -73,6 +84,13 @@ POSITION_LABELS = {
     "EI": "Extremo izquierdo",
     "DC": "Delantero centro",
     "SD": "Segundo delantero",
+    # Codigo generico de SofaScore (G/D/M/F) -- jugadores.posicion ya no
+    # resuelve la posicion tactica fina via Transfermarkt (decision 2026-10-17:
+    # este repo solo usa los datos que trae el propio scraper).
+    "G": "Portero",
+    "D": "Defensa",
+    "M": "Centrocampista",
+    "F": "Delantero",
 }
 
 # Agrupación en las 4 líneas clásicas, para el reparto de puntos por posición
@@ -82,6 +100,11 @@ POSITION_GROUPS = {
     "LD": "defensa", "LI": "defensa", "DFC": "defensa",
     "MCD": "centrocampista", "MC": "centrocampista", "MCO": "centrocampista",
     "ED": "delantero", "EI": "delantero", "DC": "delantero", "SD": "delantero",
+    # Ver comentario de POSITION_LABELS sobre G/D/M/F.
+    "G": "portero",
+    "D": "defensa",
+    "M": "centrocampista",
+    "F": "delantero",
 }
 
 POSITION_GROUP_LABELS = {
@@ -124,7 +147,8 @@ def _fetch_season_bundle(temporada):
         })),
         ("historial", lambda: fetch_all("historial_equipos_jugador", {"order": "historial_id.asc"})),
         ("jugadores", lambda: fetch_all("jugadores", {
-            "select": "jugador_id,nombre_jugador,fecha_nacimiento,posicion,altura_cm", "order": "jugador_id.asc",
+            "select": "jugador_id,nombre_jugador,fecha_nacimiento,posicion,altura_cm,foto_url",
+            "order": "jugador_id.asc",
         })),
         ("equipos", lambda: fetch_all("equipos", {"select": "equipo_id,nombre_equipo", "order": "equipo_id.asc"})),
     ])
@@ -297,6 +321,70 @@ def build_points_evolution(temporada):
     return {"jornadas": [f"J{n}" for n in range(1, jornadas_max + 1)], "teams": teams_out}
 
 
+def build_team_matchday_snapshot(temporada):
+    """Puntos Fantasy acumulados en toda la temporada frente a los puntos oficiales de
+    clasificación acumulados — ambos a fecha de la última jornada y en el mismo orden
+    (el de la tabla real), para detectar equipos que rinden peor/mejor en Fantasy de lo
+    que su puesto en Liga sugiere."""
+    bundle = _load_season_bundle(temporada)
+    equipo_info = _equipo_lookup(bundle)
+    jornada_actual = max((p["jornada"] for p in bundle["partidos"]), default=0)
+    if jornada_actual == 0:
+        return {"jornada": 0, "teams": []}
+
+    fantasy_by_equipo = defaultdict(float)
+    unresolved = 0
+    for punt in bundle["puntuaciones"]:
+        partido = bundle["partidos_by_id"].get(punt["partido_id"])
+        if not partido:
+            continue
+        equipo_id = _resolve_equipo(punt["jugador_id"], punt["partido_id"], partido["fecha_partido"], bundle)
+        if equipo_id is None:
+            unresolved += 1
+            continue
+        fantasy_by_equipo[equipo_id] += punt.get("puntuacion_media") or 0
+
+    if unresolved:
+        print(f"[supabase_data] build_team_matchday_snapshot({temporada}): "
+              f"{unresolved} filas de puntuaciones sin equipo resuelto")
+
+    rows_by_equipo_jornada = {}
+    for row in bundle["statsequipos"]:
+        partido = bundle["partidos_by_id"].get(row["partido_id"])
+        if not partido:
+            continue
+        rows_by_equipo_jornada[(row["equipo_id"], partido["jornada"])] = row
+
+    equipo_ids = sorted(equipo_info)
+    last_known = {}
+    for jornada in range(1, jornada_actual + 1):
+        for eid in equipo_ids:
+            row = rows_by_equipo_jornada.get((eid, jornada))
+            if row is not None:
+                last_known[eid] = row
+
+    standings = []
+    for eid in equipo_ids:
+        row = last_known.get(eid)
+        puntos = row["puntos_acumulados"] if row else 0
+        dif = row["diferencia_goles_acumulada"] if row else 0
+        favor = row["goles_favor_acumulados"] if row else 0
+        standings.append((eid, puntos, dif, favor))
+    standings.sort(key=lambda t: (-t[1], -t[2], -t[3]))
+
+    teams_out = [
+        {
+            **equipo_info[eid],
+            "official_position": position,
+            "official_points": puntos,
+            "fantasy_points": round(fantasy_by_equipo.get(eid, 0.0), 1),
+        }
+        for position, (eid, puntos, _dif, _favor) in enumerate(standings, start=1)
+    ]
+
+    return {"jornada": jornada_actual, "teams": teams_out}
+
+
 def build_team_evolution(slug, temporada):
     points = build_points_evolution(temporada)
     classification = build_classification_evolution(temporada)
@@ -353,7 +441,11 @@ def build_player_radar(temporada):
     metric_keys = ["goles", "asistencias", "regularidad", "valoracion", "puntos_fantasy"]
     norm = {key: normalize(key) for key in metric_keys}
 
-    top3 = sorted(pool, key=lambda jid: raw[jid]["puntos_fantasy"], reverse=True)[:3]
+    # De entre los que cualifican, solo se puede "destacar" a los que ya tienen foto
+    # subida — si ninguno la tuviera todavía, se cae al ranking general de siempre.
+    with_photo = [jid for jid in pool if bundle["jugadores_by_id"].get(jid, {}).get("foto_url")]
+    ranked_pool = with_photo or list(pool)
+    top3 = sorted(ranked_pool, key=lambda jid: raw[jid]["puntos_fantasy"], reverse=True)[:3]
     equipo_info = _equipo_lookup(bundle)
 
     players_out = []
@@ -362,10 +454,12 @@ def build_player_radar(temporada):
         team_id = _current_team_for_player(jid, bundle["historial_by_jugador"])
         info = equipo_info.get(team_id, {})
         players_out.append({
+            "jugador_id": jid,
             "slug": _slugify(jugador.get("nombre_jugador", str(jid))),
             "name": jugador.get("nombre_jugador", f"Jugador {jid}"),
             "team_slug": info.get("slug"),
             "team_short": info.get("short"),
+            "photo_url": jugador.get("foto_url"),
             "values": [round(norm[key][jid], 1) for key in metric_keys],
         })
 
@@ -563,6 +657,7 @@ def build_player_directory(temporada):
             "team_slug": team.get("slug"),
             "team_name": team.get("name"),
             "team_short": team.get("short"),
+            "photo_url": jugador.get("foto_url"),
             "matches": a["matches"],
             "total": round(a["sum_media"], 1),
             "avg": round(a["sum_media"] / a["matches"], 1),
@@ -576,31 +671,43 @@ def build_player_directory(temporada):
 
 
 def build_position_points_breakdown(temporada):
-    """Reparto de los puntos Fantasy repartidos esta temporada entre las 4 líneas
-    (portero/defensa/centrocampista/delantero) — para el gráfico de sectores de la home."""
+    """Puntos Fantasy medios por jugador en cada una de las 4 líneas
+    (portero/defensa/centrocampista/delantero) — puntos totales de la línea entre el
+    número de jugadores de esa línea que han puntuado, para el gráfico de sectores de
+    la home. Es la media, no el total, para no sesgar hacia las líneas con más
+    jugadores (defensas/centrocampistas frente a porteros)."""
     bundle = _load_season_bundle(temporada)
 
     totals = defaultdict(float)
+    players_by_group = defaultdict(set)
     for punt in bundle["puntuaciones"]:
         media = punt.get("puntuacion_media")
         if media is None:
             continue
-        jugador = bundle["jugadores_by_id"].get(punt["jugador_id"])
+        jugador_id = punt["jugador_id"]
+        jugador = bundle["jugadores_by_id"].get(jugador_id)
         if not jugador:
             continue
         group = POSITION_GROUPS.get(jugador.get("posicion"))
         if not group:
             continue
         totals[group] += media
+        players_by_group[group].add(jugador_id)
 
-    total_sum = sum(totals.values()) or 1.0
+    averages = {
+        key: totals[key] / len(players_by_group[key])
+        for key in totals
+        if players_by_group[key]
+    }
+
+    avg_sum = sum(averages.values()) or 1.0
     order = ["portero", "defensa", "centrocampista", "delantero"]
     return [
         {
             "key": key,
             "label": POSITION_GROUP_LABELS[key],
-            "value": round(totals.get(key, 0.0), 1),
-            "pct": round(totals.get(key, 0.0) / total_sum * 100, 1),
+            "value": round(averages.get(key, 0.0), 1),
+            "pct": round(averages.get(key, 0.0) / avg_sum * 100, 1),
         }
         for key in order
     ]
@@ -686,6 +793,7 @@ def build_player_detail(slug, temporada):
         "team_slug": team.get("slug"),
         "team_name": team.get("name"),
         "team_short": team.get("short"),
+        "photo_url": jugador.get("foto_url"),
         "matches": matches_out,
         "totals": {
             "matches": total_matches,
