@@ -1,0 +1,35 @@
+[Unit]
+Description=DataFantasy web (gunicorn)
+After=network-online.target
+Wants=network-online.target
+
+[Service]
+User=datafantasy
+Group=datafantasy
+WorkingDirectory=/srv/datafantasy/dataFantasyWeb
+# Artículos, sus imágenes y visitas viven fuera del repo (ver CONTENT_DIR en app.py)
+Environment=CONTENT_DIR=/srv/datafantasy/content
+Environment=BEHIND_PROXY=1
+# Un solo proceso: el límite de intentos de login y la caché de Supabase están
+# en memoria. Los hilos bastan para el tráfico esperado.
+ExecStart=/srv/datafantasy/dataFantasyWeb/venv/bin/gunicorn \
+    --workers 1 --threads 8 --bind 127.0.0.1:8000 \
+    --access-logfile - app:app
+Restart=always
+RestartSec=3
+
+# Endurecimiento: el proceso solo puede escribir en content/
+NoNewPrivileges=true
+ProtectSystem=strict
+ReadWritePaths=/srv/datafantasy/content
+ProtectHome=true
+PrivateTmp=true
+PrivateDevices=true
+ProtectKernelTunables=true
+ProtectKernelModules=true
+ProtectControlGroups=true
+RestrictSUIDSGID=true
+LockPersonality=true
+
+[Install]
+WantedBy=multi-user.target

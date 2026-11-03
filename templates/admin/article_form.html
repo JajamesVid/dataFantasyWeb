@@ -15,6 +15,7 @@
     </div>
 
     <form method="post" action="{{ url_for('admin_save_article') }}" enctype="multipart/form-data" class="admin-form" id="article-form">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
       <input type="hidden" name="id" value="{{ article.id or '' }}">
       <input type="hidden" name="existing_cover" value="{{ article.cover or '' }}">
       <input type="hidden" name="blocks_order" id="blocks-order" value="">
@@ -65,7 +66,7 @@
       <label class="field">
         <span class="field-label">Imagen de portada</span>
         {% if article.cover %}
-        <img src="{{ url_for('static', filename='img/articles/' ~ article.cover) }}" class="current-image-preview" alt="Portada actual">
+        <img src="{{ url_for('article_image', filename=article.cover) }}" class="current-image-preview" alt="Portada actual">
         {% endif %}
         <input type="file" name="cover" accept="image/*">
       </label>
@@ -99,7 +100,7 @@
               </div>
               <input type="hidden" name="block_type_existing-{{ loop.index0 }}" value="image">
               <input type="hidden" name="block_existing_existing-{{ loop.index0 }}" value="{{ block.src }}">
-              <img src="{{ url_for('static', filename='img/articles/' ~ block.src) }}" class="current-image-preview" alt="">
+              <img src="{{ url_for('article_image', filename=block.src) }}" class="current-image-preview" alt="">
               <input type="file" name="block_image_existing-{{ loop.index0 }}" accept="image/*">
               <input type="text" name="block_caption_existing-{{ loop.index0 }}" value="{{ block.caption or '' }}" placeholder="Pie de foto (opcional)">
             </div>
@@ -124,6 +125,7 @@
     <div class="admin-form-actions admin-form-actions--secondary">
       {% if article.status == "published" %}
       <form method="post" action="{{ url_for('admin_tweet_article', article_id=article.id) }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
         <button type="submit" class="btn btn--twitter">Publicar en Twitter</button>
       </form>
       {% else %}
@@ -133,6 +135,7 @@
       <form method="post" action="{{ url_for('admin_delete_article', article_id=article.id) }}"
             onsubmit="return confirm('¿Seguro que quieres eliminar este artículo? Esta acción no se puede deshacer.');"
             class="delete-form">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
         <button type="submit" class="btn btn--danger">Eliminar artículo</button>
       </form>
     </div>

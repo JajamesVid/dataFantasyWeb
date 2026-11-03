@@ -6,7 +6,7 @@
 <div class="article-page">
 
   {% if article.cover %}
-  <div class="article-hero" style="background-image: url('{{ url_for('static', filename='img/articles/' ~ article.cover) }}')">
+  <div class="article-hero" style="background-image: url('{{ url_for('article_image', filename=article.cover) }}')">
     <div class="article-hero-overlay"></div>
   </div>
   {% endif %}
@@ -33,7 +33,7 @@
         {% elif block.type == "image" %}
           <figure class="article-figure">
             <img
-              src="{{ url_for('static', filename='img/articles/' ~ block.src) }}"
+              src="{{ url_for('article_image', filename=block.src) }}"
               alt="{{ block.caption or '' }}"
               class="article-img"
             />

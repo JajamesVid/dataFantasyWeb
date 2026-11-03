@@ -7,6 +7,7 @@
   <div class="container container--narrow">
     <h2 class="section-title">Acceso al panel</h2>
     <form method="post" class="login-form">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
       <input type="hidden" name="next" value="{{ next }}" />
       <label class="login-form-field">
         Usuario

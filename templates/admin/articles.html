@@ -27,10 +27,12 @@
         <div class="admin-row-actions">
           <a href="{{ url_for('admin_edit_article', article_id=a.id) }}" class="btn btn--ghost">Editar</a>
           <form method="post" action="{{ url_for('admin_publish_article', article_id=a.id) }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn--primary">Publicar</button>
           </form>
           <form method="post" action="{{ url_for('admin_delete_article', article_id=a.id) }}"
                 onsubmit="return confirm('¿Seguro que quieres eliminar este artículo? Esta acción no se puede deshacer.');">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn--danger">Eliminar</button>
           </form>
         </div>
@@ -56,10 +58,12 @@
           <a href="{{ url_for('article', article_id=a.id) }}" class="btn btn--ghost" target="_blank">Ver</a>
           <a href="{{ url_for('admin_edit_article', article_id=a.id) }}" class="btn btn--ghost">Editar</a>
           <form method="post" action="{{ url_for('admin_tweet_article', article_id=a.id) }}">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn--twitter">Tuitear</button>
           </form>
           <form method="post" action="{{ url_for('admin_delete_article', article_id=a.id) }}"
                 onsubmit="return confirm('¿Seguro que quieres eliminar este artículo? Esta acción no se puede deshacer.');">
+          <input type="hidden" name="_csrf" value="{{ csrf_token() }}">
             <button type="submit" class="btn btn--danger">Eliminar</button>
           </form>
         </div>

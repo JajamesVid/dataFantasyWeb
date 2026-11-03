@@ -1,12 +1,19 @@
 import json
 import os
+import secrets
+import threading
+import time
 import uuid
+from collections import defaultdict, deque
 from datetime import date
 from functools import wraps
 from pathlib import Path
 
 from dotenv import load_dotenv
-from flask import Flask, abort, flash, g, redirect, render_template, request, session, url_for
+from flask import (
+    Flask, abort, flash, g, redirect, render_template, request, send_from_directory, session, url_for,
+)
+from werkzeug.middleware.proxy_fix import ProxyFix
 from werkzeug.security import check_password_hash
 from werkzeug.utils import secure_filename
 
@@ -16,7 +23,50 @@ from twitter_post import post_tweet_for_article
 load_dotenv()
 
 app = Flask(__name__)
-app.secret_key = os.environ.get("FLASK_SECRET_KEY", "dev-only-secret-key")
+# Sin FLASK_SECRET_KEY se genera una al arrancar (las sesiones se pierden al
+# reiniciar): nunca una fija en el código, que es público.
+app.secret_key = os.environ.get("FLASK_SECRET_KEY") or secrets.token_hex(32)
+app.config.update(
+    SESSION_COOKIE_HTTPONLY=True,
+    SESSION_COOKIE_SAMESITE="Lax",
+    # solo por HTTPS cuando la web se sirva con HTTPS (en local es http)
+    SESSION_COOKIE_SECURE=os.environ.get("SITE_BASE_URL", "").startswith("https://"),
+    MAX_CONTENT_LENGTH=10 * 1024 * 1024,  # subidas de imágenes del panel
+)
+
+# En el servidor la web va detrás de Caddy (que a su vez está detrás de
+# Cloudflare): sin esto request.remote_addr sería siempre 127.0.0.1 y el
+# límite de intentos de login bloquearía a todo el mundo a la vez. Caddy
+# reescribe X-Forwarded-For con la IP real, así que basta con fiarse de 1 salto.
+if os.environ.get("BEHIND_PROXY") == "1":
+    app.wsgi_app = ProxyFix(app.wsgi_app, x_for=1, x_proto=1, x_host=1)
+
+CSP = "; ".join([
+    "default-src 'self'",
+    "script-src 'self' 'unsafe-inline' https://cdn.jsdelivr.net",
+    "style-src 'self' 'unsafe-inline' https://fonts.googleapis.com",
+    "font-src 'self' https://fonts.gstatic.com",
+    "img-src 'self' data: blob: https:",
+    "connect-src 'self'",
+    "object-src 'none'",
+    "base-uri 'self'",
+    "form-action 'self'",
+    "frame-ancestors 'none'",
+])
+
+
+@app.after_request
+def security_headers(response):
+    response.headers.setdefault("Content-Security-Policy", CSP)
+    response.headers.setdefault("X-Content-Type-Options", "nosniff")
+    response.headers.setdefault("X-Frame-Options", "DENY")
+    response.headers.setdefault("Referrer-Policy", "strict-origin-when-cross-origin")
+    response.headers.setdefault("Permissions-Policy", "camera=(), microphone=(), geolocation=()")
+    if app.config["SESSION_COOKIE_SECURE"]:
+        response.headers.setdefault("Strict-Transport-Security", "max-age=31536000")
+    if request.path.startswith("/panel"):
+        response.headers["Cache-Control"] = "no-store"
+    return response
 
 ADMIN_USERNAME = os.environ.get("ADMIN_USERNAME")
 ADMIN_PASSWORD_HASH = os.environ.get("ADMIN_PASSWORD_HASH")
@@ -24,16 +74,20 @@ SUPABASE_TEMPORADA = os.environ.get("SUPABASE_TEMPORADA", "25/26")
 
 # Temporadas que el visitante puede elegir en el selector de la nav. La URL usa el
 # slug (sin barra, más limpio en un query string); Supabase usa el valor "db" tal cual
-# está guardado en la columna `temporada`.
+# está guardado en la columna `temporada`. Con una sola opción el selector no se muestra.
 TEMPORADA_OPTIONS = [
-    {"slug": "25-26", "label": "2025/26", "db": "25/26"},
     {"slug": "26-27", "label": "2026/27", "db": "26/27"},
 ]
 TEMPORADA_BY_SLUG = {t["slug"]: t["db"] for t in TEMPORADA_OPTIONS}
 TEMPORADA_SLUG_BY_DB = {t["db"]: t["slug"] for t in TEMPORADA_OPTIONS}
 
 DATA = Path(__file__).parent / "data"
-ARTICLES_IMG = Path(__file__).parent / "static" / "img" / "articles"
+# Lo que se escribe desde la web (artículos, sus imágenes y las visitas). En el
+# servidor CONTENT_DIR apunta fuera del repo para que `git pull` no lo pise; en
+# local, sin CONTENT_DIR, sigue en data/ y static/img/articles como siempre.
+CONTENT_DIR = Path(os.environ["CONTENT_DIR"]) if os.environ.get("CONTENT_DIR") else None
+CONTENT = CONTENT_DIR or DATA
+ARTICLES_IMG = CONTENT_DIR / "articles_img" if CONTENT_DIR else Path(__file__).parent / "static" / "img" / "articles"
 BADGES_DIR = Path(__file__).parent / "static" / "img" / "escudos"
 PLAYERS_DIR = Path(__file__).parent / "static" / "img" / "jugadores"
 ALLOWED_IMAGE_EXT = {"jpg", "jpeg", "png", "webp", "gif"}
@@ -41,19 +95,26 @@ BADGE_EXTENSIONS = ("webp", "png", "svg", "jpg", "jpeg")
 TAGS = ["Jornada", "Análisis", "Mercado"]
 
 
-def load_json(filename):
-    with open(DATA / filename, encoding="utf-8") as f:
+def load_json(filename, folder=DATA):
+    with open(folder / filename, encoding="utf-8") as f:
         return json.load(f)
 
 
+def save_json(filename, data):
+    """Escribe en un temporal y lo renombra: un lector nunca ve el fichero a medias."""
+    tmp = CONTENT / f".{filename}.tmp"
+    with open(tmp, "w", encoding="utf-8") as f:
+        json.dump(data, f, ensure_ascii=False, indent=2)
+        f.write("\n")
+    os.replace(tmp, CONTENT / filename)
+
+
 def load_all_articles():
-    return load_json("articles.json")
+    return load_json("articles.json", CONTENT)
 
 
 def save_all_articles(articles):
-    with open(DATA / "articles.json", "w", encoding="utf-8") as f:
-        json.dump(articles, f, ensure_ascii=False, indent=2)
-        f.write("\n")
+    save_json("articles.json", articles)
 
 
 def load_articles():
@@ -66,13 +127,59 @@ def load_teams():
 
 
 def load_analytics():
-    return load_json("analytics.json")
+    return load_json("analytics.json", CONTENT)
 
 
-def save_analytics(analytics):
-    with open(DATA / "analytics.json", "w", encoding="utf-8") as f:
-        json.dump(analytics, f, ensure_ascii=False, indent=2)
-        f.write("\n")
+# gunicorn atiende con varios hilos: sin el lock, dos visitas a la vez leen el
+# mismo contador y una de las dos se pierde.
+_analytics_lock = threading.Lock()
+
+
+def update_analytics(change):
+    with _analytics_lock:
+        analytics = load_analytics()
+        change(analytics)
+        save_json("analytics.json", analytics)
+
+
+# Protección CSRF: todo POST debe traer el token de la sesión en el campo _csrf
+# (los formularios lo incluyen con {{ csrf_token() }}). Sin esto, una web ajena
+# podría publicar o borrar artículos usando la sesión abierta del admin.
+def csrf_token():
+    if "_csrf" not in session:
+        session["_csrf"] = secrets.token_urlsafe(32)
+    return session["_csrf"]
+
+
+app.jinja_env.globals["csrf_token"] = csrf_token
+
+
+@app.before_request
+def check_csrf():
+    if request.method == "POST":
+        token = request.form.get("_csrf", "")
+        if not token or not secrets.compare_digest(token, session.get("_csrf", "")):
+            abort(400)
+
+
+# Límite de intentos de login por IP (en memoria: la web corre en un solo proceso).
+LOGIN_MAX_FALLOS = 5
+LOGIN_VENTANA_SEGUNDOS = 15 * 60
+_login_fallos = defaultdict(deque)
+
+
+def login_bloqueado(ip):
+    fallos = _login_fallos[ip]
+    while fallos and time.time() - fallos[0] > LOGIN_VENTANA_SEGUNDOS:
+        fallos.popleft()
+    return len(fallos) >= LOGIN_MAX_FALLOS
+
+
+def safe_next_url(next_url):
+    """Solo rutas internas: si no, el login serviría para redirigir a una web ajena."""
+    if next_url and next_url.startswith("/") and not next_url.startswith("//"):
+        return next_url
+    return url_for("admin_articles")
 
 
 def login_required(view):
@@ -95,14 +202,15 @@ def month_label(month_key):
 
 @app.before_request
 def track_visit():
-    if request.path.startswith("/panel") or request.path.startswith("/static"):
+    if request.path.startswith(("/panel", "/static", "/media")):
         return
-    analytics = load_analytics()
-    analytics["total_visits"] = analytics.get("total_visits", 0) + 1
-    month_key = date.today().strftime("%Y-%m")
-    monthly_visits = analytics.setdefault("monthly_visits", {})
-    monthly_visits[month_key] = monthly_visits.get(month_key, 0) + 1
-    save_analytics(analytics)
+    def count(analytics):
+        analytics["total_visits"] = analytics.get("total_visits", 0) + 1
+        month_key = date.today().strftime("%Y-%m")
+        monthly_visits = analytics.setdefault("monthly_visits", {})
+        monthly_visits[month_key] = monthly_visits.get(month_key, 0) + 1
+
+    update_analytics(count)
 
 
 @app.before_request
@@ -219,6 +327,11 @@ def load_player(slug):
     return player
 
 
+@app.route("/media/articles/<path:filename>")
+def article_image(filename):
+    return send_from_directory(ARTICLES_IMG, filename)
+
+
 def allowed_image(filename):
     return "." in filename and filename.rsplit(".", 1)[1].lower() in ALLOWED_IMAGE_EXT
 
@@ -289,10 +402,11 @@ def article(article_id):
     if match is None:
         abort(404)
 
-    analytics = load_analytics()
-    article_visits = analytics.setdefault("article_visits", {})
-    article_visits[str(article_id)] = article_visits.get(str(article_id), 0) + 1
-    save_analytics(analytics)
+    def count(analytics):
+        article_visits = analytics.setdefault("article_visits", {})
+        article_visits[str(article_id)] = article_visits.get(str(article_id), 0) + 1
+
+    update_analytics(count)
 
     return render_template("article.html", article=match)
 
@@ -342,14 +456,20 @@ def jugador(slug):
 @app.route("/panel/login", methods=["GET", "POST"])
 def admin_login():
     if request.method == "POST":
+        ip = request.remote_addr
+        if login_bloqueado(ip):
+            flash("Demasiados intentos fallidos. Espera 15 minutos y vuelve a probar.")
+            return render_template("admin/login.html", next=request.form.get("next", "")), 429
         username = request.form.get("username", "")
         password = request.form.get("password", "")
-        valid_user = ADMIN_USERNAME is not None and username == ADMIN_USERNAME
+        valid_user = ADMIN_USERNAME is not None and secrets.compare_digest(username, ADMIN_USERNAME)
         valid_password = ADMIN_PASSWORD_HASH is not None and check_password_hash(ADMIN_PASSWORD_HASH, password)
         if valid_user and valid_password:
+            _login_fallos.pop(ip, None)
+            session.clear()
             session["admin_logged_in"] = True
-            next_url = request.form.get("next") or url_for("admin_articles")
-            return redirect(next_url)
+            return redirect(safe_next_url(request.form.get("next")))
+        _login_fallos[ip].append(time.time())
         flash("Usuario o contraseña incorrectos.")
     return render_template("admin/login.html", next=request.args.get("next", ""))
 

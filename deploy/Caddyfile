@@ -1,0 +1,31 @@
+# Caddy delante de gunicorn. Solo recibe tráfico de Cloudflare (el firewall
+# cierra el 443 al resto), con el certificado de origen de Cloudflare.
+{
+	servers {
+		# rangos de Cloudflare, generados por setup_server.sh
+		import /etc/caddy/cloudflare-ips.caddy
+		client_ip_headers CF-Connecting-IP
+	}
+}
+
+datafantasylab.com, www.datafantasylab.com {
+	tls /etc/caddy/certs/origin.pem /etc/caddy/certs/origin.key
+
+	@www host www.datafantasylab.com
+	redir @www https://datafantasylab.com{uri} permanent
+
+	encode zstd gzip
+
+	request_body {
+		max_size 12MB
+	}
+
+	reverse_proxy 127.0.0.1:8000 {
+		# la IP real del visitante (CF-Connecting-IP); la app confía en 1 salto
+		header_up X-Forwarded-For {client_ip}
+	}
+
+	log {
+		output file /var/log/caddy/datafantasylab.log
+	}
+}
