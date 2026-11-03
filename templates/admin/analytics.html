@@ -28,6 +28,22 @@
       </div>
     </div>
 
+    <h3 class="admin-subheading">Visitas por región</h3>
+    {% if regions %}
+    <div class="admin-list">
+      {% for r in regions %}
+      <div class="admin-row region-row">
+        <span class="admin-row-title region-row-label">{{ r.label }}</span>
+        <div class="region-bar"><span class="region-bar-fill{% if not r.is_spain %} region-bar-fill--other{% endif %}" style="width: {{ '%.1f' % (r.share * 100) }}%"></span></div>
+        <span class="stat-inline region-row-value">{{ r.visits }} · {{ '%.0f' % (r.share * 100) }}%</span>
+      </div>
+      {% endfor %}
+    </div>
+    <p class="admin-empty">Se cuentan desde que la web está en datafantasylab.com ({{ region_total }} visitas). La ubicación sale de la IP y es aproximada: muchas conexiones móviles aparecen en Madrid.</p>
+    {% else %}
+    <p class="admin-empty">Aún no hay visitas con región: se empiezan a contar con la web publicada detrás de Cloudflare.</p>
+    {% endif %}
+
     <h3 class="admin-subheading">Visitas por artículo</h3>
     {% if articles %}
     <div class="admin-list">

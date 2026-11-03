@@ -194,6 +194,57 @@ def login_required(view):
 MESES_ABREV = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"]
 
 
+# Visitas por comunidad autónoma. La región la pone Cloudflare en cabeceras
+# (CF-IPCountry siempre; cf-region-code con el Managed Transform "Add visitor
+# location headers"): la web nunca guarda IPs, solo el contador agregado.
+COMUNIDADES = {
+    "AN": "Andalucía", "AR": "Aragón", "AS": "Asturias", "IB": "Baleares",
+    "CN": "Canarias", "CB": "Cantabria", "CL": "Castilla y León", "CM": "Castilla-La Mancha",
+    "CT": "Cataluña", "VC": "Comunidad Valenciana", "EX": "Extremadura", "GA": "Galicia",
+    "MD": "Madrid", "MC": "Murcia", "NC": "Navarra", "PV": "País Vasco", "RI": "La Rioja",
+    "CE": "Ceuta", "ML": "Melilla",
+}
+# Por si Cloudflare da la provincia (ISO 3166-2 de 2º nivel) en vez de la comunidad.
+PROVINCIA_A_COMUNIDAD = {
+    "AL": "AN", "CA": "AN", "CO": "AN", "GR": "AN", "H": "AN", "J": "AN", "MA": "AN", "SE": "AN",
+    "HU": "AR", "TE": "AR", "Z": "AR", "O": "AS", "PM": "IB", "GC": "CN", "TF": "CN", "S": "CB",
+    "AV": "CL", "BU": "CL", "LE": "CL", "P": "CL", "SA": "CL", "SG": "CL", "SO": "CL", "VA": "CL",
+    "ZA": "CL", "AB": "CM", "CR": "CM", "CU": "CM", "GU": "CM", "TO": "CM",
+    "B": "CT", "GI": "CT", "L": "CT", "T": "CT", "A": "VC", "CS": "VC", "V": "VC",
+    "BA": "EX", "CC": "EX", "C": "GA", "LU": "GA", "OR": "GA", "PO": "GA", "M": "MD", "MU": "MC",
+    "NA": "NC", "BI": "PV", "SS": "PV", "VI": "PV", "LO": "RI",
+}
+REGION_INTERNACIONAL = "INT"
+REGION_ESPANA_SIN_DATO = "ES"
+REGION_DESCONOCIDA = "ND"
+REGION_LABELS = {
+    **COMUNIDADES,
+    REGION_INTERNACIONAL: "Internacional",
+    REGION_ESPANA_SIN_DATO: "España (sin región)",
+    REGION_DESCONOCIDA: "Sin datos",
+}
+
+
+def visitor_region():
+    """Código de comunidad, 'INT' fuera de España, 'ES' o 'ND' si falta el dato.
+
+    Solo se fía de las cabeceras detrás de Cloudflare: en local cualquiera podría
+    mandarlas (y en local no hay ubicación que sacar).
+    """
+    if os.environ.get("BEHIND_PROXY") != "1":
+        return REGION_DESCONOCIDA
+    country = request.headers.get("CF-IPCountry", "").upper()
+    if not country or country in ("XX", "T1"):  # desconocido / Tor
+        return REGION_DESCONOCIDA
+    if country != "ES":
+        return REGION_INTERNACIONAL
+    code = request.headers.get("cf-region-code", "").upper()
+    if code.startswith("ES-"):
+        code = code[3:]
+    code = PROVINCIA_A_COMUNIDAD.get(code, code)
+    return code if code in COMUNIDADES else REGION_ESPANA_SIN_DATO
+
+
 def month_label(month_key):
     """'2026-08' -> 'ago 2026'."""
     year, month = month_key.split("-")
@@ -209,7 +260,10 @@ def track_visit():
         month_key = date.today().strftime("%Y-%m")
         monthly_visits = analytics.setdefault("monthly_visits", {})
         monthly_visits[month_key] = monthly_visits.get(month_key, 0) + 1
+        region_visits = analytics.setdefault("region_visits", {})
+        region_visits[region] = region_visits.get(region, 0) + 1
 
+    region = visitor_region()
     update_analytics(count)
 
 
@@ -495,8 +549,26 @@ def admin_analytics():
     current_month_key = date.today().strftime("%Y-%m")
     sorted_months = sorted(monthly_visits)
 
+    region_visits = analytics.get("region_visits", {})
+    region_total = sum(region_visits.values())
+    regions = sorted(
+        (
+            {
+                "label": REGION_LABELS.get(code, code),
+                "visits": n,
+                "share": n / region_total if region_total else 0,
+                "is_spain": code in COMUNIDADES,
+            }
+            for code, n in region_visits.items()
+        ),
+        key=lambda r: r["visits"],
+        reverse=True,
+    )
+
     return render_template(
         "admin/analytics.html",
+        regions=regions,
+        region_total=region_total,
         total_visits=analytics.get("total_visits", 0),
         current_month_visits=monthly_visits.get(current_month_key, 0),
         monthly_chart={

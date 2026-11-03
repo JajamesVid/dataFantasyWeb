@@ -50,6 +50,9 @@ En Hetzner Cloud: **CX22, Ubuntu 24.04**, unos 4–5 €/mes. Cualquier proveedo
 4. **SSL/TLS > Edge Certificates**: activa *Always Use HTTPS*, *Minimum TLS 1.2* y
    (más adelante, cuando todo funcione) *HSTS*.
 5. **Security > Bots**: activa *Bot Fight Mode*.
+6. **Rules > Settings > Managed Transforms**: activa *Add visitor location headers*.
+   Con esto el panel cuenta las visitas por comunidad autónoma. Sin él, solo
+   distingue entre España e internacional.
 
 ## 3. Certificado de origen
 

@@ -1471,6 +1471,36 @@ a.card:not(:has(.card-cover)) .card-content {
   color: var(--muted);
 }
 
+.region-row {
+  display: grid;
+  grid-template-columns: minmax(8rem, 12rem) 1fr auto;
+  align-items: center;
+  gap: 1rem;
+}
+
+.region-bar {
+  height: 0.6rem;
+  background: var(--border);
+  border-radius: 999px;
+  overflow: hidden;
+}
+
+.region-bar-fill {
+  display: block;
+  height: 100%;
+  background: #22c55e;
+  border-radius: 999px;
+}
+
+.region-bar-fill--other {
+  background: #94a3b8;
+}
+
+.region-row-value {
+  min-width: 6.5rem;
+  text-align: right;
+}
+
 .stat-inline {
   font-size: 0.85rem;
   font-weight: 600;
