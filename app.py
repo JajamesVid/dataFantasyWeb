@@ -181,8 +181,8 @@ def load_position_breakdown():
 
 
 def load_team_evolution(slug):
-    """A single team's jornada-by-jornada points and league position, overlaid on the
-    strip chart on its own page.
+    """A single team's Fantasy points per match, coloured by result (V/E/D), plus its
+    league position and average points per result, for the strip on its own page.
 
     Not every team in teams.json has data for the configured temporada, so this
     returns None when there's nothing to plot.

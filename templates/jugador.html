@@ -149,9 +149,10 @@
         backgroundColor: 'rgba(56, 189, 248, 0.12)',
         fill: true,
         borderWidth: 2,
-        pointRadius: 0,
-        pointHoverRadius: 4,
-        tension: 0.3,
+        pointRadius: 3,
+        pointHoverRadius: 5,
+        // el valor de mercado cambia a saltos: escalonado, sin curva que invente valores intermedios
+        stepped: 'before',
       }],
     },
     options: {
@@ -160,7 +161,11 @@
       interaction: { mode: 'index', axis: 'x', intersect: false },
       scales: {
         x: { ticks: { color: '#64748b', font: { size: 10 } }, grid: { display: false } },
-        y: { display: false },
+        y: {
+          beginAtZero: true,
+          ticks: { color: '#64748b', font: { size: 10 }, callback: (v) => `${(v / 1e6).toLocaleString('es-ES')} M€` },
+          grid: { color: '#e4e7eb' },
+        },
       },
       plugins: {
         legend: { display: false },

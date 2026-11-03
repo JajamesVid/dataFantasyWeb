@@ -163,7 +163,8 @@ def _fetch_season_bundle(temporada):
     # Segunda tanda: dependen de partido_ids, pero son independientes entre sí.
     second = fetch_many([
         ("statsequipos", lambda: fetch_in_chunks(_table_name("statsequipos", temporada), "partido_id", partido_ids, {
-            "select": "partido_id,equipo_id,puntos_acumulados,diferencia_goles_acumulada,goles_favor_acumulados",
+            "select": "partido_id,equipo_id,equipo_rival_id,local_visitante,goles_favor,goles_contra,puntos_partido,"
+                      "puntos_acumulados,diferencia_goles_acumulada,goles_favor_acumulados",
             "order": "estadistica_equipo_id.asc",
         })),
         ("puntuaciones", lambda: fetch_in_chunks(_table_name("puntuaciones", temporada), "partido_id", partido_ids, {
@@ -289,11 +290,8 @@ def build_classification_evolution(temporada):
     return {"jornadas": [f"J{n}" for n in range(1, jornadas_max + 1)], "teams": teams_out}
 
 
-def build_points_evolution(temporada):
-    bundle = _load_season_bundle(temporada)
-    equipo_info = _equipo_lookup(bundle)
-    jornadas_max = max((p["jornada"] for p in bundle["partidos"]), default=0)
-
+def _fantasy_points_by_equipo_jornada(bundle, caller):
+    """equipo_id -> jornada -> suma de puntuacion_media de sus jugadores en ese partido."""
     points_by_equipo_jornada = defaultdict(lambda: defaultdict(float))
     unresolved = 0
     for punt in bundle["puntuaciones"]:
@@ -307,7 +305,16 @@ def build_points_evolution(temporada):
         points_by_equipo_jornada[equipo_id][partido["jornada"]] += punt.get("puntuacion_media") or 0
 
     if unresolved:
-        print(f"[supabase_data] build_points_evolution({temporada}): {unresolved} filas de puntuaciones sin equipo resuelto")
+        print(f"[supabase_data] {caller}: {unresolved} filas de puntuaciones sin equipo resuelto")
+    return points_by_equipo_jornada
+
+
+def build_points_evolution(temporada):
+    bundle = _load_season_bundle(temporada)
+    equipo_info = _equipo_lookup(bundle)
+    jornadas_max = max((p["jornada"] for p in bundle["partidos"]), default=0)
+
+    points_by_equipo_jornada = _fantasy_points_by_equipo_jornada(bundle, f"build_points_evolution({temporada})")
 
     teams_out = []
     for eid in sorted(equipo_info):
@@ -385,17 +392,63 @@ def build_team_matchday_snapshot(temporada):
     return {"jornada": jornada_actual, "teams": teams_out}
 
 
+RESULT_BY_PUNTOS_PARTIDO = {3: "V", 1: "E", 0: "D"}
+
+
 def build_team_evolution(slug, temporada):
-    points = build_points_evolution(temporada)
-    classification = build_classification_evolution(temporada)
-    team_points = next((t for t in points["teams"] if t["slug"] == slug), None)
-    if team_points is None:
+    """Puntos Fantasy de cada partido del equipo junto con su resultado (V/E/D), para
+    ver la racha y cuánto puntúa el equipo según gane, empate o pierda. Una jornada
+    sin partido (aplazado) sale con result=None para que quede el hueco en el gráfico."""
+    bundle = _load_season_bundle(temporada)
+    equipo_info = _equipo_lookup(bundle)
+    equipo_id = next((eid for eid, info in equipo_info.items() if info["slug"] == slug), None)
+    if equipo_id is None:
         return None
+
+    jornadas_max = max((p["jornada"] for p in bundle["partidos"]), default=0)
+    fantasy = _fantasy_points_by_equipo_jornada(bundle, f"build_team_evolution({slug}, {temporada})").get(equipo_id, {})
+
+    rows_by_jornada = {}
+    for row in bundle["statsequipos"]:
+        partido = bundle["partidos_by_id"].get(row["partido_id"])
+        if partido and row["equipo_id"] == equipo_id:
+            rows_by_jornada[partido["jornada"]] = row
+
+    matches = []
+    for jornada in range(1, jornadas_max + 1):
+        row = rows_by_jornada.get(jornada)
+        if row is None:
+            matches.append({"jornada": f"J{jornada}", "points": None, "result": None})
+            continue
+        rival = equipo_info.get(row["equipo_rival_id"], {})
+        matches.append({
+            "jornada": f"J{jornada}",
+            "points": round(fantasy.get(jornada, 0.0), 1),
+            "result": RESULT_BY_PUNTOS_PARTIDO.get(row["puntos_partido"]),
+            "score": f"{row['goles_favor']}-{row['goles_contra']}",
+            "rival": rival.get("short", "?"),
+            "home": (row["local_visitante"] or "").lower() == "local",
+        })
+
+    played = [m for m in matches if m["result"]]
+    record = {r: sum(1 for m in played if m["result"] == r) for r in ("V", "E", "D")}
+    avg_by_result = {
+        r: round(statistics.mean(m["points"] for m in played if m["result"] == r), 1) if record[r] else None
+        for r in ("V", "E", "D")
+    }
+
+    classification = build_classification_evolution(temporada)
     team_class = next((t for t in classification["teams"] if t["slug"] == slug), None)
+    last_row = rows_by_jornada[max(rows_by_jornada)] if rows_by_jornada else None
+
     return {
-        "jornadas": points["jornadas"],
-        "points": team_points["points"],
-        "positions": team_class["positions"] if team_class else None,
+        "matches": matches,
+        "record": record,
+        "avg_by_result": avg_by_result,
+        "avg_points": round(statistics.mean(m["points"] for m in played), 1) if played else None,
+        "position": team_class["positions"][-1] if team_class and team_class["positions"] else None,
+        "league_points": last_row["puntos_acumulados"] if last_row else None,
+        "last_jornada": matches[-1]["jornada"] if matches else None,
     }
 
 

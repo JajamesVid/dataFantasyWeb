@@ -1009,11 +1009,27 @@ body::after {
   flex-shrink: 0;
 }
 
-.team-evolution-dot--points { background: var(--accent); }
-.team-evolution-dot--position { background: #38bdf8; }
+.team-evolution-dot--V { background: #22c55e; }
+.team-evolution-dot--E { background: #eab308; }
+.team-evolution-dot--D { background: #ef4444; }
+
+.team-evolution-averages {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem 1.25rem;
+  margin-bottom: 0.75rem;
+  font-size: 0.8rem;
+  color: var(--muted);
+}
+
+.team-evolution-avg {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+}
 
 .team-evolution-chart {
-  height: 140px;
+  height: 180px;
 }
 
 /* ── Empty state ──────────────────────────────────── */
