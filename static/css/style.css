@@ -1130,53 +1130,11 @@ a.score-chip--df:hover { background: rgba(34, 197, 94, 0.1); }
   align-self: flex-start;
 }
 
-.player-stats-grid {
-  display: grid;
-  grid-template-columns: repeat(2, 1fr);
-  gap: 1rem;
-}
 
-.player-stat-card {
-  background: var(--bg-card);
-  border: 1px solid var(--border);
-  border-radius: var(--radius);
-  box-shadow: var(--shadow-card);
-  padding: 1.1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
 
-.player-stat-category {
-  align-self: flex-start;
-  font-size: 0.68rem;
-  font-weight: 800;
-  letter-spacing: 0.4px;
-  text-transform: uppercase;
-  color: var(--accent-d);
-  background: rgba(34, 197, 94, 0.12);
-  padding: 0.25rem 0.55rem;
-  border-radius: 999px;
-}
 
-.player-stat-name {
-  font-size: 1.05rem;
-  font-weight: 700;
-}
 
-.player-stat-desc {
-  font-size: 0.8rem;
-  color: var(--muted);
-  line-height: 1.4;
-  flex: 1;
-}
 
-.player-stat-sparkline {
-  display: flex;
-  align-items: flex-end;
-  gap: 4px;
-  height: 40px;
-}
 
 .player-stat-bar {
   flex: 1;
@@ -1186,13 +1144,194 @@ a.score-chip--df:hover { background: rgba(34, 197, 94, 0.1); }
   opacity: 0.85;
 }
 
-.player-stat-footer {
+/* mismo código de colores que .score-chip--red/orange/green/blue */
+.player-stat-bar--red { background: #dc2626; }
+.player-stat-bar--orange { background: #ea580c; }
+.player-stat-bar--green { background: #16a34a; }
+.player-stat-bar--blue { background: #2563eb; }
+.player-stat-bar--none { background: var(--border); }
+
+
+/* ── Pilares del equipo (hexágono de destacados) ──── */
+/* Vértices en % del contenedor: tienen que coincidir con el <svg> de equipo.html.
+   La foto de cada jugador queda centrada en su vértice (translate de .team-hex-node). */
+.team-hex {
+  position: relative;
+  width: 100%;
+  max-width: 780px;
+  aspect-ratio: 1 / 1.02;
+  margin: 0 auto 7rem;  /* la tarjeta del vértice de abajo cuelga por debajo del contenedor */
+}
+
+.team-hex-lines {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.team-hex-lines polygon,
+.team-hex-lines line {
+  fill: none;
+  stroke: var(--accent);
+  stroke-width: 1.5;
+  stroke-opacity: 0.35;
+  vector-effect: non-scaling-stroke;
+}
+
+.team-hex-lines polygon {
+  fill: rgba(34, 197, 94, 0.05);
+  stroke-opacity: 0.6;
+  stroke-width: 2;
+}
+
+.team-hex-center {
+  position: absolute;
+  left: 50%;
+  top: 47%;
+  transform: translate(-50%, -50%);
+  width: 112px;
+  height: 112px;
+  border-radius: 50%;
+  background: var(--bg-card);
+  border: 2px solid var(--accent);
+  box-shadow: var(--shadow-card);
   display: flex;
-  gap: 0.75rem;
-  font-size: 0.78rem;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 1.4rem;
+}
+
+.team-hex-center img {
+  width: 70%;
+  height: 70%;
+  object-fit: contain;
+}
+
+.team-hex-node {
+  position: absolute;
+  width: 158px;
+  transform: translate(-50%, -64px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.3rem;
+  text-align: center;
+  color: var(--text);
+  text-decoration: none;
+}
+
+.team-hex-node--0 { left: 50%;   top: 12%; }
+.team-hex-node--1 { left: 84.6%; top: 29.5%; }
+.team-hex-node--2 { left: 84.6%; top: 64.5%; }
+.team-hex-node--3 { left: 50%;   top: 82%; }
+.team-hex-node--4 { left: 15.4%; top: 64.5%; }
+.team-hex-node--5 { left: 15.4%; top: 29.5%; }
+
+.team-hex-category {
+  font-size: 0.66rem;
+  font-weight: 800;
+  letter-spacing: 0.4px;
+  text-transform: uppercase;
+  color: var(--accent-d);
+  background: var(--bg-card);
+  border: 1px solid rgba(34, 197, 94, 0.35);
+  padding: 0.2rem 0.55rem;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+
+.team-hex-photo {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  overflow: hidden;
+  background: var(--bg-card);
+  border: 3px solid var(--accent);
+  box-shadow: var(--shadow-card);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.2s;
+}
+
+.team-hex-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: top;
+}
+
+.team-hex-photo--initial {
+  font-size: 1.6rem;
+  font-weight: 800;
+  color: var(--accent-d);
+}
+
+.team-hex-node:hover .team-hex-photo { transform: scale(1.07); }
+
+.team-hex-info {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.25rem;
+  padding: 0.45rem 0.65rem;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  box-shadow: var(--shadow-card);
+}
+
+.team-hex-name {
+  font-size: 0.92rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+.team-hex-scores {
+  display: flex;
+  align-items: center;
+  gap: 0.35rem;
+}
+
+.team-hex-avg {
+  font-size: 1.05rem;
+  font-weight: 800;
+}
+
+.team-hex-sparkline {
+  display: flex;
+  align-items: flex-end;
+  gap: 3px;
+  width: 80px;
+  height: 22px;
+}
+
+.team-hex-highlight {
+  font-size: 0.72rem;
+  font-weight: 600;
   color: var(--muted);
-  border-top: 1px solid var(--border);
-  padding-top: 0.6rem;
+  max-width: 140px;
+  line-height: 1.3;
+}
+
+/* En pantallas estrechas el hexágono no cabe legible: cuadrícula de 2 columnas */
+@media (max-width: 640px) {
+  .team-hex {
+    aspect-ratio: auto;
+    margin-bottom: 0;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1.5rem 0.75rem;
+  }
+  .team-hex-lines,
+  .team-hex-center { display: none; }
+  .team-hex-node {
+    position: static;
+    width: auto;
+    transform: none;
+  }
 }
 
 /* ── Article page ─────────────────────────────────── */
@@ -1801,9 +1940,6 @@ fieldset.field {
 
 @media (max-width: 800px) {
   .team-layout {
-    grid-template-columns: 1fr;
-  }
-  .player-stats-grid {
     grid-template-columns: 1fr;
   }
   .articles-column {

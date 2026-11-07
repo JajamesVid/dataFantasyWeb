@@ -5,6 +5,7 @@ compartidas por las 4 vistas; cada `build_*` deriva su resultado de ese bundle
 sin volver a golpear la red.
 """
 import json
+import math
 import os
 import re
 import statistics
@@ -67,9 +68,27 @@ TEAM_NAME_TO_SLUG = {
 # así que tenerlos todos no hace daño y evita tener que tocar esto cada año.
 
 MIN_MATCHES_RADAR = 10
-MIN_MATCHES_CATEGORY = 10
-MIN_MATCHES_REVELACION = 3
-MIN_PASES_ACIERTO = 50
+# Pilares del equipo (build_team_player_stats)
+MIN_SHARE_CATEGORY = 0.6       # % de los partidos del equipo para entrar en valorado/regular/infravalorado
+REGULAR_MIN_PUNTOS = 4         # "partido bueno" para el pilar Más regular
+RACHA_JORNADAS = 3             # ventana de En racha (jornadas del equipo)
+RACHA_MIN_PARTIDOS = 2         # partidos jugados dentro de esa ventana
+INFLUENCIA_MIN_MINUTOS = 270   # igual que MINUTOS_MINIMOS de Articulos/peso_especifico.py
+# Peso Especifico (DataFantasy/Articulos/peso_especifico.py): variable de jugador ->
+# (variable de equipo que hace de total, peso, fase). Mismos pesos que alli.
+PESO_ESPECIFICO_VARIABLES = {
+    "goles": ("goles_favor", 10, "ataque"),
+    "asistencias_gol": ("goles_favor", 10, "ataque"),
+    "goles_esperados": ("goles_esperados", 3, "ataque"),
+    "tiros_a_puerta": ("tiros_a_puerta", 3, "ataque"),
+    "pases_precisos": ("pases_precisos", 3, "construccion"),
+    "pases_largos_precisos": ("pases_largos_precisos", 3, "construccion"),
+    "centros_precisos": ("centros_precisos", 3, "construccion"),
+    "entradas_totales": ("entradas_totales", 3, "defensa"),
+    "intercepciones": ("intercepciones", 3, "defensa"),
+    "recuperaciones": ("recuperaciones", 3, "defensa"),
+    "despejes": ("despejes", 3, "defensa"),
+}
 RECENT_JORNADAS_WINDOW = 6
 
 POSITION_LABELS = {
@@ -115,12 +134,12 @@ POSITION_GROUP_LABELS = {
 }
 
 CATEGORY_META = {
-    "valorado": ("Mejor valorado", "El más consistente en valoración esta temporada"),
-    "regularidad": ("Más regular", "El más fiable jornada tras jornada"),
-    "racha": ("En racha", "El de mejor forma reciente"),
-    "acierto": ("Más acertado", "El de mayor precisión de pase"),
-    "influencia": ("Más influyente", "El que más goles y asistencias suma"),
-    "revelacion": ("La revelación", "La sorpresa de la temporada"),
+    "valorado": ("Mejor valorado", "La mejor media de puntuación de la temporada"),
+    "influencia": ("Más influyente", "Por quien más pasa el juego del equipo mientras está en el campo"),
+    "racha": ("En racha", f"La mejor media en sus últimos {RACHA_JORNADAS} partidos"),
+    "numero12": ("El número 12", "El que más puntos suma saliendo desde el banquillo: el recurso del míster"),
+    "infravalorado": ("Infravalorado", "El que más rinde según la puntuación DataFantasy por encima de la estándar"),
+    "regularidad": ("Más regular", f"El que más partidos supera los {REGULAR_MIN_PUNTOS} puntos"),
 }
 
 _CACHE = {}
@@ -164,7 +183,9 @@ def _fetch_season_bundle(temporada):
     second = fetch_many([
         ("statsequipos", lambda: fetch_in_chunks(_table_name("statsequipos", temporada), "partido_id", partido_ids, {
             "select": "partido_id,equipo_id,equipo_rival_id,local_visitante,goles_favor,goles_contra,puntos_partido,"
-                      "puntos_acumulados,diferencia_goles_acumulada,goles_favor_acumulados",
+                      "puntos_acumulados,diferencia_goles_acumulada,goles_favor_acumulados,"
+                      "goles_esperados,tiros_a_puerta,pases_precisos,pases_largos_precisos,centros_precisos,"
+                      "entradas_totales,intercepciones,recuperaciones,despejes",
             "order": "estadistica_equipo_id.asc",
         })),
         ("puntuaciones", lambda: fetch_in_chunks(_table_name("puntuaciones", temporada), "partido_id", partido_ids, {
@@ -172,7 +193,9 @@ def _fetch_season_bundle(temporada):
             "order": "puntuacion_id.asc",
         })),
         ("statsjugadores", lambda: fetch_in_chunks(_table_name("statsjugadores", temporada), "partido_id", partido_ids, {
-            "select": "partido_id,jugador_id,equipo_id,goles,asistencias_gol,pases_precisos,pases_totales,minutos_jugados",
+            "select": "partido_id,jugador_id,equipo_id,goles,asistencias_gol,pases_precisos,pases_totales,minutos_jugados,"
+                      "goles_esperados,tiros_a_puerta,pases_largos_precisos,centros_precisos,"
+                      "entradas_totales,intercepciones,recuperaciones,despejes",
             "order": "estadistica_id.asc",
         })),
     ])
@@ -519,11 +542,64 @@ def build_player_radar(temporada):
     return {"metrics": ["Goles", "Asistencias", "Regularidad", "Valoración", "Puntos Fantasy"], "players": players_out}
 
 
-def _season_date_bounds(partidos):
-    fechas = [p["fecha_partido"] for p in partidos]
-    if not fechas:
-        return None, None
-    return min(fechas), max(fechas)
+def _peso_especifico_en_campo(bundle, equipo_id, partidos_equipo):
+    """jugador_id -> Peso Especifico en campo (%), como PesoEspecificoEnCampo de
+    DataFantasy/Articulos/peso_especifico.py: por variable, lo suyo entre lo del
+    equipo escalado a los minutos que estuvo en el campo; por fase, la media
+    ponderada de esas cuotas; y la media de las 3 fases. Solo con
+    INFLUENCIA_MIN_MINUTOS o mas (con pocos minutos la cuota se dispara)."""
+    equipo_por_partido = {r["partido_id"]: r for r in partidos_equipo}
+    sumas = defaultdict(lambda: defaultdict(float))
+    minutos = defaultdict(int)
+    for sj in bundle["statsjugadores"]:
+        equipo = equipo_por_partido.get(sj["partido_id"])
+        if sj.get("equipo_id") != equipo_id or equipo is None or not sj.get("minutos_jugados"):
+            continue
+        minutos[sj["jugador_id"]] += sj["minutos_jugados"]
+        fraccion = min(sj["minutos_jugados"], 90) / 90
+        for variable, (variable_equipo, _, _) in PESO_ESPECIFICO_VARIABLES.items():
+            if sj.get(variable) is None or equipo.get(variable_equipo) is None:
+                continue  # sin dato en jugador o en equipo -> fuera de las dos sumas
+            sumas[sj["jugador_id"]][variable] += float(sj[variable])
+            sumas[sj["jugador_id"]][variable + "_campo"] += float(equipo[variable_equipo]) * fraccion
+
+    resultado = {}
+    for jugador_id, s in sumas.items():
+        if minutos[jugador_id] < INFLUENCIA_MIN_MINUTOS:
+            continue
+        fases = defaultdict(lambda: [0.0, 0.0])  # fase -> [suma cuota*peso, suma pesos]
+        for variable, (_, peso, fase) in PESO_ESPECIFICO_VARIABLES.items():
+            total = s.get(variable + "_campo")
+            if total:
+                fases[fase][0] += s[variable] / total * peso
+                fases[fase][1] += peso
+        medias = [num / den for num, den in fases.values() if den]
+        if medias:
+            resultado[jugador_id] = 100 * statistics.mean(medias)
+    return resultado
+
+
+def _puntos_desde_banquillo(bundle, equipo_id):
+    """jugador_id -> (puntos estándar sumados saliendo de suplente, partidos) a
+    partir de `alineaciones` (suplentes con minutos). Vacío si la tabla aún no
+    existe o no tiene ese equipo."""
+    try:
+        suplencias = fetch_all("alineaciones", {
+            "equipo_id": f"eq.{equipo_id}",
+            "estado": "eq.suplente",
+            "minutos": "gt.0",
+            "select": "partido_id,jugador_id",
+        })
+    except Exception as exc:
+        print(f"[supabase_data] alineaciones no disponibles: {exc}")
+        return {}
+    desde_banquillo = {(a["partido_id"], a["jugador_id"]) for a in suplencias if a.get("jugador_id")}
+    resultado = defaultdict(lambda: [0.0, 0])
+    for punt in bundle["puntuaciones"]:
+        if (punt["partido_id"], punt["jugador_id"]) in desde_banquillo and punt.get("puntuacion_media") is not None:
+            resultado[punt["jugador_id"]][0] += punt["puntuacion_media"]
+            resultado[punt["jugador_id"]][1] += 1
+    return {jid: tuple(v) for jid, v in resultado.items()}
 
 
 def build_team_player_stats(slug, temporada):
@@ -534,11 +610,10 @@ def build_team_player_stats(slug, temporada):
         return None
 
     jornadas_max = max((p["jornada"] for p in bundle["partidos"]), default=0)
-    temporada_inicio, temporada_fin = _season_date_bounds(bundle["partidos"])
 
     per_player = defaultdict(lambda: {
-        "medias_by_jornada": {}, "racha_by_jornada": {}, "matches": 0, "sum_media": 0.0,
-        "medias": [], "dfs": [], "goles": 0, "asistencias": 0, "pases_precisos": 0, "pases_totales": 0,
+        "medias_by_jornada": {}, "matches": 0, "sum_media": 0.0,
+        "medias": [], "dfs": [], "goles": 0, "asistencias": 0,
     })
 
     for punt in bundle["puntuaciones"]:
@@ -558,8 +633,6 @@ def build_team_player_stats(slug, temporada):
         p["medias"].append(media)
         if _df_score(punt) is not None:
             p["dfs"].append(_df_score(punt))
-        if punt.get("racha_puntuacion_media_14d") is not None:
-            p["racha_by_jornada"][partido["jornada"]] = punt["racha_puntuacion_media_14d"]
 
     for sj in bundle["statsjugadores"]:
         if sj.get("equipo_id") != equipo_id:
@@ -567,60 +640,83 @@ def build_team_player_stats(slug, temporada):
         p = per_player[sj["jugador_id"]]
         p["goles"] += sj.get("goles") or 0
         p["asistencias"] += sj.get("asistencias_gol") or 0
-        p["pases_precisos"] += sj.get("pases_precisos") or 0
-        p["pases_totales"] += sj.get("pases_totales") or 0
 
-    newcomers = {
-        jugador_id
-        for jugador_id, entries in bundle["historial_by_jugador"].items()
-        for inicio, _fin, eid in entries
-        if eid == equipo_id and inicio and temporada_inicio <= inicio <= temporada_fin
-    }
+    partidos_equipo = [
+        row for row in bundle["statsequipos"] if row["equipo_id"] == equipo_id
+    ]
+    min_matches = max(1, math.ceil(MIN_SHARE_CATEGORY * len(partidos_equipo)))
+    eligible = [jid for jid, p in per_player.items() if p["matches"] >= min_matches] or list(per_player)
 
-    eligible = [jid for jid, p in per_player.items() if p["matches"] >= MIN_MATCHES_CATEGORY] or list(per_player)
+    chosen, highlights = {}, {}
 
-    chosen = {}
-
-    def pick(category_key, candidates, keyfn):
+    def pick(category_key, candidates, keyfn, highlight):
         remaining = [jid for jid in candidates if jid not in chosen.values()]
         if remaining:
-            chosen[category_key] = max(remaining, key=keyfn)
+            jid = max(remaining, key=keyfn)
+            chosen[category_key] = jid
+            highlights[category_key] = highlight(jid)
 
-    pick("valorado", eligible, lambda jid: per_player[jid]["sum_media"] / per_player[jid]["matches"])
-    pick("regularidad", eligible,
-         lambda jid: -statistics.pstdev(per_player[jid]["medias"]) if len(per_player[jid]["medias"]) > 1 else 0)
-    pick("racha", eligible,
-         lambda jid: per_player[jid]["racha_by_jornada"].get(max(per_player[jid]["racha_by_jornada"], default=0), -999))
+    def avg(jid):
+        return per_player[jid]["sum_media"] / per_player[jid]["matches"]
 
-    acierto_pool = [jid for jid in eligible if per_player[jid]["pases_totales"] >= MIN_PASES_ACIERTO] or eligible
-    pick("acierto", acierto_pool, lambda jid: per_player[jid]["pases_precisos"] / max(per_player[jid]["pases_totales"], 1))
+    pick("valorado", eligible, avg,
+         lambda jid: f"{per_player[jid]['goles']} G · {per_player[jid]['asistencias']} A en {per_player[jid]['matches']} partidos")
 
-    pick("influencia", eligible, lambda jid: per_player[jid]["goles"] + per_player[jid]["asistencias"])
+    influencia = _peso_especifico_en_campo(bundle, equipo_id, partidos_equipo)
+    pick("influencia", list(influencia), lambda jid: influencia[jid],
+         lambda jid: f"{influencia[jid]:.1f}% del juego en campo")
 
-    revelacion_pool = [
-        jid for jid in per_player
-        if jid in newcomers and per_player[jid]["matches"] >= MIN_MATCHES_REVELACION and jid not in chosen.values()
+    jornadas_equipo = sorted({bundle["partidos_by_id"][r["partido_id"]]["jornada"]
+                              for r in partidos_equipo if r["partido_id"] in bundle["partidos_by_id"]})
+    ventana = jornadas_equipo[-RACHA_JORNADAS:]
+
+    def racha(jid):
+        recientes = [per_player[jid]["medias_by_jornada"][j] for j in ventana if j in per_player[jid]["medias_by_jornada"]]
+        return statistics.mean(recientes) if recientes else None
+
+    en_racha = [
+        jid for jid, p in per_player.items()
+        if sum(1 for j in ventana if j in p["medias_by_jornada"]) >= RACHA_MIN_PARTIDOS
     ]
-    if revelacion_pool:
-        chosen["revelacion"] = max(revelacion_pool, key=lambda jid: per_player[jid]["sum_media"] / per_player[jid]["matches"])
-    else:
-        remaining = [
-            jid for jid in per_player
-            if jid not in chosen.values() and bundle["jugadores_by_id"].get(jid, {}).get("fecha_nacimiento")
-        ]
-        if remaining:
-            chosen["revelacion"] = max(remaining, key=lambda jid: bundle["jugadores_by_id"][jid]["fecha_nacimiento"])
+    pick("racha", en_racha, racha, lambda jid: f"{racha(jid):.1f} en sus últimos partidos")
+
+    puntos_banquillo = _puntos_desde_banquillo(bundle, equipo_id)
+    pick("numero12", list(puntos_banquillo), lambda jid: puntos_banquillo[jid][0],
+         lambda jid: f"{puntos_banquillo[jid][0]:.0f} pts en {puntos_banquillo[jid][1]} "
+                     f"{'partido' if puntos_banquillo[jid][1] == 1 else 'partidos'} desde el banquillo")
+
+    con_df = [jid for jid in eligible if per_player[jid]["dfs"]]
+
+    def diferencia_df(jid):
+        return statistics.mean(per_player[jid]["dfs"]) - avg(jid)
+
+    pick("infravalorado", con_df, diferencia_df, lambda jid: f"{diferencia_df(jid):+.1f} DF sobre la estándar")
+
+    def buenos(jid):
+        return sum(1 for m in per_player[jid]["medias"] if m >= REGULAR_MIN_PUNTOS)
+
+    pick("regularidad", eligible, lambda jid: (buenos(jid) / per_player[jid]["matches"], per_player[jid]["matches"]),
+         lambda jid: f"{buenos(jid)} de {per_player[jid]['matches']} partidos con {REGULAR_MIN_PUNTOS}+ pts")
 
     recent_jornadas = list(range(max(1, jornadas_max - RECENT_JORNADAS_WINDOW + 1), jornadas_max + 1))
 
     players_out = []
-    for category_key, jugador_id in chosen.items():
+    for category_key in [k for k in CATEGORY_META if k in chosen]:
+        jugador_id = chosen[category_key]
         p = per_player[jugador_id]
         jugador = bundle["jugadores_by_id"].get(jugador_id, {})
         label, description = CATEGORY_META[category_key]
+        nombre = jugador.get("nombre_jugador", f"Jugador {jugador_id}")
         players_out.append({
-            "name": jugador.get("nombre_jugador", f"Jugador {jugador_id}"),
+            "name": nombre,
+            "slug": _player_slug(jugador_id, nombre),
+            "photo_url": jugador.get("foto_url"),
             "scores": [round(p["medias_by_jornada"].get(j, 0), 1) for j in recent_jornadas],
+            # mismo código de colores que en la sección de jugadores; "none" = no jugó esa jornada
+            "bands": [
+                _score_band(p["medias_by_jornada"][j]) if j in p["medias_by_jornada"] else "none"
+                for j in recent_jornadas
+            ],
             "avg": round(p["sum_media"] / p["matches"], 1) if p["matches"] else 0,
             "avg_df": _mean_or_none(p["dfs"]),
             "goals": p["goles"],
@@ -628,6 +724,7 @@ def build_team_player_stats(slug, temporada):
             "category_key": category_key,
             "category_label": label,
             "category_description": description,
+            "highlight": highlights[category_key],
         })
 
     return {"jornadas": [f"J{n}" for n in recent_jornadas], "players": players_out}

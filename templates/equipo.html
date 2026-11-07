@@ -49,25 +49,46 @@
 
       <!-- Left: player stats -->
       <div class="player-stats-column">
-        <p class="pitch-title">Jugadores destacados</p>
-        <div class="player-stats-grid">
-          {% for player in player_stats.players %}
-          <div class="player-stat-card">
-            <span class="player-stat-category">{{ player.category_label }}</span>
-            <h3 class="player-stat-name">{{ player.name }}</h3>
-            <p class="player-stat-desc">{{ player.category_description }}</p>
-            <div class="player-stat-sparkline">
-              {% for score in player.scores %}
-              <div class="player-stat-bar" style="height: {{ (score / 14 * 100) | round(1) }}%" title="{{ player_stats.jornadas[loop.index0] }}: {{ score }} pts"></div>
-              {% endfor %}
-            </div>
-            <div class="player-stat-footer">
-              <span>Media {{ player.avg }}</span>
-              <a href="{{ url_for('puntuacion_datafantasy') }}" class="score-chip score-chip--df" title="Puntuación DataFantasy: ¿qué es?">DF {{ player.avg_df if player.avg_df is not none else "–" }}</a>
-              <span>{{ player.goals }} goles</span>
-              <span>{{ player.assists }} asist.</span>
-            </div>
+        <p class="pitch-title">Los pilares del equipo</p>
+        {# Hexágono: escudo en el centro y un destacado en cada vértice (posiciones en CSS,
+           .team-hex-node--0..5). En móvil pasa a una cuadrícula de 2 columnas. #}
+        <div class="team-hex">
+          <svg class="team-hex-lines" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+            <polygon points="50,12 84.6,29.5 84.6,64.5 50,82 15.4,64.5 15.4,29.5" />
+            <line x1="50" y1="47" x2="50" y2="12" /><line x1="50" y1="47" x2="84.6" y2="29.5" />
+            <line x1="50" y1="47" x2="84.6" y2="64.5" /><line x1="50" y1="47" x2="50" y2="82" />
+            <line x1="50" y1="47" x2="15.4" y2="64.5" /><line x1="50" y1="47" x2="15.4" y2="29.5" />
+          </svg>
+          <div class="team-hex-center">
+            {% if team.badge %}
+            <img src="{{ team.badge }}" alt="{{ team.name }}">
+            {% else %}
+            <span>{{ team.short }}</span>
+            {% endif %}
           </div>
+          {% for player in player_stats.players %}
+          <a href="{{ url_for('jugador', slug=player.slug) }}" class="team-hex-node team-hex-node--{{ loop.index0 }}"
+             title="{{ player.category_label }}: {{ player.category_description }}">
+            <span class="team-hex-category">{{ player.category_label }}</span>
+            {% if player.photo_url %}
+            <span class="team-hex-photo"><img src="{{ player.photo_url }}" alt="{{ player.name }}"></span>
+            {% else %}
+            <span class="team-hex-photo team-hex-photo--initial">{{ player.name[:1] }}</span>
+            {% endif %}
+            <span class="team-hex-info">
+            <span class="team-hex-name">{{ player.name }}</span>
+            <span class="team-hex-scores">
+              <span class="team-hex-avg">{{ player.avg }}</span>
+              <span class="score-chip score-chip--df">DF {{ player.avg_df if player.avg_df is not none else "–" }}</span>
+            </span>
+            <span class="team-hex-sparkline">
+              {% for score in player.scores %}
+              <span class="player-stat-bar player-stat-bar--{{ player.bands[loop.index0] }}" style="height: {{ (([[score, 0] | max, 20] | min) * 5) | round(1) }}%" title="{{ player_stats.jornadas[loop.index0] }}: {{ score if player.bands[loop.index0] != 'none' else 'no jugó' }}{{ ' pts' if player.bands[loop.index0] != 'none' else '' }}"></span>
+              {% endfor %}
+            </span>
+            <span class="team-hex-highlight">{{ player.highlight }}</span>
+            </span>
+          </a>
           {% endfor %}
         </div>
       </div>
