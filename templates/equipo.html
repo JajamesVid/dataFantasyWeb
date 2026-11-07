@@ -63,6 +63,7 @@
             </div>
             <div class="player-stat-footer">
               <span>Media {{ player.avg }}</span>
+              <a href="{{ url_for('puntuacion_datafantasy') }}" class="score-chip score-chip--df" title="Puntuación DataFantasy: ¿qué es?">DF {{ player.avg_df if player.avg_df is not none else "–" }}</a>
               <span>{{ player.goals }} goles</span>
               <span>{{ player.assists }} asist.</span>
             </div>

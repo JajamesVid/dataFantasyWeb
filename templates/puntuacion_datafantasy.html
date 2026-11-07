@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+
+{% block title %}Puntuación DataFantasy · DataFantasy{% endblock %}
+
+{% block content %}
+<section class="inner-page">
+  <div class="container df-explainer">
+    <div class="section-header">
+      <h2 class="section-title">¿Qué es la puntuación DataFantasy?</h2>
+    </div>
+
+    <p>
+      En la web verás dos puntuaciones para cada jugador y partido: la
+      <strong>puntuación estándar</strong>, la que conoces de los juegos fantasy, y a su lado la
+      <span class="score-chip score-chip--df">DF</span> <strong>puntuación DataFantasy</strong>, la nuestra.
+    </p>
+
+    <h2>¿En qué se diferencian?</h2>
+    <ul>
+      <li><strong>La estándar</strong> resume las valoraciones de los medios especializados: es la referencia que todo el mundo usa.</li>
+      <li><strong>La DataFantasy</strong> sale solo de lo que pasó en el partido, de los datos, sin opiniones. Por eso a veces coincide con la estándar y a veces no: cuando no coinciden suele haber algo interesante detrás.</li>
+    </ul>
+
+    <h2>¿Qué mide?</h2>
+    <ul>
+      <li>Unas <strong>60 estadísticas de cada partido</strong>: pases, duelos, regates, recuperaciones, ocasiones creadas, tiros, errores…</li>
+      <li>Cada estadística se compara con la de <strong>todos los jugadores de la liga</strong>, así que no premia solo hacer muchas cosas, sino hacerlas mejor que el resto.</li>
+      <li>Cuenta lo bueno y lo malo: una pérdida peligrosa o un fallo también restan.</li>
+      <li>Los goles suman un extra y las tarjetas penalizan.</li>
+      <li>Los <strong>porteros tienen su propia fórmula</strong>, con estadísticas de portería (paradas, goles evitados…) y comparados solo con otros porteros.</li>
+    </ul>
+
+    <h2>¿Cómo se lee?</h2>
+    <p>
+      Está en la misma escala aproximada que la estándar, así que puedes compararlas directamente:
+      si un jugador saca más DF que estándar, los datos dicen que hizo un partido mejor del que
+      se le ha reconocido; si saca menos, al revés.
+    </p>
+
+    <p style="margin-top: 2rem;">
+      <a href="{{ url_for('jugadores') }}" class="btn btn--ghost">Ver jugadores →</a>
+    </p>
+  </div>
+</section>
+{% endblock %}

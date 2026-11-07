@@ -492,6 +492,11 @@ def equipo(slug):
     )
 
 
+@app.route("/puntuacion-datafantasy")
+def puntuacion_datafantasy():
+    return render_template("puntuacion_datafantasy.html")
+
+
 @app.route("/jugadores")
 def jugadores():
     return render_template("jugadores.html", players=load_players())

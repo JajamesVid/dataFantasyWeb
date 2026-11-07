@@ -37,7 +37,10 @@
               {{ player.team_name or "Sin equipo" }} · Media {{ player.avg }}
             </span>
           </span>
-          <span class="player-card-total">{{ player.total }}</span>
+          <span class="player-card-totals">
+            <span class="player-card-total">{{ player.total }}</span>
+            <span class="score-chip score-chip--df" title="Total con la puntuación DataFantasy">DF {{ player.total_df if player.total_df is not none else "–" }}</span>
+          </span>
         </span>
         {% if player.recent_scores %}
         <span class="player-card-recent">

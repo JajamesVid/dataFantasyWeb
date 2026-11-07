@@ -168,7 +168,7 @@ def _fetch_season_bundle(temporada):
             "order": "estadistica_equipo_id.asc",
         })),
         ("puntuaciones", lambda: fetch_in_chunks(_table_name("puntuaciones", temporada), "partido_id", partido_ids, {
-            "select": "partido_id,jugador_id,puntuacion_media,racha_puntuacion_media_14d",
+            "select": "partido_id,jugador_id,puntuacion_media,racha_puntuacion_media_14d,puntuacion_datafantasy",
             "order": "puntuacion_id.asc",
         })),
         ("statsjugadores", lambda: fetch_in_chunks(_table_name("statsjugadores", temporada), "partido_id", partido_ids, {
@@ -538,7 +538,7 @@ def build_team_player_stats(slug, temporada):
 
     per_player = defaultdict(lambda: {
         "medias_by_jornada": {}, "racha_by_jornada": {}, "matches": 0, "sum_media": 0.0,
-        "medias": [], "goles": 0, "asistencias": 0, "pases_precisos": 0, "pases_totales": 0,
+        "medias": [], "dfs": [], "goles": 0, "asistencias": 0, "pases_precisos": 0, "pases_totales": 0,
     })
 
     for punt in bundle["puntuaciones"]:
@@ -556,6 +556,8 @@ def build_team_player_stats(slug, temporada):
         p["matches"] += 1
         p["sum_media"] += media
         p["medias"].append(media)
+        if _df_score(punt) is not None:
+            p["dfs"].append(_df_score(punt))
         if punt.get("racha_puntuacion_media_14d") is not None:
             p["racha_by_jornada"][partido["jornada"]] = punt["racha_puntuacion_media_14d"]
 
@@ -620,6 +622,7 @@ def build_team_player_stats(slug, temporada):
             "name": jugador.get("nombre_jugador", f"Jugador {jugador_id}"),
             "scores": [round(p["medias_by_jornada"].get(j, 0), 1) for j in recent_jornadas],
             "avg": round(p["sum_media"] / p["matches"], 1) if p["matches"] else 0,
+            "avg_df": _mean_or_none(p["dfs"]),
             "goals": p["goles"],
             "assists": p["asistencias"],
             "category_key": category_key,
@@ -650,6 +653,17 @@ def _age_from_birthdate(fecha_nacimiento):
 RECENT_SCORES_WINDOW = 5
 
 
+def _df_score(punt):
+    """Puntuación DataFantasy de una fila de puntuaciones (la propia, junto a la
+    estándar = puntuacion_media); None si no está calculada."""
+    value = punt.get("puntuacion_datafantasy")
+    return float(value) if value is not None else None
+
+
+def _mean_or_none(values):
+    return round(statistics.mean(values), 1) if values else None
+
+
 def _score_band(value):
     """Código de colores usado en toda la sección de jugadores para una puntuación
     individual de partido: <=1 rojo, (1,5] naranja, (5,9] verde, >9 azul."""
@@ -666,7 +680,9 @@ def build_player_directory(temporada):
     bundle = _load_season_bundle(temporada)
     equipo_info = _equipo_lookup(bundle)
 
-    agg = defaultdict(lambda: {"sum_media": 0.0, "matches": 0, "goles": 0, "asistencias": 0, "by_jornada": {}})
+    agg = defaultdict(lambda: {
+        "sum_media": 0.0, "matches": 0, "goles": 0, "asistencias": 0, "by_jornada": {}, "df_by_jornada": {},
+    })
     for punt in bundle["puntuaciones"]:
         media = punt.get("puntuacion_media")
         if media is None:
@@ -678,6 +694,8 @@ def build_player_directory(temporada):
         a["sum_media"] += media
         a["matches"] += 1
         a["by_jornada"][partido["jornada"]] = media
+        if _df_score(punt) is not None:
+            a["df_by_jornada"][partido["jornada"]] = _df_score(punt)
 
     for sj in bundle["statsjugadores"]:
         a = agg[sj["jugador_id"]]
@@ -696,7 +714,10 @@ def build_player_directory(temporada):
 
         recent_jornadas = sorted(a["by_jornada"])[-RECENT_SCORES_WINDOW:]
         recent_scores = [
-            {"jornada": j, "score": round(a["by_jornada"][j], 1), "band": _score_band(a["by_jornada"][j])}
+            {
+                "jornada": j, "score": round(a["by_jornada"][j], 1), "band": _score_band(a["by_jornada"][j]),
+                "score_df": round(a["df_by_jornada"][j], 1) if j in a["df_by_jornada"] else None,
+            }
             for j in recent_jornadas
         ]
 
@@ -714,6 +735,8 @@ def build_player_directory(temporada):
             "matches": a["matches"],
             "total": round(a["sum_media"], 1),
             "avg": round(a["sum_media"] / a["matches"], 1),
+            "total_df": round(sum(a["df_by_jornada"].values()), 1) if a["df_by_jornada"] else None,
+            "avg_df": _mean_or_none(list(a["df_by_jornada"].values())),
             "goals": a["goles"],
             "assists": a["asistencias"],
             "recent_scores": recent_scores,
@@ -783,6 +806,7 @@ def build_player_detail(slug, temporada):
 
     matches_out = []
     sum_media, goles, asistencias, minutos = 0.0, 0, 0, 0
+    dfs = []
     for punt in bundle["puntuaciones"]:
         if punt["jugador_id"] != jugador_id:
             continue
@@ -807,6 +831,9 @@ def build_player_detail(slug, temporada):
         match_minutos = sj.get("minutos_jugados") or 0
 
         sum_media += media
+        df = _df_score(punt)
+        if df is not None:
+            dfs.append(df)
         goles += match_goles
         asistencias += match_asistencias
         minutos += match_minutos
@@ -817,6 +844,7 @@ def build_player_detail(slug, temporada):
             "rival": rival,
             "score": round(media, 1),
             "band": _score_band(media),
+            "score_df": round(df, 1) if df is not None else None,
             "goals": match_goles,
             "assists": match_asistencias,
             "minutes": match_minutos,
@@ -851,6 +879,7 @@ def build_player_detail(slug, temporada):
         "totals": {
             "matches": total_matches,
             "avg": round(sum_media / total_matches, 1) if total_matches else 0,
+            "avg_df": _mean_or_none(dfs),
             "goals": goles,
             "assists": asistencias,
             "minutes": minutos,

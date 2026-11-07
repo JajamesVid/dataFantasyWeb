@@ -38,6 +38,7 @@
           <span class="team-evolution-total team-evolution-total--points">
             <span class="team-evolution-dot team-evolution-dot--points"></span>Media {{ player.totals.avg }}
           </span>
+          <a href="{{ url_for('puntuacion_datafantasy') }}" class="score-chip score-chip--df" title="Puntuación DataFantasy: ¿qué es?">DF {{ player.totals.avg_df if player.totals.avg_df is not none else "–" }}</a>
           <span class="team-evolution-total">{{ player.totals.goals }} goles</span>
           <span class="team-evolution-total">{{ player.totals.assists }} asist.</span>
           <span class="team-evolution-total">{{ player.totals.minutes }} min.</span>
@@ -64,6 +65,7 @@
         </div>
         <div class="admin-row-actions">
           <span class="score-chip score-chip--{{ match.band }}">{{ match.score }} pts</span>
+          <a href="{{ url_for('puntuacion_datafantasy') }}" class="score-chip score-chip--df" title="Puntuación DataFantasy: ¿qué es?">DF {{ match.score_df if match.score_df is not none else "–" }}</a>
           <span>{{ match.goals }} goles</span>
           <span>{{ match.assists }} asist.</span>
           <span>{{ match.minutes }}'</span>
@@ -103,11 +105,21 @@
     data: {
       labels: {{ player.matches | map(attribute='jornada') | list | tojson }}.map((j) => `J${j}`),
       datasets: [{
-        label: 'Puntuación',
+        label: 'Estándar',
         data: {{ player.matches | map(attribute='score') | list | tojson }},
-        borderColor: '#22c55e',
-        backgroundColor: 'rgba(34, 197, 94, 0.12)',
+        borderColor: '#64748b',
+        backgroundColor: 'rgba(100, 116, 139, 0.12)',
         fill: true,
+        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 4,
+        tension: 0.3,
+      }, {
+        label: 'DataFantasy',
+        data: {{ player.matches | map(attribute='score_df') | list | tojson }},
+        borderColor: '#22c55e',
+        backgroundColor: 'transparent',
+        fill: false,
         borderWidth: 2,
         pointRadius: 0,
         pointHoverRadius: 4,
@@ -123,14 +135,14 @@
         y: { display: false },
       },
       plugins: {
-        legend: { display: false },
+        legend: { display: true, position: 'bottom', labels: { color: '#64748b', boxWidth: 12 } },
         tooltip: {
           backgroundColor: '#111827',
           borderColor: '#1e2d45',
           borderWidth: 1,
           titleColor: '#e2e8f0',
           bodyColor: '#e2e8f0',
-          callbacks: { label: (ctx) => `${ctx.parsed.y} pts` },
+          callbacks: { label: (ctx) => `${ctx.dataset.label}: ${ctx.parsed.y} pts` },
         },
       },
     },
