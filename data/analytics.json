@@ -1,9 +1,6 @@
 {
-  "total_visits": 401,
+  "total_visits": 0,
   "article_visits": {},
-  "monthly_visits": {
-    "2026-08": 87,
-    "2026-09": 291,
-    "2026-10": 21
-  }
+  "monthly_visits": {},
+  "region_visits": {}
 }
